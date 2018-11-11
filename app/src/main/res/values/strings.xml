@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Organizer</string>
+    <string name="app_name">Организатор</string>
     <string name="etLogin">Логин или e-mail</string>
     <string name="etPassword">Пароль</string>
     <string name="tvLogIn">Авторизация</string>

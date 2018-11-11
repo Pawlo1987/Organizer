@@ -1,0 +1,8 @@
+SELECT
+city.name as city,
+field.name as field,
+event.date as date,
+event.starttime as time
+FROM
+event INNER JOIN city ON city._id = event.city
+      INNER JOIN field ON field._id = event.field;

@@ -7,9 +7,16 @@
     android:orientation="vertical"
     tools:context="com.example.user.organizer.MainActivity">
 
-    <fragment
-        android:id="@+id/fragment"
-        android:name="com.example.user.organizer.ShowAllEventsFragment"
+    <!--<fragment-->
+        <!--android:id="@+id/fragment"-->
+        <!--android:name="com.example.user.organizer.ShowAllEventsFragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content" />-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvMain"
+        app:layoutManager="LinearLayoutManager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent" />
+
 </LinearLayout>

@@ -1,6 +1,7 @@
 package com.example.user.organizer;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.hardware.Sensor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,9 +21,11 @@ import java.util.List;
 
 public class ShowAllEventsFragment extends Fragment {
 
-//    RecyclerView rvMainShAlEvFr;
-//    ShowAllEventsRecyclerAdapter showAllEventsRecyclerAdapter;  // адаптер для отображения recyclerView
-//
+    RecyclerView rvMainShAlEvFr;
+    ShowAllEventsRecyclerAdapter showAllEventsRecyclerAdapter;  // адаптер для отображения recyclerView
+    Cursor cursor;
+    DBUtilities dbUtilities;
+
     public ShowAllEventsFragment newInstance() {
         ShowAllEventsFragment fragment = new ShowAllEventsFragment();
         Bundle args = new Bundle();
@@ -33,11 +36,20 @@ public class ShowAllEventsFragment extends Fragment {
 
     public ShowAllEventsFragment() { }
 
+    @Override // Метод onAttach() вызывается в начале жизненного цикла фрагмента, и именно здесь
+    // мы можем получить контекст фрагмента, в качестве которого выступает класс MainActivity.
+
+    public void onAttach(Context context) {
+        dbUtilities = new DBUtilities(context);
+
+        super.onAttach(context);
+    } // onAttach
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        // получить параметр для отображения во фрагменте
-//        Bundle args = getArguments();
+        // получить параметр для отображения во фрагменте
+        Bundle args = getArguments();
 
     } // onCreate
 
@@ -45,13 +57,13 @@ public class ShowAllEventsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-//        FragmentActivity current = getActivity();
-//
+        FragmentActivity current = getActivity();
+
         View result = inflater.inflate(R.layout.fragment_show_all_events, container, false);
-//        // RecycerView для отображения
-//        rvMainShAlEvFr = (RecyclerView) result.findViewById(R.id.rvMainShAlEvFr);
-//
-//        // создаем адаптер
+        // RecycerView для отображения
+        rvMainShAlEvFr = (RecyclerView) result.findViewById(R.id.rvMainShAlEvFr);
+
+        // создаем адаптер
 //        showAllEventsRecyclerAdapter = new ShowAllEventsRecyclerAdapter(current);
 //        rvMainShAlEvFr.setAdapter();
         return result;

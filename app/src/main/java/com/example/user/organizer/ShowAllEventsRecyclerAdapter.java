@@ -1,10 +1,12 @@
 package com.example.user.organizer;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.hardware.Sensor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +19,14 @@ public class ShowAllEventsRecyclerAdapter extends RecyclerView.Adapter<ShowAllEv
 
     //поля класса SensorAdapter
     private LayoutInflater inflater;
-    private List<Sensor> sensors;
+    private Cursor eventsCursor;
+    DBUtilities dbUtilities;
 
     //конструктор
-    ShowAllEventsRecyclerAdapter(Context context, List<Sensor> sensors) {
+    ShowAllEventsRecyclerAdapter(Context context, Cursor eventsCursor) {
         this.inflater = LayoutInflater.from(context);
-        this.sensors = sensors;
+        this.eventsCursor = eventsCursor;
+        dbUtilities = new DBUtilities(context);
     } // SensorAdapter
 
     //создаем новую разметку(View) путем указания разметки
@@ -33,37 +37,38 @@ public class ShowAllEventsRecyclerAdapter extends RecyclerView.Adapter<ShowAllEv
         return new ViewHolder(view);
     }
 
+    //привязываем элементы разметки к переменным объекта(в данном случае к курсору)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Sensor sensor = sensors.get(position); // переходим в курсоре на текущую позицию
+        eventsCursor.moveToPosition(position); // переходим в курсоре на текущую позицию
 
         // получение данных
-//        holder.tvNameAdapt.setText(sensor.getName().toString());
-//        holder.tvTypeAdapt.setText(String.valueOf(sensor.getType()));
-//        holder.tvVendorAdapt.setText(sensor.getVendor().toString());
-//        holder.tvVersionAdapt.setText(String.valueOf(sensor.getVersion()));
-//        holder.tvMaxValAdapt.setText(String.format("%.2f", sensor.getMaximumRange()));
-//        holder.tvResolutionAdapt.setText(String.format("%.2f", sensor.getResolution()));
+        holder.tvCityShAlEvReAd.setText(eventsCursor.getString(0));//String.format("%d", eventsCursor.getInt(1)));//город
+        holder.tvFieldShAlEvReAd.setText(eventsCursor.getString(1));//(String.format("%d", eventsCursor.getInt(2)));//поле
+        holder.tvDateShAlEvReAd.setText(eventsCursor.getString(2));// Дата
+        holder.tvTimeShAlEvReAd.setText(eventsCursor.getString(3));//Время
+
+//        получаем нажатую позицию адаптера
+        int posnow = eventsCursor.getPosition();
 
     } // onBindViewHolder
 
+    //получаем количество элементов объекта(курсора)
     @Override
-    public int getItemCount() { return sensors.size(); }
+    public int getItemCount() { return eventsCursor.getCount(); }
 
-
+    //Создаем класс ViewHolder с помощью которого мы получаем ссылку на каждый элемент
+    //отдельного пункта списка
     public class ViewHolder extends RecyclerView.ViewHolder {
-//        final TextView tvNameAdapt, tvTypeAdapt, tvVendorAdapt,
-//                tvVersionAdapt, tvMaxValAdapt, tvResolutionAdapt;
+        final TextView tvDateShAlEvReAd, tvTimeShAlEvReAd, tvCityShAlEvReAd, tvFieldShAlEvReAd;
 
         ViewHolder(View view){
             super(view);
 
-//            tvNameAdapt = (TextView) view.findViewById(R.id.tvNameAdapt);
-//            tvTypeAdapt = (TextView) view.findViewById(R.id.tvTypeAdapt);
-//            tvVendorAdapt = (TextView) view.findViewById(R.id.tvVendorAdapt);
-//            tvVersionAdapt = (TextView) view.findViewById(R.id.tvVersionAdapt);
-//            tvMaxValAdapt = (TextView) view.findViewById(R.id.tvMaxValAdapt);
-//            tvResolutionAdapt = (TextView) view.findViewById(R.id.tvResolutionAdapt);
+            tvDateShAlEvReAd = (TextView) view.findViewById(R.id.tvDateShAlEvReAd);
+            tvTimeShAlEvReAd = (TextView) view.findViewById(R.id.tvTimeShAlEvReAd);
+            tvCityShAlEvReAd = (TextView) view.findViewById(R.id.tvCityShAlEvReAd);
+            tvFieldShAlEvReAd = (TextView) view.findViewById(R.id.tvFieldShAlEvReAd);
         } // ViewHolder
     } // class ViewHolder
-}//SensorAdapter
+}//ShowAllEventsRecyclerAdapter

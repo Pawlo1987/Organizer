@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">Organizer</string>
+    <string name="etLogin">Логин или e-mail</string>
+    <string name="etPassword">Пароль</string>
+    <string name="tvLogIn">Авторизация</string>
+    <string name="btnSignIn">Войти</string>
+    <string name="tvOr">ИЛИ</string>
+    <string name="btnSignUp">Зарегистрироватся</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tvCreateAccount">Новый Аккаунт</string>
+    <string name="tvNameCrAcFr">Имя</string>
+    <string name="tvLoginCrAcFr">Логин</string>
+    <string name="tvPasswordCrAcFr">Пароль</string>
+    <string name="tvConfirmPasswordCrAcFr">Потв. пароль</string>
+    <string name="tvEmailCrAcFr">e-mail</string>
+    <string name="tvPhoneCrAcFr">номер телефона</string>
+    <string name="tvDefCityCrAcFr">город по умол.</string>
+    <string name="btnCreateCrAcFr">Создать</string>
+    <string name="tvHeaderSeMeStFr">Выбор статуса пользователя</string>
+    <string name="tvCitySeMeStFr">Выбор города</string>
+    <string name="tvStatusSeMeStFr">Определить статус</string>
+    <string name="btnConfirmSeMeStFr">Потвердить выбор</string>
+    <string name="tvHeaderCrEv">Новое событие</string>
+    <string name="tvFieldCrEv">Поле</string>
+    <string name="btnNewFieldCrEv">Создать новое поле</string>
+    <string name="tvDateCrEv">Дата</string>
+    <string name="btnDateCrEv">Дата</string>
+    <string name="tvStartTimeCrEv">Время начала</string>
+    <string name="btnStartTimeCrEv">Время начала</string>
+    <string name="tvDurationCrEv">Длительность</string>
+    <string name="tvPriceCrEv">Цена</string>
+    <string name="tvListOfParticipantsCrEv">Список участников</string>
+    <string name="tvPhoneCrEv">Номер организатора</string>
+    <string name="tvPasswordCrEv">Пароль</string>
+    <string name="btnConfirmCrEv">Создать</string>
+    <string name="tvHeaderShAlEvFr">Все активные события</string>
+    <string name="tvFirstLineShAlEvReAd">Событие назначено на</string>
+    <string name="tvSecondLineShAlEvReAd">состоится в</string>
+    <string name="tvThirdLineShAlEvReAd">в городе</string>
+    <string name="tvFourthLineShAlEvReAd">на поле</string>
+
+</resources>

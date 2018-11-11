@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.user.organizer.ShowAllEventsFragment">
+
+
+    <TextView
+        android:id="@+id/tvHeaderShAlEvFr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="@string/tvHeaderShAlEvFr"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="24sp" />
+
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/rvMainShAlEvFr"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" >-->
+
+    <!--</android.support.v7.widget.RecyclerView>-->
+
+</LinearLayout>

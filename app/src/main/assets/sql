@@ -1,3 +1,4 @@
+-- запрос для showAllEvents
 SELECT
 city.name as city,
 field.name as field,
@@ -6,3 +7,10 @@ event.starttime as time
 FROM
 event INNER JOIN city ON city._id = event.city
       INNER JOIN field ON field._id = event.field;
+      
+-- запрос для авторизации
+SELECT
+login as login, 
+email as email
+FROM
+user;

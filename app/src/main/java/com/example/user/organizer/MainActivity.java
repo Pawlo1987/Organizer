@@ -1,45 +1,62 @@
 package com.example.user.organizer;
 
-import android.database.Cursor;
-import android.support.v7.app.AppCompatActivity;
+
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
+
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.TabHost;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    ShowAllEventsFragment fragm;
-//    DBUtilities dbUtilities;
-//
-//    // поля для доступа к записям БД
-//    Cursor eventsCursor;                // прочитанные данные
-//    ShowAllEventsRecyclerAdapter showAllEventsRecyclerAdapter;  // адаптер для отображения таблицы
-//
-//    RecyclerView rvMain;
+    final String ID_EXIT_DIALOG = "dialogExitConfirm";
+    private ExitConfirmDialog exitDialog; // диалог подтверждения выхода из приложения
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        dbUtilities = new DBUtilities(getApplicationContext());
-//
-//        dbUtilities.open();
-//        // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
-//        String query = "SELECT city.name as city, field.name as field, event.date as date, " +
-//                "event.starttime as time FROM event INNER JOIN city ON city._id = event.city " +
-//                "INNER JOIN field ON field._id = event.field;";
-//        eventsCursor =  dbUtilities.getDb().rawQuery(query, null);
-//
-//        // RecycerView для отображения таблицы users БД
-//        rvMain = (RecyclerView) findViewById(R.id.rvMain);
-//
-//        // создаем адаптер, передаем в него курсор
-//        showAllEventsRecyclerAdapter = new ShowAllEventsRecyclerAdapter(this, eventsCursor);
-//        rvMain.setAdapter(showAllEventsRecyclerAdapter);
 
-//        вызвать фрагмент
-        fragm = new ShowAllEventsFragment().newInstance();
+        Intent intent = new Intent(this, LoginPartActivity.class);
+        startActivity(intent);
+
     }//onCreate
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+
+    } // onCreateOptionsMenu
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+
+        switch (item.getItemId()) {
+            case R.id.menuAuthorization:
+//                fTrans.add(R.id.fragmentMA, fragCrEv);
+                break;
+
+
+            case R.id.menuFinish:
+                exitDialog.show(getSupportFragmentManager(), ID_EXIT_DIALOG);
+                return true;
+
+        } // switch
+        return false;
+    } // onOptionsItemSelected
+
+    // Перехватчик нажатия клавиши Назад для текущей активности - вызвать диалог выхода
+    @Override public void onBackPressed() {
+        // отображение диалогового окна
+        exitDialog.show(getSupportFragmentManager(), ID_EXIT_DIALOG);
+    } // onBackPressed
 
 
 }//MainActivity

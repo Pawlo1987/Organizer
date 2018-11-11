@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.example.user.organizer.MainActivity">
+    tools:context="com.example.user.organizer.LogoutPartActivity">
 
     <TabHost
         android:id="@android:id/tabhost"
@@ -53,10 +52,4 @@
             </FrameLayout>
         </LinearLayout>
     </TabHost>
-
-    <FrameLayout
-        android:id="@+id/fragmentMA"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
 </LinearLayout>

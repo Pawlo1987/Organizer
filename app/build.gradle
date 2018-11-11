@@ -10,6 +10,19 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // Jack - набор инструментова, необходим для реализации некоторых
+        // возможностей Java 1.8
+        // https://developer.android.com/guide/platform/j8-jack.html#supported-features
+        jackOptions {
+            enabled true
+        }
+
+        // включить лямбда-выражения в возможности компилятора
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
     }
     buildTypes {
         release {

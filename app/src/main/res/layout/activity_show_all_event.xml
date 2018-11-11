@@ -1,14 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context="com.example.user.organizer.ShowAllEventsFragment">
-
+    tools:context="com.example.user.organizer.ShowAllEventActivity">
 
     <TextView
-        android:id="@+id/tvHeaderShAlEvFr"
+        android:id="@+id/tvHeaderShAlEvAc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
@@ -19,7 +19,7 @@
 
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvMainShAlEvFr"
+        android:id="@+id/rvMainShAlEvAc"
         app:layoutManager="LinearLayoutManager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.example.user.organizer.ShowAllEventsFragment">
 
@@ -16,11 +17,11 @@
         android:textColor="@android:color/black"
         android:textSize="24sp" />
 
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvMainShAlEvFr"
+        app:layoutManager="LinearLayoutManager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

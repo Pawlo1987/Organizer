@@ -118,7 +118,7 @@ public class DBUtilities{
         String id = null;
         //обращаемся к базе для получения списка имен городов
         try(BackgroundWorker bg = new BackgroundWorker()){
-            bg.execute("getIdByValue", tableName, firstColumnName, firstValue,
+            bg.execute("getIdByTwoValues", tableName, firstColumnName, firstValue,
                     secondColumnName, secondValue);
 
             String resultdb = bg.get();
@@ -283,7 +283,7 @@ public class DBUtilities{
             JSONObject jResult = new JSONObject(resultdb);
             if(jResult.getString("error").toString().equals("")){
                 //выводим текст с положительным ответом о создании нового пользователя
-                Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
             }else{
                 //выводим текст с отрецательным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
@@ -529,7 +529,7 @@ public class DBUtilities{
     }//getMaxValueInHisColumn
 
     //получение коллекции пользователей для списка учасников
-    public List<Participant> getListParticipantsUser(String cityName) {
+    public List<Participant> getListParticipantsUser(String cityName, String idAuthUser) {
         List<Participant> participantList = new ArrayList<>();
 
         //получаем id города
@@ -561,6 +561,7 @@ public class DBUtilities{
                 int n = idList.size();
 
                 for (int i = 0; i <n ; i++) {
+                    if(idList.get(i).equals(idAuthUser)) continue;  //если попали на запись организатора
                     participantList.add(new Participant(idList.get(i),nameList.get(i),loginList.get(i),cityIdList.get(i)));
                 }//fori
 
@@ -798,7 +799,7 @@ public class DBUtilities{
             JSONObject jResult = new JSONObject(resultdb);
             if(jResult.getString("error").toString().equals("")){
                 //выводим текст с положительным ответом о создании нового пользователя
-                Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
             }else{
                 //выводим текст с отрецательным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
@@ -851,7 +852,7 @@ public class DBUtilities{
             JSONObject jResult = new JSONObject(resultdb);
             if(jResult.getString("error").toString().equals("")){
                 //выводим текст с положительным ответом о создании нового пользователя
-                Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
             }else{
                 //выводим текст с отрецательным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
@@ -884,4 +885,5 @@ public class DBUtilities{
             e.printStackTrace();
         }//try-catch
     }//updateEventsTable
+
 }//DBUtilities

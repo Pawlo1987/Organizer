@@ -11,6 +11,8 @@ import android.support.v7.app.AlertDialog;
 import com.example.user.organizer.DBUtilities;
 import com.example.user.organizer.inteface.CustomInterface;
 
+import java.util.List;
+
 //---------------------- Фрагмент с диалогом удалить событие -------------------
 public class DeleteEventDialog extends DialogFragment {
     DBUtilities dbUtilities;
@@ -38,9 +40,26 @@ public class DeleteEventDialog extends DialogFragment {
 //                .setIcon(R.drawable.exlamation)
                 // лямбда-выражение на клик кнопки "Да"
                 .setPositiveButton("Подтверждаю",
-                        (dialog, whichButton) -> dbUtilities.deleteRowById("events", event_id))
+                        (dialog, whichButton) -> deleteEvent(event_id))
                 .setNegativeButton("Не подтверждаю", null) // не назначаем слушателя кликов по кнопке "Нет"
                 .setCancelable(false)           // запрет закрытия диалога кнопкой Назад
                 .create();
     }//onCreateDialog
+
+    //подтверждение удаления
+    private void deleteEvent(String event_id){
+        //заполняем список учасников(id)
+        List<String> idParticipantsList = dbUtilities.getListValuesByValueAndHisColumn(
+                "participants", "event_id",
+                event_id, "id"
+        );
+
+        //удаляем старый список учасников из таблицы participants
+        for (String idParticipants : idParticipantsList) {
+            dbUtilities.deleteRowById("participants",idParticipants);
+        }//foreach
+
+        //удалил собития
+        dbUtilities.deleteRowById("events", event_id);
+    }//deleteEvent
 }//DeleteEventDialog

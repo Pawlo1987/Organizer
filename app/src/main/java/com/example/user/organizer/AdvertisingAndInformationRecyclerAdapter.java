@@ -43,6 +43,7 @@ public class AdvertisingAndInformationRecyclerAdapter extends RecyclerView.Adapt
         holder.tvDateAdAvInReAd.setText(note.getNoteDate());     //дата
         holder.tvCityAdAvInReAd.setText(note.getNoteCityName()); //город
 
+
     } // onBindViewHolder
 
     //получаем количество элементов объекта(курсора)

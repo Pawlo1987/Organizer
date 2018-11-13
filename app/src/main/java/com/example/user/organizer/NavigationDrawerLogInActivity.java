@@ -13,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.user.organizer.fragment.AdvertisingAndInformationFragment;
 import com.example.user.organizer.fragment.ExitConfirmDialog;
@@ -31,7 +33,6 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
 
     final String ID_EXIT_DIALOG = "dialogExitConfirm";          //пааметр для вызова диалога "выход"
     private ExitConfirmDialog exitConfirmDialog; // диалог подтверждения выхода из приложения
-
     ShowAllEventsFragment showAllEventsFragment;
     ShowFieldCatalogFragment showFieldCatalogFragment;
     ShowAuthUserEventsFragment showAuthUserEventsFragment;
@@ -79,6 +80,31 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        // Наполняем шапку бокового меню элементами
+        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_navigation_drawer_log_in);
+        TextView tvProfileName = headerLayout.findViewById(R.id.tvProfileName);
+        TextView tvProfileRating = headerLayout.findViewById(R.id.tvProfileRating);
+        ImageView ivProfileLogo = headerLayout.findViewById(R.id.ivProfileLogo);
+
+        //имя пользователя отобразить в боковом меню
+        tvProfileName.setText(dbUtilities.searchValueInColumn(
+                "users",
+                "id",
+                "name",
+                idAuthUser)
+        );
+
+        //рейтинг пользователя отобразить в боковом меню
+        tvProfileRating.setText(dbUtilities.searchValueInColumn(
+                "users",
+                "id",
+                "login",
+                idAuthUser)
+        );
+        //логотип пользователя отобразить в боковом меню
+        ivProfileLogo.setImageResource(R.drawable.football_ball11);
+
         navigationView.setNavigationItemSelectedListener(this);
     }
 

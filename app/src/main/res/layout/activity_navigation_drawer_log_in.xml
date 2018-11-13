@@ -8,20 +8,20 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-        <!-- Разметка верхнего бара для меню-->
+      <!-- Разметка верхнего бара для меню-->
     <include
         layout="@layout/app_bar_navigation_drawer_log_in"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!-- Разметка виджета NavigationDrawer, разметка заголовка и меню виджета-->
+     <!-- Разметка виджета NavigationDrawer, разметка заголовка и меню виджета-->
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_navigation_drawer_log_in"
         app:menu="@menu/activity_navigation_drawer_log_in_drawer" />
+    <!--app:headerLayout="@layout/nav_header_navigation_drawer_log_in"-->
 
 </android.support.v4.widget.DrawerLayout>

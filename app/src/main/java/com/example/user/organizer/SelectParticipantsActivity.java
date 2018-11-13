@@ -33,6 +33,7 @@ public class SelectParticipantsActivity extends AppCompatActivity {
     DBUtilities dbUtilities;
 
     Context context;
+    String idAuthUser;                  //id Авторизированого пользователя
 
     List<String> spListCity;            // Данные для спинера выбора города
     int spListCitySize;                 //разме листа (количество городов + 1(ВСЕ ГОРОДА))
@@ -43,6 +44,7 @@ public class SelectParticipantsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_participants);
+        idAuthUser = getIntent().getStringExtra("idAuthUser");
 
         context = getBaseContext();
         dbUtilities = new DBUtilities(context);
@@ -111,7 +113,7 @@ public class SelectParticipantsActivity extends AppCompatActivity {
     //Строим RecyclerView
     private void buildUserRecyclerView(String cityName, String filter) {
 
-        showUserList = dbUtilities.getListParticipantsUser(cityName);
+        showUserList = dbUtilities.getListParticipantsUser(cityName, idAuthUser);
 
         // создаем адаптер, передаем в него курсор
         selectParticipantsRecyclerAdapter
@@ -132,6 +134,7 @@ public class SelectParticipantsActivity extends AppCompatActivity {
     private void buildCitySpinner() {
         //заполнить spListCity данные для отображения в Spinner
         spListCity = dbUtilities.getStrListTableFromDB("cities", "name");
+
         spListCity.add("ВСЕ ГОРОДА");
 
         //создание адаптера для спинера

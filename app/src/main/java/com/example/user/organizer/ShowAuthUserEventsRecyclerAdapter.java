@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -109,6 +110,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
             implements PopupMenu.OnMenuItemClickListener{
         final TextView tvDateShAuUsEvReAd, tvTimeShAuUsEvReAd, tvCityShAuUsEvReAd,
                        tvFieldShAuUsEvReAd, tvStatusShAuUsEvReAd;
+        ImageView ivArrowShAuUsEvReAd;
 
         ViewHolder(View view){
             super(view);
@@ -118,6 +120,30 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
             tvCityShAuUsEvReAd = view.findViewById(R.id.tvCityShAuUsEvReAd);
             tvFieldShAuUsEvReAd = view.findViewById(R.id.tvFieldShAuUsEvReAd);
             tvStatusShAuUsEvReAd = view.findViewById(R.id.tvStatusShAuUsEvReAd);
+            ivArrowShAuUsEvReAd = view.findViewById(R.id.ivArrowShAuUsEvReAd);
+
+            //слушатель события нажатия стрелки
+            ivArrowShAuUsEvReAd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    //получаем данные о нажатом событии
+                    event = eventsList.get(getAdapterPosition());
+                    eventId = event.eventId;
+                    eventCityName = event.cityName;
+                    eventFieldName = event.fieldName;
+                    eventDate = event.eventData;
+                    showEventDate = dateShowFormat(eventDate);
+                    eventTime = event.eventTime;
+                    eventDuration = event.eventDuration;
+                    eventPrice = event.eventPrice;
+                    eventPhone = event.eventPhone;
+                    eventUserId = event.eventUserId;
+
+                    //выбран пункт подробная информация
+                    aboutEvent();
+                }//onClick
+            });
 
             //слушатель события нажатого меню
             view.setOnClickListener(new View.OnClickListener() {

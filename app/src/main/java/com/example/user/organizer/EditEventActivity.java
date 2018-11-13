@@ -362,7 +362,7 @@ public class EditEventActivity extends AppCompatActivity {
 
         if(flChangeLoginUserList){
 
-            //заполняем список учасников(_id)
+            //заполняем список учасников(id)
             List<String> idUsersList = dbUtilities.getListValuesByValueAndHisColumn(
                     "participants", "participants.event_id",
                     eventId, "participants.id"

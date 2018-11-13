@@ -289,6 +289,7 @@ public class CreateEventActivity extends AppCompatActivity {
     //обработка нажатия клавиши добавить участника
     private void addUser() {
         Intent intent = new Intent(this, SelectParticipantsActivity.class);
+        intent.putExtra("idAuthUser", idAuthUser);
         startActivityForResult(intent, REQ_ADD_USER);
 
     }//addUser

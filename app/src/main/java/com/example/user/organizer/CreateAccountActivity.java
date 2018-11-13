@@ -1,17 +1,20 @@
 package com.example.user.organizer;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 //---------Активность для создания записи нового пользователя ---------------------------
@@ -19,7 +22,6 @@ import java.util.List;
 public class CreateAccountActivity extends AppCompatActivity {
 
     DBUtilities dbUtilities;
-    Cursor creAccCursor;                // курсор для чтения данных из БД
     Context context;
     List<String> spListCity;            // Данные для спинера выбора города
 
@@ -30,6 +32,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     EditText etEmailCrAcAc;
     EditText etPhoneCrAcAc;
     Spinner spDefCityCrAcAc;                     //объект спинер
+
     private ArrayAdapter<String> spAdapterCity;  //Адаптер для спинера
 
     @Override
@@ -53,11 +56,30 @@ public class CreateAccountActivity extends AppCompatActivity {
         dbUtilities = new DBUtilities(context);
         dbUtilities.open();
 
-        //запрос для получения курсор с данными
-        String query = "SELECT name FROM cities;";
+        //обращаемся к базе для получения списка имен городов
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("getAllCities");
 
-        //заполнить spListCity данные для отображения в Spinner
-        spListCity = dbUtilities.fillListStr(query);
+            String resultdb = bg.get();
+            Log.d("FOOTBALL", resultdb);
+            JSONObject jResult = new JSONObject(resultdb);
+
+            if(jResult.getString("error").toString().equals("")){
+                JSONObject jCities = jResult.getJSONObject("cities");
+                Iterator<String> i = jCities.keys();
+
+                while(i.hasNext()){
+                    spListCity.add(jCities.getString(i.next()));
+                }
+
+                Log.d("FOOTBALL", spListCity.toString());
+            }else{
+                Toast.makeText(context, "ERROR", Toast.LENGTH_LONG).show();
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
 
         //создание адаптера для спинера
         spAdapterCity = new ArrayAdapter<String>(
@@ -72,19 +94,32 @@ public class CreateAccountActivity extends AppCompatActivity {
         spDefCityCrAcAc.setAdapter(spAdapterCity);
     }//onCreate
 
-    //обработчик неажатия клавишы Создать запись пользователя
+    //обработчик нажатия клавишы Создать запись пользователя
     public void createNewAccount() {
+        String login = etLoginCrAcAc.getText().toString();
+        String password = etPasswordCrAcAc.getText().toString();
+        String name = etNameCrAcAc.getText().toString();
+        String phone = etPhoneCrAcAc.getText().toString();
+        String city_id = String.valueOf(spListCity.indexOf(spDefCityCrAcAc.getSelectedItem()) + 1);
+        String email = etEmailCrAcAc.getText().toString();
 
-        ContentValues cv = new ContentValues();
-        cv.put("login", etLoginCrAcAc.getText().toString());
-        cv.put("password", etPasswordCrAcAc.getText().toString());
-        cv.put("name", etNameCrAcAc.getText().toString());
-        cv.put("phone", etPhoneCrAcAc.getText().toString());
-        cv.put("city_id", spListCity.indexOf(spDefCityCrAcAc.getSelectedItem()) + 1);
-        cv.put("email", etEmailCrAcAc.getText().toString());
+        //обращяемся к базе данных на сервер для создания новой записи в таблицу пользователей
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("addNewUser", login, password, name, phone, city_id, email);
 
-        //добваить данные через объект ContentValues(cv), в таблицу "user"
-        dbUtilities.insertInto(cv, "users");
+            String resultdb = bg.get();
+            JSONObject jResult = new JSONObject(resultdb);
+            if(jResult.getString("error").toString().equals("")){
+                //выводим текст с положительным ответом о создании нового пользователя
+                Toast.makeText(this, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
+            }else{
+                //выводим текст с отрецательным ответом о создании нового пользователя
+                Toast.makeText(this, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
 
         //вернутся в активность авторизации
         turnBack();
@@ -92,7 +127,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     //вернутся в активность авторизации
     private void turnBack() {
-        Intent intent = new Intent(this, UnauthorizedPartActivity.class);
+        Intent intent = new Intent(this, AuthorizationActivity.class);
         startActivity(intent);
     }//turnBack
 

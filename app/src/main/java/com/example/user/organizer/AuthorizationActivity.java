@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.util.ArrayMap;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import org.json.JSONObject;
 
 //--------Активность для авторизация пользователя или перехода в актиность создания нового акаунта-
 
@@ -19,6 +22,7 @@ public class AuthorizationActivity extends AppCompatActivity {
     DBUtilities dbUtilities;
     Cursor authorCursor;                // курсор для чтения данных из БД
     Context context;
+    String result;                      // ответ сервера
 
     //Коллекции храннящие сущществующие логины и имейлы для авторизации
     ArrayMap<Integer, String> loginMap = new ArrayMap<>();
@@ -37,30 +41,30 @@ public class AuthorizationActivity extends AppCompatActivity {
         etPassword = (EditText) findViewById(R.id.etPassword);
         context = getBaseContext();
         dbUtilities = new DBUtilities(context);
-        dbUtilities.open();
-        // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
-        String query = "SELECT users.login, users.email, users.password FROM users;";
-        authorCursor =  dbUtilities.getDb().rawQuery(query, null);
+//        dbUtilities.open();
+//        // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
+//        String query = "SELECT users.login, users.email, users.password FROM users;";
+//        authorCursor =  dbUtilities.getDb().rawQuery(query, null);
 
-        //заполнить коллекции для поиска сущестующего логина или email для авторизации
-        fillMap();
+//        //заполнить коллекции для поиска сущестующего логина или email для авторизации
+//        fillMap();
 
     }//onCreate
 
-    // заполняем коллекции логинов и email-ов
-    private void fillMap() {
-        int n = authorCursor.getCount();
-
-        //значение ключа коллекции
-        int j = 0;
-        //цикл для заполнения коллекций существующих логинов(email) и их паролей
-        for (int i = 0; i < n; i++, j = j + 2) {
-            authorCursor.moveToPosition(i); // переходим в курсоре на текущую позицию
-            loginMap.put(j,authorCursor.getString(0));      //логин пользователя
-            loginMap.put(j+1,authorCursor.getString(1));    //email пользователя
-            passwordMap.put(i,authorCursor.getString(2));   //пароль пользователя
-        }//fori
-    }//fillMap
+//    // заполняем коллекции логинов и email-ов
+//    private void fillMap() {
+//        int n = authorCursor.getCount();
+//
+//        //значение ключа коллекции
+//        int j = 0;
+//        //цикл для заполнения коллекций существующих логинов(email) и их паролей
+//        for (int i = 0; i < n; i++, j = j + 2) {
+//            authorCursor.moveToPosition(i); // переходим в курсоре на текущую позицию
+//            loginMap.put(j,authorCursor.getString(0));      //логин пользователя
+//            loginMap.put(j+1,authorCursor.getString(1));    //email пользователя
+//            passwordMap.put(i,authorCursor.getString(2));   //пароль пользователя
+//        }//fori
+//    }//fillMap
 
     // Обработка нажатия кнопки авторизации
     public void signIn() {
@@ -68,7 +72,28 @@ public class AuthorizationActivity extends AppCompatActivity {
         String login = etLogin.getText().toString();          //введенное значение в поле логин
         String password = etPassword.getText().toString();    //введенное значение в поле пароль
 
-        boolean checkLogin = false, checkPassword = false;    //флаги проверки пароля и логина
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("authorization", login, password);
+
+            result = bg.get();
+            JSONObject jResult = new JSONObject(result);
+            if(jResult.getString("error").toString().equals("")){
+                User user = new User();
+                user.id = jResult.getJSONObject("user").getString("id");
+                user.name = jResult.getJSONObject("user").getString("name");
+
+                Intent intent = new Intent(this, NavigationDrawerLogInActivity.class);
+                intent.putExtra("User", user);
+                startActivity(intent);
+            }else{
+                Toast.makeText(this, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        /*boolean checkLogin = false, checkPassword = false;    //флаги проверки пароля и логина
 
         //если коллекция loginMap содержит введеное значение
         if(loginMap.containsValue(login)){
@@ -85,14 +110,14 @@ public class AuthorizationActivity extends AppCompatActivity {
                     break;
                 }//if
             }//for
-        }//if
+        }//if*/
 
         //проверка существующего Логина или почти и совпадающего пароля
-        if(checkLogin && checkPassword){
+        /*if(checkLogin && checkPassword){
             //переходин в актиность LoginActivity
             Intent intent = new Intent(this, NavigationDrawerLogInActivity.class);
             startActivity(intent);
-        } //if-else
+        } //if-else*/
 
     }//signIn
 

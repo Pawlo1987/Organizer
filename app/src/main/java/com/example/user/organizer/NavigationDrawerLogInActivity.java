@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.user.organizer.fragment.AdvertisingAndInformationFragment;
 import com.example.user.organizer.fragment.ExitConfirmDialog;
@@ -23,6 +24,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CustomInterface{
 
     DBUtilities dbUtilities;
+    User user;
 
     final String ID_EXIT_DIALOG = "dialogExitConfirm";          //пааметр для вызова диалога "выход"
     private ExitConfirmDialog exitConfirmDialog; // диалог подтверждения выхода из приложения
@@ -36,6 +38,9 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer_log_in);
+        //user = getIntent().getParcelableExtra("User");
+
+        //Toast.makeText(this, user.name, Toast.LENGTH_LONG).show();
 
         dbUtilities = new DBUtilities(getBaseContext());
         dbUtilities.open();

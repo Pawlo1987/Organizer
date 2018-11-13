@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.user.organizer.CreateFieldActivity">
+    tools:context="com.example.user.organizer.activity.CreateFieldActivity">
 
     <TextView
         android:id="@+id/tvCreateField"

@@ -1,4 +1,4 @@
-package com.example.user.organizer;
+package com.example.user.organizer.activity;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -6,6 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
+
+import com.example.user.organizer.DBUtilities;
+import com.example.user.organizer.R;
+import com.example.user.organizer.ShowAllEventsRecyclerAdapter;
 
 //-------Активность для вывода(просмотра) всех событий--------------
 
@@ -23,7 +27,7 @@ public class ShowAllEventActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_all_event);
+        setContentView(R.layout.fragment_show_all_event);
 
         context = getBaseContext();
         dbUtilities = new DBUtilities(context);

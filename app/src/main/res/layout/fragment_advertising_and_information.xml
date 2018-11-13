@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.user.organizer.AdvertisingAndInformationActivity">
+    tools:context="com.example.user.organizer.activity.AdvertisingAndInformationActivity">
 
     <TextView
         android:id="@+id/tvAdAnInAc"

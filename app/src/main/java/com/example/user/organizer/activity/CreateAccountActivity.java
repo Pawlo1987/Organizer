@@ -1,4 +1,4 @@
-package com.example.user.organizer;
+package com.example.user.organizer.activity;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,6 +10,10 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import com.example.user.organizer.DBUtilities;
+import com.example.user.organizer.R;
+import com.example.user.organizer.activity.UnauthorizedPartActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +58,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         dbUtilities.open();
 
         //запрос для получения курсор с данными
-        String query = "SELECT name FROM city;";
+        String query = "SELECT name FROM cities;";
 
         //заполнить spListCity данные для отображения в Spinner
         spListCity = dbUtilities.fillList(query);
@@ -86,14 +90,13 @@ public class CreateAccountActivity extends AppCompatActivity {
         //добваить данные через объект ContentValues(cv), в таблицу "user"
         dbUtilities.insertInto(cv, "users");
 
-        //переходин в актиность LoginPartActivity
-        Intent intent = new Intent(this, LoginPartActivity.class);
-        startActivity(intent);
+        //вернутся в активность авторизации
+        turnBack();
     }//CreateNewAccount
 
     //вернутся в активность авторизации
     private void turnBack() {
-        Intent intent = new Intent(this, LogoutPartActivity.class);
+        Intent intent = new Intent(this, UnauthorizedPartActivity.class);
         startActivity(intent);
     }//turnBack
 

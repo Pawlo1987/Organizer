@@ -1,22 +1,20 @@
-package com.example.user.organizer;
+package com.example.user.organizer.activity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.user.organizer.DBUtilities;
+import com.example.user.organizer.R;
+import com.example.user.organizer.activity.AdvertisingAndInformationActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;

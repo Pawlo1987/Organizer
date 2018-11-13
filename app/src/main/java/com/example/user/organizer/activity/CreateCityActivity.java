@@ -1,4 +1,4 @@
-package com.example.user.organizer;
+package com.example.user.organizer.activity;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import com.example.user.organizer.DBUtilities;
+import com.example.user.organizer.R;
 
 import java.util.ArrayList;
 import java.util.List;

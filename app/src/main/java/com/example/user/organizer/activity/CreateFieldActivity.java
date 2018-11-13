@@ -1,4 +1,4 @@
-package com.example.user.organizer;
+package com.example.user.organizer.activity;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,8 +11,10 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.example.user.organizer.DBUtilities;
+import com.example.user.organizer.R;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 //---------------Активность для создания нового поля---------------------
@@ -141,7 +143,7 @@ public class CreateFieldActivity extends AppCompatActivity {
 
     //вернутся в активность авторизации
     private void turnBack() {
-        Intent intent = new Intent(this, LoginPartActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }//turnBack
 

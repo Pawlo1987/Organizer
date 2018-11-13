@@ -1,23 +1,21 @@
-package com.example.user.organizer;
+package com.example.user.organizer.activity;
 
-import android.app.FragmentTransaction;
 import android.app.TabActivity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.TabHost;
+
+import com.example.user.organizer.R;
 
 //--Активность с инициализацией активных клавиш Tab Tools после авторизации-----
 
-public class LoginPartActivity extends TabActivity {
+public class LoginActivity extends TabActivity {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_part);
+        setContentView(R.layout.activity_login);
 
         // получаем TabHost
         TabHost tabHost = getTabHost();
@@ -46,11 +44,5 @@ public class LoginPartActivity extends TabActivity {
         tabSpec.setIndicator("Вкладка 4");
         tabSpec.setContent(new Intent(this, AdvertisingAndInformationActivity.class));
         tabHost.addTab(tabSpec);
-
-        tabSpec = tabHost.newTabSpec("tag5");
-        tabSpec.setIndicator("Вкладка 5");
-        tabSpec.setContent(new Intent(this, ExitActivity.class));
-        tabHost.addTab(tabSpec);
-
     }
 }

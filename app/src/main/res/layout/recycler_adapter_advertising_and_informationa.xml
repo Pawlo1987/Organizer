@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="20dp"
     android:orientation="vertical"
-    tools:context="com.example.user.organizer.AdvertisingAndInformationRecyclerAdapter">
+    tools:context="com.example.user.organizer.activity.AdvertisingAndInformationRecyclerAdapter">
 
 
     <TextView

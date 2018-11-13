@@ -5,27 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.user.organizer.ShowAllEventActivity">
+    tools:context="com.example.user.organizer.activity.ShowAuthUserEventsActivity">
 
     <TextView
-        android:id="@+id/tvallevents"
+        android:id="@+id/tvauthuserevents"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView" />
 
     <TextView
-        android:id="@+id/tvHeaderShAlEvAc"
+        android:id="@+id/tvHeaderShAuUsEvAc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="@string/tvHeaderShAlEvFr"
+        android:text="@string/tvHeaderShAuUsEvAc"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="24sp" />
 
-
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvMainShAlEvAc"
+        android:id="@+id/rvMainShAuUsEvAc"
         app:layoutManager="LinearLayoutManager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

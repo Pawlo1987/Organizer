@@ -1,4 +1,4 @@
-package com.example.user.organizer;
+package com.example.user.organizer.activity;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -8,24 +8,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import static android.view.View.GONE;
+import com.example.user.organizer.DBUtilities;
+import com.example.user.organizer.R;
 
 //-------Активность адаптера для вывода(просмотра) новости и реклама --------------
 
 public class AdvertisingAndInformationRecyclerAdapter extends RecyclerView.Adapter<AdvertisingAndInformationRecyclerAdapter.ViewHolder> {
 
-    //поля класса AdvertisingAndInformationRecyclerAdapter
+    //поля класса advertisingAndInformationRecyclerAdapter
     private LayoutInflater inflater;
     private Cursor infoCursor;
     DBUtilities dbUtilities;
 
 
     //конструктор
-    AdvertisingAndInformationRecyclerAdapter(Context context, Cursor infoCursor) {
+    public AdvertisingAndInformationRecyclerAdapter(Context context, Cursor infoCursor) {
         this.inflater = LayoutInflater.from(context);
         this.infoCursor = infoCursor;
         dbUtilities = new DBUtilities(context);
-    } // AdvertisingAndInformationRecyclerAdapter
+    } // advertisingAndInformationRecyclerAdapter
 
     //создаем новую разметку(View) путем указания разметки
     @Override
@@ -63,4 +64,4 @@ public class AdvertisingAndInformationRecyclerAdapter extends RecyclerView.Adapt
             tvCityAdAvInReAd = (TextView) view.findViewById(R.id.tvCityAdAvInReAd);
         } // ViewHolder
     } // class ViewHolder
-}//AdvertisingAndInformationRecyclerAdapter
+}//advertisingAndInformationRecyclerAdapter

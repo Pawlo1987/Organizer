@@ -3,7 +3,6 @@ package com.example.user.organizer;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,17 +12,17 @@ import android.widget.TextView;
 
 public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<ShowAuthUserEventsRecyclerAdapter.ViewHolder> {
 
-    //поля класса AdvertisingAndInformationRecyclerAdapter
+    //поля класса advertisingAndInformationRecyclerAdapter
     private LayoutInflater inflater;
     private Cursor eventsCursor;
     DBUtilities dbUtilities;
 
     //конструктор
-    ShowAuthUserEventsRecyclerAdapter(Context context, Cursor eventsCursor) {
+    public ShowAuthUserEventsRecyclerAdapter(Context context, Cursor eventsCursor) {
         this.inflater = LayoutInflater.from(context);
         this.eventsCursor = eventsCursor;
         dbUtilities = new DBUtilities(context);
-    } // AdvertisingAndInformationRecyclerAdapter
+    } // advertisingAndInformationRecyclerAdapter
 
     //создаем новую разметку(View) путем указания разметки
     @Override
@@ -67,4 +66,4 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         } // ViewHolder
     } // class ViewHolder
 
-}//AdvertisingAndInformationRecyclerAdapter
+}//advertisingAndInformationRecyclerAdapter

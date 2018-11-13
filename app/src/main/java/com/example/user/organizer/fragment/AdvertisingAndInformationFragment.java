@@ -1,26 +1,33 @@
-package com.example.user.organizer;
+package com.example.user.organizer.fragment;
 
+import android.app.Fragment;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.user.organizer.activity.AdvertisingAndInformationRecyclerAdapter;
+import com.example.user.organizer.activity.CreateNewsNoteActivity;
+import com.example.user.organizer.DBUtilities;
+import com.example.user.organizer.R;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
-public class AdvertisingAndInformationActivity extends AppCompatActivity {
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
+
+public class AdvertisingAndInformationFragment extends Fragment {
 
     // коды для идентификации активностей при получении результата
     public final int REQ_CREATE_NOTE = 1001;
@@ -34,10 +41,12 @@ public class AdvertisingAndInformationActivity extends AppCompatActivity {
     RecyclerView rvNoteLineAdAnInAc;
 
     // адаптер для отображения recyclerView
-    AdvertisingAndInformationRecyclerAdapter AdvertisingAndInformationRecyclerAdapter;
+    AdvertisingAndInformationRecyclerAdapter advertisingAndInformationRecyclerAdapter;
     DBUtilities dbUtilities;
     Spinner spCityAdAnInAc;
     int spPos;                      //позиция спинера
+
+    Button btnNewNoteAdAnInAc;      // кнопка создания новости
 
     // поля для доступа к записям БД
     Cursor infoCursor;                // прочитанные данные
@@ -47,20 +56,49 @@ public class AdvertisingAndInformationActivity extends AppCompatActivity {
     Context context;
     int idAuthUser = 6;
 
+    public AdvertisingAndInformationFragment newInstance() {
+
+        AdvertisingAndInformationFragment fragment = new AdvertisingAndInformationFragment();
+
+        return fragment;
+    } // FirstPageFragment
+
+    // Метод onAttach() вызывается в начале жизненного цикла фрагмента, и именно здесь
+    // мы можем получить контекст фрагмента, в качестве которого выступает класс MainActivity.
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_advertising_and_information);
+    public void onAttach(Context context) {
+        this.context = context;
+        dbUtilities = new DBUtilities(context);
+        dbUtilities.open();
+
+        super.onAttach(context);
+    } // onAttach
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View result = inflater.inflate(R.layout.fragment_advertising_and_information,  container, false);
+
+        btnNewNoteAdAnInAc = result.findViewById(R.id.btnNewNoteAdAnInAc);
+
+        // RecycerView для отображения таблицы users БД
+        rvNoteLineAdAnInAc = result.findViewById(R.id.rvNoteLineAdAnInAc);
+
+        //Обработка нажатия клавишы "Создать новость"
+        btnNewNoteAdAnInAc.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(context, CreateNewsNoteActivity.class);
+                startActivityForResult(intent, REQ_CREATE_NOTE);
+            }
+        });
 
         //привязка ресурсов к объектам
-        spCityAdAnInAc = (Spinner) findViewById(R.id.spCityAdAnInAc);
+        spCityAdAnInAc = result.findViewById(R.id.spCityAdAnInAc);
 
         //инициализация коллекции для спинера
         spListCity = new ArrayList<>();
-
-        context = getBaseContext();
-        dbUtilities = new DBUtilities(context);
-        dbUtilities.open();
 
         //запрос для получения курсор с данными
         String query = "SELECT name FROM cities;";
@@ -91,6 +129,7 @@ public class AdvertisingAndInformationActivity extends AppCompatActivity {
                 }//if-else
 
                 buildUserRecyclerView(query);     //Строим RecyclerView
+
             }//onItemSelected
 
             @Override
@@ -101,19 +140,21 @@ public class AdvertisingAndInformationActivity extends AppCompatActivity {
 
         // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
         query = "SELECT head, date, cities.name FROM infonotes " +
-                       "INNER JOIN cities ON cities._id = infonotes.city;";
+                "INNER JOIN cities ON cities._id = infonotes.city;";
 
         buildUserRecyclerView(query);     //Строим RecyclerView
 
-        tvAdAnInAc = (TextView) findViewById(R.id.tvAdAnInAc);
+        tvAdAnInAc = result.findViewById(R.id.tvAdAnInAc);
         tvAdAnInAc.setText(String.valueOf(infoCursor.getCount()));
-    }//onCreate
+
+        return result;
+    } // onCreateView
 
     //-----------------------Метод для приема результатов из активностей----------------------------
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_CANCELED) {
-            Toast.makeText(this, "Ошибка ввода!!!", Toast.LENGTH_LONG).show();
+//            Toast.makeText(this, "Ошибка ввода!!!", Toast.LENGTH_LONG).show();
         }//RESULT_CANCELED
 
         // обработка результатов по активностям
@@ -127,6 +168,8 @@ public class AdvertisingAndInformationActivity extends AppCompatActivity {
 
             writeDataToBD(head, note, date, city);
         }//RESULT_OK
+
+        spCityAdAnInAc.setSelection(spListCity.size()-1);
 
         //обновим список после обновления
         // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
@@ -143,7 +186,7 @@ public class AdvertisingAndInformationActivity extends AppCompatActivity {
         cv.put("date", date);
         cv.put("city", city);
 
-        //добваить данные через объект ContentValues(cv), в таблицу "user"
+        //добваить данные через объект ContentValues(cv), в таблицу "infonotes"
         dbUtilities.insertInto(cv, "infonotes");
     }//writeDataToBD
 
@@ -155,7 +198,7 @@ public class AdvertisingAndInformationActivity extends AppCompatActivity {
 
         //создание адаптера для спинера
         spinnerAdapter = new ArrayAdapter<String>(
-                this,
+                context,
                 android.R.layout.simple_spinner_item,
                 list
         );
@@ -171,18 +214,11 @@ public class AdvertisingAndInformationActivity extends AppCompatActivity {
         infoCursor =  dbUtilities.getDb().rawQuery(query, null);
 
         // создаем адаптер, передаем в него курсор
-        AdvertisingAndInformationRecyclerAdapter
+        advertisingAndInformationRecyclerAdapter
                 = new AdvertisingAndInformationRecyclerAdapter(context, infoCursor);
+
         // RecycerView для отображения таблицы users БД
-        rvNoteLineAdAnInAc = (RecyclerView) findViewById(R.id.rvNoteLineAdAnInAc);
-
-        rvNoteLineAdAnInAc.setAdapter(AdvertisingAndInformationRecyclerAdapter);
-
+        rvNoteLineAdAnInAc.setAdapter(advertisingAndInformationRecyclerAdapter);
     }//buildUserRecyclerView
 
-    //Обработка нажатия клавишы "Создать новость"
-    public void onClick(View view) {
-        Intent intent = new Intent(this, CreateNewsNoteActivity.class);
-        startActivityForResult(intent, REQ_CREATE_NOTE);
-    }//onClick
-}
+}//AdvertisingAndInformationFragment

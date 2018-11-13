@@ -1,4 +1,4 @@
-package com.example.user.organizer;
+package com.example.user.organizer.activity;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -7,12 +7,16 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
+import com.example.user.organizer.DBUtilities;
+import com.example.user.organizer.R;
+import com.example.user.organizer.ShowAuthUserEventsRecyclerAdapter;
+
 //-------Активность для вывода(просмотра) событий авторизированого пользователя--------------
 
 public class ShowAuthUserEventsActivity extends AppCompatActivity {
 
     RecyclerView rvMainShAuUsEvAc;
-    ShowAuthUserEventsRecyclerAdapter ShowAuthUserEventsRecyclerAdapter;  // адаптер для отображения recyclerView
+    ShowAuthUserEventsRecyclerAdapter showAuthUserEventsRecyclerAdapter;  // адаптер для отображения recyclerView
     DBUtilities dbUtilities;
 
     // поля для доступа к записям БД
@@ -25,7 +29,7 @@ public class ShowAuthUserEventsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_auth_user_events);
+        setContentView(R.layout.fragment_show_auth_user_events);
 
         context = getBaseContext();
         dbUtilities = new DBUtilities(context);
@@ -40,11 +44,11 @@ public class ShowAuthUserEventsActivity extends AppCompatActivity {
         eventsCursor =  dbUtilities.getDb().rawQuery(query, null);
 
         // создаем адаптер, передаем в него курсор
-        ShowAuthUserEventsRecyclerAdapter = new ShowAuthUserEventsRecyclerAdapter(context, eventsCursor);
+        showAuthUserEventsRecyclerAdapter = new ShowAuthUserEventsRecyclerAdapter(context, eventsCursor);
         // RecycerView для отображения таблицы users БД
         rvMainShAuUsEvAc = (RecyclerView) findViewById(R.id.rvMainShAuUsEvAc);
 
-        rvMainShAuUsEvAc.setAdapter(ShowAuthUserEventsRecyclerAdapter);
+        rvMainShAuUsEvAc.setAdapter(showAuthUserEventsRecyclerAdapter);
         tvauthuserevents = (TextView) findViewById(R.id.tvauthuserevents);
         tvauthuserevents.setText(String.valueOf(eventsCursor.getCount()));
     }//onCreate

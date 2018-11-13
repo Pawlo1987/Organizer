@@ -19,7 +19,7 @@ public class ShowAllEventsRecyclerAdapter extends RecyclerView.Adapter<ShowAllEv
     DBUtilities dbUtilities;
 
     //конструктор
-    ShowAllEventsRecyclerAdapter(Context context, Cursor eventsCursor) {
+    public ShowAllEventsRecyclerAdapter(Context context, Cursor eventsCursor) {
         this.inflater = LayoutInflater.from(context);
         this.eventsCursor = eventsCursor;
         dbUtilities = new DBUtilities(context);

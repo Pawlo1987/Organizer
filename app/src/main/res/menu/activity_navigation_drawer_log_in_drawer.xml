@@ -1,34 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/create_event"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/icon_create_event"
             android:title="@string/create_event" />
         <item
             android:id="@+id/show_user_events"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/icon_user_events"
             android:title="@string/show_user_events" />
         <item
             android:id="@+id/show_all_events"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/icon_all_events"
             android:title="@string/show_all_events" />
         <item
             android:id="@+id/news_line"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/icon_news"
             android:title="@string/news_line" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="">
         <menu>
             <item
                 android:id="@+id/log_out"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/icon_logout"
                 android:title="@string/log_out" />
             <item
                 android:id="@+id/exit_app"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/icon_exit"
                 android:title="@string/exit_app" />
         </menu>
     </item>

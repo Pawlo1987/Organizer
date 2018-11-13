@@ -1,4 +1,4 @@
-package com.example.user.organizer;
+package com.example.user.organizer.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,9 +8,11 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.ArrayMap;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+
+import com.example.user.organizer.DBUtilities;
+import com.example.user.organizer.R;
 
 //--------Активность для авторизация пользователя или перехода в актиность создания нового акаунта-
 
@@ -91,10 +93,10 @@ public class AuthorizationActivity extends AppCompatActivity {
 
         //проверка существующего Логина или почти и совпадающего пароля
         if(checkLogin && checkPassword){
-            //переходин в актиность LoginPartActivity
-            Intent intent = new Intent(this, LoginPartActivity.class);
+            //переходин в актиность LoginActivity
+            Intent intent = new Intent(this, NavigationDrawerLogInActivity.class);
             startActivity(intent);
-        } //if
+        } //if-else
 
     }//signIn
 
@@ -113,6 +115,5 @@ public class AuthorizationActivity extends AppCompatActivity {
                 createAccount();
                 break;
         }//switch
-        finish();
     }//onClick
 }//AuthorizationActivity

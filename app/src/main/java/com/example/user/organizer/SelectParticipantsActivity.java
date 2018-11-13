@@ -8,12 +8,16 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import com.example.user.organizer.DBUtilities;
+import com.example.user.organizer.R;
+import com.example.user.organizer.SelectParticipantsRecyclerAdapter;
+import com.example.user.organizer.activity.CreateEventActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +35,7 @@ public class SelectParticipantsActivity extends AppCompatActivity {
     EditText edBinarySePaAc;        //Строка для бинарного поиска
 
     // адаптер для отображения recyclerView
-    com.example.user.organizer.SelectParticipantsRecyclerAdapter SelectParticipantsRecyclerAdapter;
+    SelectParticipantsRecyclerAdapter selectParticipantsRecyclerAdapter;
     DBUtilities dbUtilities;
 
     // поля для доступа к записям БД
@@ -133,12 +137,12 @@ public class SelectParticipantsActivity extends AppCompatActivity {
         selectUserCursor =  dbUtilities.getDb().rawQuery(query, null);
 
         // создаем адаптер, передаем в него курсор
-        SelectParticipantsRecyclerAdapter
+        selectParticipantsRecyclerAdapter
                 = new SelectParticipantsRecyclerAdapter(context, selectUserCursor, filter, loginUserList);
         // RecycerView для отображения таблицы users БД
         rvUserSePaAc = (RecyclerView) findViewById(R.id.rvUserSePaAc);
 
-        rvUserSePaAc.setAdapter(SelectParticipantsRecyclerAdapter);
+        rvUserSePaAc.setAdapter(selectParticipantsRecyclerAdapter);
 
         // для сохранения отмеченных checkbox при скролинге пропишем доп. функции для recyclerView
         rvUserSePaAc.setDrawingCacheEnabled(true);

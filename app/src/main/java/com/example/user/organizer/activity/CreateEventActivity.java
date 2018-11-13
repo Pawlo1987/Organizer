@@ -1,4 +1,4 @@
-package com.example.user.organizer;
+package com.example.user.organizer.activity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -21,12 +21,14 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.user.organizer.DBUtilities;
+import com.example.user.organizer.R;
+import com.example.user.organizer.SelectParticipantsActivity;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-
-import static com.example.user.organizer.R.id.etPasswordCrAcAc;
 
 //--Активность для создания нового события(переход на активность создание нового поля --------------
 //-- или нового города или активность для добавления нового участника в событие)-------
@@ -338,8 +340,8 @@ public class CreateEventActivity extends AppCompatActivity {
             dbUtilities.insertInto(cv, "participants");
 
         }
-        //переходин в актиность LoginPartActivity
-        Intent intent = new Intent(this, LoginPartActivity.class);
+        //переходин в актиность LoginActivity
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }//createEvent
 }//CreateEventActivity

@@ -1,20 +1,20 @@
-package com.example.user.organizer;
+package com.example.user.organizer.activity;
 
 import android.app.TabActivity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TabHost;
+
+import com.example.user.organizer.R;
 
 ////--Активность с инициализацией активных клавиш Tab Tools до авторизации-----
 
-public class LogoutPartActivity extends TabActivity {
+public class UnauthorizedPartActivity extends TabActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_logout_part);
+        setContentView(R.layout.unauthorized_part);
 
         // получаем TabHost
         TabHost tabHost = getTabHost();

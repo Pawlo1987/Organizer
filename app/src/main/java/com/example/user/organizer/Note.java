@@ -3,6 +3,7 @@ package com.example.user.organizer;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+//----------Объект новостная запись, для упаковки даннных записей--------
 public class Note implements Parcelable{
     public String noteHead;
     public String noteDate;

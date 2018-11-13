@@ -6,7 +6,8 @@ import android.view.View;
 public interface CustomInterface {
     //закрыть приложение
     void closeApp();
-
+    //выйти из аккаунта
+    void signOut();
 
 }//CustomInterface
 

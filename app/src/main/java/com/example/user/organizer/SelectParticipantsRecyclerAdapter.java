@@ -13,11 +13,11 @@ import java.util.List;
 
 import static android.view.View.GONE;
 
+//--------Адаптер для вывода и выбора учасников события
 public class SelectParticipantsRecyclerAdapter extends RecyclerView.Adapter<SelectParticipantsRecyclerAdapter.ViewHolder> {
 
     //поля класса SelectParticipantsRecyclerAdapter
     private LayoutInflater inflater;
-    private Cursor selectUserCursor;
     private List<Participant> ShowUserList;     //коллекция учасников выбранными игроками
     private String filter;
     DBUtilities dbUtilities;
@@ -27,7 +27,6 @@ public class SelectParticipantsRecyclerAdapter extends RecyclerView.Adapter<Sele
     //конструктор
     SelectParticipantsRecyclerAdapter(Context context, String filter, List<Participant> ShowUserList, List<String> loginUserList) {
         this.inflater = LayoutInflater.from(context);
-        this.selectUserCursor = selectUserCursor;
         this.filter = filter;
         this.ShowUserList = ShowUserList;
         dbUtilities = new DBUtilities(context);

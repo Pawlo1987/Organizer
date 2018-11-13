@@ -37,10 +37,9 @@ public class EditEventActivity extends AppCompatActivity {
     public static final String PAR_USERS = "select";
 
     DBUtilities dbUtilities;
-    Cursor edEvCursor;                  // курсор для чтения данных из БД
     Context context;
 
-    String idAuthUser = "7";      // id авторизированого пользователя
+    String idAuthUser;      // id авторизированого пользователя
 
     boolean flChangeLoginUserList = false;      //  Поменялся список учасников
 
@@ -65,7 +64,6 @@ public class EditEventActivity extends AppCompatActivity {
 
     Intent intent;                          // для получения результатов из активности
     String eventId;
-    String query;                           //переменная для запроса
     String showEventDate;                   // дата события для показа
     String eventDateForDB;                  // дата события для БД
     String eventStartTime;                  // Время начала события
@@ -73,6 +71,7 @@ public class EditEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_event);
+
         //привязка ресурсов к объектам
         tvDateEdEv = (TextView) findViewById(R.id.tvDateEdEv);
         tvStartTimeEdEv = (TextView) findViewById(R.id.tvStartTimeEdEv);
@@ -91,6 +90,8 @@ public class EditEventActivity extends AppCompatActivity {
         etPriceEdEv.setText(intent.getStringExtra("price"));
         evPasswordEdEv.setText(intent.getStringExtra("password"));
         evPhoneEdEv.setText(intent.getStringExtra("phone"));
+        idAuthUser = intent.getStringExtra("user_id");
+
 
         //инициализация коллекции для спинера
         spListField = new ArrayList<>();

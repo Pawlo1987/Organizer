@@ -10,13 +10,11 @@ import android.widget.TextView;
 
 import java.util.List;
 
-//-------Активность адаптера для вывода(просмотра) новости и реклама --------------
-
+//-------Адаптер для вывода(просмотра) новости и реклама --------------
 public class AdvertisingAndInformationRecyclerAdapter extends RecyclerView.Adapter<AdvertisingAndInformationRecyclerAdapter.ViewHolder> {
 
     //поля класса advertisingAndInformationRecyclerAdapter
     private LayoutInflater inflater;
-    private Cursor infoCursor;
     DBUtilities dbUtilities;
     Note note;
     List<Note> notes;

@@ -2,25 +2,30 @@ package com.example.user.organizer.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 
+import com.example.user.organizer.AuthorizationActivity;
 import com.example.user.organizer.inteface.CustomInterface;
 
 //---------------------- Фрагмент с диалогом подтверждения выхода из приложения-------------------
 
 public class ExitConfirmDialog extends DialogFragment {
 
-    //интерфейс для закрытия приложения
-    CustomInterface closeApp;
+    //инициализация интерфейса
+    CustomInterface CustomInterface;
+    Context context;
 
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
-        closeApp = (CustomInterface) context;
+        this.context = context;
+        CustomInterface = (CustomInterface) context;
+
     } // onAttach
 
     @NonNull // создание диалога
@@ -39,7 +44,7 @@ public class ExitConfirmDialog extends DialogFragment {
                     .setMessage("Вы уверены?")
 //                .setIcon(R.drawable.exlamation)
                     // лямбда-выражение на клик кнопки "Да"
-                    .setPositiveButton("Да", (dialog, whichButton) -> current.finish())
+                    .setPositiveButton("Да", (dialog, whichButton) -> CustomInterface.signOut())
                     .setNegativeButton("Нет", null) // не назначаем слушателя кликов по кнопке "Нет"
                     .setCancelable(false)           // запрет закрытия диалога кнопкой Назад
                     .create();
@@ -49,9 +54,10 @@ public class ExitConfirmDialog extends DialogFragment {
                     .setMessage("Вы уверены?")
 //                .setIcon(R.drawable.exlamation)
                     // лямбда-выражение на клик кнопки "Да"
-                    .setPositiveButton("Да", (dialog, whichButton) -> closeApp.closeApp())
+                    .setPositiveButton("Да", (dialog, whichButton) -> CustomInterface.closeApp())
                     .setNegativeButton("Нет", null) // не назначаем слушателя кликов по кнопке "Нет"
                     .setCancelable(false)           // запрет закрытия диалога кнопкой Назад
                     .create();
     }//onCreateDialog
+
 }//class ExitConfirmDialog

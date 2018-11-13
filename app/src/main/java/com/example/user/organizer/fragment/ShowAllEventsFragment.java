@@ -30,14 +30,8 @@ public class ShowAllEventsFragment extends Fragment {
     List<Event> eventsList = new ArrayList<>(); //коллекция событий
     Context context;
 
-    String idAuthUser = "7";                 //авторизированный пользователь
+    String idAuthUser;                 //авторизированный пользователь
 
-    public ShowAllEventsFragment newInstance() {
-
-        ShowAllEventsFragment fragment = new ShowAllEventsFragment();
-
-        return fragment;
-    } // FirstPageFragment
 
     // Метод onAttach() вызывается в начале жизненного цикла фрагмента, и именно здесь
     // мы можем получить контекст фрагмента, в качестве которого выступает класс MainActivity.
@@ -45,6 +39,9 @@ public class ShowAllEventsFragment extends Fragment {
     public void onAttach(Context context) {
         this.context = context;
         dbUtilities = new DBUtilities(context);
+
+        // прочитать данные, переданные из активности (из точки вызова)
+        idAuthUser = getArguments().getString("idAuthUser");
 
         //получаем коллекцию событий
         eventsList = dbUtilities.getListEvents("");

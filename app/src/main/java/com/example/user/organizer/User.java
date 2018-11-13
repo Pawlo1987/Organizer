@@ -3,10 +3,7 @@ package com.example.user.organizer;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by User on 04.11.2017.
- */
-
+//------объект пользователь, для упаковки данных о пользователе------
 public class User implements Parcelable {
     public String id;
     public String name;

@@ -14,9 +14,7 @@ import java.util.List;
 //--------------Вспомагательный класс для работы с БД-----------------------------
 public class DBUtilities{
 
-//    private DBHelper dbHelper;
     private Context context;
-//    private SQLiteDatabase db;
 
     public DBUtilities(Context context) {
         this.context = context;
@@ -623,6 +621,72 @@ public class DBUtilities{
         }//try-catch
 
         return eventsList;
+    }//getListEvents
+
+    //получение коллекции полей
+    public List<Field> getListField(String fieldId) {
+        List<Field> fieldList = new ArrayList<>();
+
+        //обращаемся к базе для получения списка имен городов
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("getListField", fieldId);
+
+            String resultdb = bg.get();
+            Log.d("FOOTBALL", resultdb);
+            JSONObject jResult = new JSONObject(resultdb);
+
+            if(jResult.getString("error").toString().equals("")){
+                JSONObject jListId = jResult.getJSONObject("id");
+                List<String> listId = getListFromJSON(jListId);
+
+                JSONObject jListCity = jResult.getJSONObject("city");
+                List<String> listCity = getListFromJSON(jListCity);
+
+                JSONObject jListName = jResult.getJSONObject("name");
+                List<String> listName = getListFromJSON(jListName);
+
+                JSONObject jListPhone = jResult.getJSONObject("phone");
+                List<String> listPhone = getListFromJSON(jListPhone);
+
+                JSONObject jListLight = jResult.getJSONObject("light");
+                List<String> listLight = getListFromJSON(jListLight);
+
+                JSONObject jListCoating = jResult.getJSONObject("coating");
+                List<String> listCoating = getListFromJSON(jListCoating);
+
+                JSONObject jListShower = jResult.getJSONObject("shower");
+                List<String> listShower = getListFromJSON(jListShower);
+
+                JSONObject jListRoof = jResult.getJSONObject("roof");
+                List<String> listRoof = getListFromJSON(jListRoof);
+
+                JSONObject jListGeoLong = jResult.getJSONObject("geoLong");
+                List<String> listGeoLong = getListFromJSON(jListGeoLong);
+
+                JSONObject jListGeoLat = jResult.getJSONObject("geoLat");
+                List<String> listGeoLat = getListFromJSON(jListGeoLat);
+
+                JSONObject jListAddress = jResult.getJSONObject("address");
+                List<String> listAddress = getListFromJSON(jListAddress);
+
+                int n = listId.size();
+
+                for (int i = 0; i <n ; i++) {
+                    fieldList.add(new Field(listId.get(i), listCity.get(i),
+                            listName.get(i), listPhone.get(i), listLight.get(i),
+                            listCoating.get(i), listShower.get(i), listRoof.get(i),
+                            listGeoLong.get(i), listGeoLat.get(i),listAddress.get(i)));
+                }//fori
+
+            }else{
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }//if-else
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
+
+        return fieldList;
     }//getListEvents
 
     //получение коллекции событий для авторизированого пользователя

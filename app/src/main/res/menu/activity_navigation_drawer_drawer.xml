@@ -7,6 +7,10 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/create_event" />
         <item
+            android:id="@+id/show_field_catalog"
+            android:icon="@drawable/icon_all_events"
+            android:title="@string/show_field_catalog" />
+        <item
             android:id="@+id/show_user_events"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/show_user_events" />

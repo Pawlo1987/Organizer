@@ -20,7 +20,7 @@ import com.example.user.organizer.fragment.LeaveEventDialog;
 import java.util.ArrayList;
 import java.util.List;
 
-//-------Активность адаптера для вывода(просмотра) событий авторизированого пользователя--------------
+//-------Адаптера для вывода(просмотра) событий авторизированого пользователя--------------
 public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<ShowAuthUserEventsRecyclerAdapter.ViewHolder> {
 
     //поля класса advertisingAndInformationRecyclerAdapter
@@ -28,7 +28,6 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
     Event event = new Event();
     List<Event> eventsList = new ArrayList<>(); //коллекция событий
     Context context;
-    String queryAdapt;
     DBUtilities dbUtilities;
     String idAuthUser;         //Авторизированный пользователь
 
@@ -181,12 +180,6 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
 
         //редактировать событие
         private void editEvent() {
-//            // Запрос на полную информацию о собитии
-//            String query = "SELECT fields.name, cities.name, date, time, duration, price, password, events.phone " +
-//                    "FROM events " +
-//                    "INNER JOIN fields ON fields._id = events.field_id " +
-//                    "INNER JOIN cities ON cities._id = events.city_id " +
-//                    "WHERE events._id = " + idEvent + ";";
             Intent intent = new Intent(context, EditEventActivity.class);
             intent.putExtra("id", eventId);
             intent.putExtra("field_name", eventFieldName);

@@ -26,6 +26,8 @@ import java.util.List;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
+//---------------------- Фрагмент для вывода рекламной ленты -------------------
+
 public class AdvertisingAndInformationFragment extends Fragment {
 
     // коды для идентификации активностей при получении результата
@@ -51,7 +53,7 @@ public class AdvertisingAndInformationFragment extends Fragment {
     List<String> spListCity;             // Данные для спинера выбора города
 
     Context context;
-    int idAuthUser = 6;
+    String idAuthUser;
 
     public AdvertisingAndInformationFragment newInstance() {
 
@@ -66,7 +68,9 @@ public class AdvertisingAndInformationFragment extends Fragment {
     public void onAttach(Context context) {
         this.context = context;
         dbUtilities = new DBUtilities(context);
-       // dbUtilities.open();
+
+        // прочитать данные, переданные из активности (из точки вызова)
+        idAuthUser = getArguments().getString("idAuthUser");
 
         super.onAttach(context);
     } // onAttach

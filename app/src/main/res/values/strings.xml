@@ -116,5 +116,11 @@
     <string name="btnConfirmEdEv">Подтвердить</string>
     <string name="tvPhoneCrFi">Телефон</string>
     <string name="tvGeolongCrFi">Геолок. долгота</string>
+    <string name="tvHeaderShFiCaFr">Каталог полей</string>
+    <string name="tvFirstLineShFiCaReAd">Город</string>
+    <string name="tvSecondLineShFiCaReAd">Назв.</string>
+    <string name="tvThirdLineShFiCaReAd">Телефон</string>
+    <string name="item_about_field_catalog_rva">подробная информация</string>
+    <string name="show_field_catalog">Каталог полей</string>
 
 </resources>

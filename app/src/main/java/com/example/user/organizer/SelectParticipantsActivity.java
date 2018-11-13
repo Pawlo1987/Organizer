@@ -20,7 +20,6 @@ import java.util.List;
 
 public class SelectParticipantsActivity extends AppCompatActivity {
 
-    String query;                   //запрос
     String filter = "";             //фильтрующее слово для бинарного поиска
     RecyclerView rvUserSePaAc;      //RecyclerView для учасников
     int spPos;                      //позиция спинера

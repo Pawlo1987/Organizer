@@ -32,16 +32,16 @@ public class CreateNewsNoteActivity extends AppCompatActivity {
     EditText etMessCrNeNoAc;            // EditText для новой записи
 
     Context context;
-    int idAuthUser = 6;
+    String idAuthUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_news_note);
+        idAuthUser = getIntent().getStringExtra("idAuthUser");
 
         context = getBaseContext();
         dbUtilities = new DBUtilities(context);
-//        dbUtilities.open();
 
         tvDateCrNeNoAc = (TextView) findViewById(R.id.tvDateCrNeNoAc);
         etHeadCrNeNoAc = (EditText) findViewById(R.id.etHeadCrNeNoAc);

@@ -16,7 +16,8 @@ import java.net.URLEncoder;
 
 import javax.net.ssl.HttpsURLConnection;
 
-// класс для подключения и выполнения запросов на сервере
+//-------Класс для подключения и выполнения запросов на сервере-----------
+//-------Поделился Валера Дорохольский---------------------------
 public class BackgroundWorker extends AsyncTask<String, Void, String> implements AutoCloseable {
     final String DOMAIN = "http://strahovanie.dn.ua/football_db/index.php";     // домен для запросов
 
@@ -205,6 +206,21 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
                     // формируем строку для отправки на сервер
                     String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8")
                             + "&" + URLEncoder.encode("eventId", "utf8") + "=" + URLEncoder.encode(eventId, "utf8");
+
+                    return workWithServer(postData);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return "IO:" + e.getMessage();
+                } // try-catch
+
+            case "getListField":
+                try {
+                    // параметры для передачи на сервер (для получения списка полей)
+                    String fieldId = params[1];
+
+                    // формируем строку для отправки на сервер
+                    String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8")
+                            + "&" + URLEncoder.encode("fieldId", "utf8") + "=" + URLEncoder.encode(fieldId, "utf8");
 
                     return workWithServer(postData);
                 } catch (IOException e) {

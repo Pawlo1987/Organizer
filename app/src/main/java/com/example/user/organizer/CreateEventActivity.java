@@ -38,7 +38,7 @@ public class CreateEventActivity extends AppCompatActivity {
     DBUtilities dbUtilities;
     Context context;
 
-    String authorizLogin = "user7";      // Логин авторизированого пользователя
+    String idAuthUser;                  //id Авторизированого пользователя
 
     ListView lvListOfParticipantsCrEv;   // ListView для выбранных выбранных участников
     List<String> spListField;            // Данные для спинера выбора поля
@@ -66,6 +66,7 @@ public class CreateEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
+        idAuthUser = getIntent().getStringExtra("idAuthUser");
 
         //привязка ресурсов к объектам
         tvDateCrEv = (TextView) findViewById(R.id.tvDateCrEv);
@@ -251,6 +252,7 @@ public class CreateEventActivity extends AppCompatActivity {
                 break;
             case R.id.btnConfirmCrEv:            //кнопка создать
                 createEvent();
+                finish();
                 break;
         }//switch
     }//onClick
@@ -319,9 +321,7 @@ public class CreateEventActivity extends AppCompatActivity {
         String price = etPriceCrEv.getText().toString();
         String password = evPasswordCrEv.getText().toString();
         String phone = evPhoneCrEv.getText().toString();
-        String user_id = dbUtilities.getIdByValue("users", "login",
-                authorizLogin   //Объект (название поля)
-        );
+        String user_id = idAuthUser;
 
         //добваить данные через объект ContentValues(cv), в таблицу "event"
         dbUtilities.insertIntoEvents(field_id, city_id, date, time,
@@ -339,7 +339,5 @@ public class CreateEventActivity extends AppCompatActivity {
             dbUtilities.insertIntoParticipants(event_id, user_id);
         }//foreach
 
-        Intent intent= new Intent(this, NavigationDrawerLogInActivity.class);
-        startActivity(intent);
     }//createEvent
 }//CreateEventActivity

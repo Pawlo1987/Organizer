@@ -1,11 +1,9 @@
 package com.example.user.organizer;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.ArrayMap;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -40,11 +38,6 @@ public class CreateCityActivity extends AppCompatActivity {
 
         context = getBaseContext();
         dbUtilities = new DBUtilities(context);
-//        dbUtilities.open();
-
-
-//        //запрос для получения курсор с данными
-//        String query = "SELECT name FROM regions;";
 
         //заполнить spListCity данные для отображения в Spinner
         spListRegion = dbUtilities.getStrListTableFromDB("regions", "name");
@@ -71,9 +64,6 @@ public class CreateCityActivity extends AppCompatActivity {
         dbUtilities.insertIntoCities(name, region_id);
 
         finish();
-//        //переходин в актиность CreateEventActivity
-//        Intent intent = new Intent(this, CreateEventActivity.class);
-//        startActivity(intent);
     }//CreateNewAccount
 
     //вернутся в активность авторизации

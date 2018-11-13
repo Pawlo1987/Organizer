@@ -4,6 +4,7 @@ package com.example.user.organizer;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+//------------Объект учасник, для упаковки данных об учаснике
 public class Participant implements Parcelable{
     String id;
     String name;

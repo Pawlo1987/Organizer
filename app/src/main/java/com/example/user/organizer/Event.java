@@ -3,6 +3,7 @@ package com.example.user.organizer;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+//-------------Объект Собитие для упаковки данных о событии----------
 public class Event implements Parcelable{
     String eventId;
     String cityName;

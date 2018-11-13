@@ -134,9 +134,7 @@ public class CreateFieldActivity extends AppCompatActivity {
                 shower_status, roof_status, geo_long, geo_lat, address);
 
         finish();
-//        //переходин в актиность CreateEventActivity
-//        Intent intent = new Intent(this, CreateEventActivity.class);
-//        startActivity(intent);
+
     }//createNewField
 
     //вернутся в активность авторизации

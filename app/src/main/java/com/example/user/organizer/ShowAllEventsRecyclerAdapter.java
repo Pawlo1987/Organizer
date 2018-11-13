@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-//-------Активность адаптера для вывода(просмотра) всех событий--------------
+//-------Адаптера для вывода(просмотра) всех событий--------------
 public class ShowAllEventsRecyclerAdapter extends
         RecyclerView.Adapter<ShowAllEventsRecyclerAdapter.ViewHolder>{
 

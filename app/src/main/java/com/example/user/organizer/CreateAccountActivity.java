@@ -18,7 +18,6 @@ import java.util.Iterator;
 import java.util.List;
 
 //---------Активность для создания записи нового пользователя ---------------------------
-
 public class CreateAccountActivity extends AppCompatActivity {
 
     DBUtilities dbUtilities;
@@ -55,30 +54,8 @@ public class CreateAccountActivity extends AppCompatActivity {
         context = getBaseContext();
         dbUtilities = new DBUtilities(context);
 
-        //обращаемся к базе для получения списка имен городов
-        try(BackgroundWorker bg = new BackgroundWorker()){
-            bg.execute("getAllCities");
-
-            String resultdb = bg.get();
-            Log.d("FOOTBALL", resultdb);
-            JSONObject jResult = new JSONObject(resultdb);
-
-            if(jResult.getString("error").toString().equals("")){
-                JSONObject jCities = jResult.getJSONObject("cities");
-                Iterator<String> i = jCities.keys();
-
-                while(i.hasNext()){
-                    spListCity.add(jCities.getString(i.next()));
-                }
-
-                Log.d("FOOTBALL", spListCity.toString());
-            }else{
-                Toast.makeText(context, "ERROR", Toast.LENGTH_LONG).show();
-            }
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }//try-catch
+        //получаем список городов для спинера
+        spListCity = dbUtilities.getStrListTableFromDB("cities","name");
 
         //создание адаптера для спинера
         spAdapterCity = new ArrayAdapter<String>(
@@ -104,11 +81,12 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         //обращяемся к базе данных на сервер для создания новой записи в таблицу user
         dbUtilities.insertIntoUsers( login, password, name, phone, city_id, email);
-
+        finish();
     }//CreateNewAccount
 
     //вернутся в активность авторизации
     private void turnBack() {
+        finish();
     }//turnBack
 
     public void onClick(View view) {
@@ -120,7 +98,6 @@ public class CreateAccountActivity extends AppCompatActivity {
                 turnBack();
                 break;
         }//switch
-        finish();
     }//onClick
 
 }//CreateAccountActivity

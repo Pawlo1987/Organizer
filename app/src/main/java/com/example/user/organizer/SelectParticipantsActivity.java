@@ -169,7 +169,6 @@ public class SelectParticipantsActivity extends AppCompatActivity {
 
     //сохранить и передать выборанных игроков
     private void confirmSelect() {
-
         // создать для передачи результатов
         Intent intent = new Intent();
         //пакуем при помощи Extra Parcelable - объект

@@ -5,10 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +20,13 @@ import java.util.List;
 //---------------Активность для создания нового поля---------------------
 
 public class CreateFieldActivity extends AppCompatActivity {
+
+    // коды для идентификации активностей при получении результата
+    public final int REQ_SELECT_LOCATION = 1002;
+
+    //Параметр -- "ИМЯ КЛЮЧА"
+    public static final String PAR_LAT = "latitude";
+    public static final String PAR_LONG = "longitude";
 
     DBUtilities dbUtilities;
     Context context;
@@ -37,6 +48,7 @@ public class CreateFieldActivity extends AppCompatActivity {
     Spinner spCoatingCrFi;
     Spinner spShowerCrFi;
     Spinner spRoofCrFi;
+    Switch swLocationCrFi;
 
     private ArrayAdapter<String> spAdapterCity;    //Адаптер для спинера выбор города
     private ArrayAdapter<String> spAdapterBoolean; //Адаптер для спинера выбор ДУШ, ОСВЕЩЕНИЕ, КРЫША
@@ -60,6 +72,11 @@ public class CreateFieldActivity extends AppCompatActivity {
         spCoatingCrFi = (Spinner) findViewById(R.id.spCoatingCrFi);
         spShowerCrFi = (Spinner) findViewById(R.id.spShowerCrFi);
         spRoofCrFi = (Spinner) findViewById(R.id.spRoofCrFi);
+        swLocationCrFi = (Switch) findViewById(R.id.swLocationCrFi);
+
+        //setEnabled - параметр для редактирования поля EditText
+        etGeolatCrFi.setEnabled(false);
+        etGeolongCrFi.setEnabled(false);
 
         //инициализация коллекции для спинера
         spListCity = new ArrayList<>();
@@ -116,7 +133,41 @@ public class CreateFieldActivity extends AppCompatActivity {
         spLightCrFi.setAdapter(spAdapterBoolean);
         spShowerCrFi.setAdapter(spAdapterBoolean);
         spRoofCrFi.setAdapter(spAdapterBoolean);
+
+        //вешаем слушателя на изменение клавишы switch
+        //(клавиша вкл./выкл. возможности редактирования полей с координатами геопозиции)
+        if (swLocationCrFi != null) {
+            swLocationCrFi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked){
+                        //setEnabled - параметр для редактирования поля EditText
+                        etGeolatCrFi.setEnabled(true);
+                        etGeolongCrFi.setEnabled(true);
+                    }else{
+                        etGeolatCrFi.setEnabled(false);
+                        etGeolongCrFi.setEnabled(false);
+                    }//if-else
+                }//onCheckedChanged
+            });//setOnCheckedChangeListener
+        }//if
     }//onCreate
+
+    //-----------------------Метод для приема результатов из активностей----------------------------
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_CANCELED) {
+            Toast.makeText(this, "Ошибка ввода!!!", Toast.LENGTH_LONG).show();
+        }
+
+        // обработка результатов по активностям
+        if (resultCode == RESULT_OK) {
+            // читаем из объекта data полученные данные и выводим в поле результата
+            //создаем новые данные о самолете из полученных данных
+            etGeolatCrFi.setText(String.valueOf(data.getDoubleExtra(PAR_LAT,0.)));
+            etGeolongCrFi.setText(String.valueOf(data.getDoubleExtra(PAR_LONG,0.)));
+        }
+    }//onActivityResult
 
     //обработчик нажатия клавишы Создать запись пользователя
     public void createNewField() {
@@ -149,18 +200,26 @@ public class CreateFieldActivity extends AppCompatActivity {
 
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btnNewCityCrFi:            //выполнить операцию
+            case R.id.btnNewCityCrFi:           //выполнить операцию
                 createNewCity();
                 break;
             case R.id.btnCreateCrFi:            //выполнить операцию
                 createNewField();
                 break;
-            case R.id.btnBackCrFi:               //отменить операцию
+            case R.id.btnSelectGeoposCrFi:      //выполнить операцию
+                geoPositionOnMap();
+                break;
+            case R.id.btnBackCrFi:              //отменить операцию
                 turnBack();
                 break;
         }//switch
-        finish();
     }//onClick
+
+    private void geoPositionOnMap() {
+        Intent intent = new Intent(this, FieldMapsActivity.class);
+        intent.putExtra("mapStatus", 1);
+        startActivityForResult(intent, REQ_SELECT_LOCATION);
+    }//geoPositionOnMap
 
     //обработка нажатия клавиши создания нового города
     private void createNewCity() {

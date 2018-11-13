@@ -2,6 +2,7 @@ package com.example.user.organizer;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -13,13 +14,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -27,22 +31,28 @@ import java.util.List;
 
 
 public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCallback {
-//    double myLatitude;
-//    double myLongitude;
-    boolean isEnabledGPS;
-    String strStatusGPS;
-    boolean isEnabledNet;
-    String strStatusNet;
-    Spinner spMapField;
-    Spinner spMapCity;
-//    LatLng myLatLng;
-    List<String> spListField;
-    List<String> spListCity;
+    double myLatitude;              //широта местоположения онлайн
+    double myLongitude;             //долгота местоположения онлайн
+    boolean isEnabledGPS;           //статус включенного GPS оборудывания
+    String strStatusGPS;            //вывод статуса включенного GPS оборудывания
+    boolean isEnabledNet;           //статус включенного GSM оборудывания
+    String strStatusNet;            //вывод статуса включенного GSM оборудывания
+    Spinner spMapField;             //спинер выбора поля для отображения маркера на карте
+    Spinner spMapCity;              //спинер выбора города для отображения маркера на карте
+    TextView tvGeoLat;              //TextView для вывода широты при создании поля
+    TextView tvGeoLong;             //TextView для вывода долготы при создании поля
+    LinearLayout llStatus0;         //LinearLayout для вывода элементов при просмотре полей
+    LinearLayout llStatus1;         //LinearLayout для вывода элементов при создании поля
+//    LatLng myLatLng;                //данные о онлайн местоположении
+    List<String> spListField;       //коллекция для спинера выбора поля
+    List<String> spListCity;        //коллекция для спинера выбора города
+    int mapStatus;                  //статус для работы с картой(0-просмотр полей, 1-создание нового поля)
+    Marker selectMarker;
 
-    Location location;
+    Location location;              //переменая для хранения данных о локации
 
     private GoogleMap mMap;
-    List<Field> fieldList = new ArrayList<>(); //коллекция полей
+    List<Field> fieldList = new ArrayList<>();      //коллекция для хранения данных о полях
     Context context;
     DBUtilities dbUtilities;
     private LocationManager locationManager;
@@ -56,6 +66,16 @@ public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCal
         spListCity = new ArrayList<>();
         spMapCity = (Spinner) findViewById(R.id.spMapCity);
         spMapField = (Spinner) findViewById(R.id.spMapField);
+        tvGeoLat = (TextView) findViewById(R.id.tvGeoLat);
+        tvGeoLong = (TextView) findViewById(R.id.tvGeoLong);
+        llStatus0 = (LinearLayout) findViewById(R.id.llStatus0);
+        llStatus1 = (LinearLayout) findViewById(R.id.llStatus1);
+        mapStatus = getIntent().getIntExtra("mapStatus", 0);
+
+        //mapStatus - цель вызваной активности
+        //(для просмотра полей статус - 0 или для выбора точки расположения поля)
+        if(mapStatus == 0) llStatus1.setVisibility(View.GONE);
+        else llStatus0.setVisibility(View.GONE);
 
         //заполнить spListCity данные для отображения в Spinner
         spListCity = dbUtilities.getStrListTableFromDB("cities", "name");
@@ -103,10 +123,10 @@ public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCal
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
         //получаем коллекцию полей
         fieldList = dbUtilities.getListField("");
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
     }//onCreate
 
     //строим Spinner
@@ -138,6 +158,9 @@ public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCal
             mMap.addMarker(new MarkerOptions().position(latLng).title(field.name));
         }//foreach
 
+        //создание начального пустого маркера
+        selectMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(1,1)).title("Новое поле"));
+
         //кнопка для посика моей геопозиции
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -151,6 +174,17 @@ public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCal
         }
         mMap.setMyLocationEnabled(true);
 
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                myLatitude = latLng.latitude;
+                myLongitude = latLng.longitude;
+                tvGeoLat.setText(String.valueOf(latLng.latitude));
+                tvGeoLong.setText(String.valueOf(latLng.longitude));
+                selectMarker.remove();
+                selectMarker = mMap.addMarker(new MarkerOptions().position(latLng).title("Новое поле"));
+            }//onMapClick
+        });//setOnMapClickListener
     }//onMapReady
 
     @Override
@@ -199,14 +233,18 @@ public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCal
     private LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
-//            myLatitude = location.getLatitude();
-//            myLongitude = location.getLongitude();
-//            myLatLng = new LatLng(myLatitude, myLongitude);
-//            mMap.addMarker(new MarkerOptions().position(myLatLng).title("мое положение"));
-//            mMap.moveCamera(CameraUpdateFactory.newLatLng(myLatLng));
-//            mMap.setMinZoomPreference(10.0f);
-//            mMap.setMaxZoomPreference(20.0f);
-        }
+            if(mapStatus == 1) {
+//                myLatitude = location.getLatitude();
+//                myLongitude = location.getLongitude();
+//                tvGeoLat.setText(String.valueOf(myLatitude));
+//                tvGeoLong.setText(String.valueOf(myLongitude));
+//                myLatLng = new LatLng(myLatitude, myLongitude);
+//                mMap.addMarker(new MarkerOptions().position(myLatLng).title("мое положение"));
+//                mMap.moveCamera(CameraUpdateFactory.newLatLng(myLatLng));
+//                mMap.setMinZoomPreference(10.0f);
+//                mMap.setMaxZoomPreference(20.0f);
+            }//if
+        }//onLocationChanged
 
         @Override
         public void onProviderDisabled(String provider) { checkEnabled(); }
@@ -248,4 +286,16 @@ public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCal
                 .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }//checkEnabled
 
+    public void onClick(View view) {
+        // создать для передачи результатов
+        Intent intent = new Intent(this, CreateFieldActivity.class);
+
+        // пакуем при помощи
+        intent.putExtra(CreateFieldActivity.PAR_LAT, myLatitude);
+        intent.putExtra(CreateFieldActivity.PAR_LONG, myLongitude);
+
+        // собственно передача параметров
+        setResult(RESULT_OK, intent);
+        onBackPressed();
+    }//onClick
 }//FieldMapsActivity

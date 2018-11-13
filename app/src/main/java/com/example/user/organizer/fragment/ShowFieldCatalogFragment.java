@@ -92,6 +92,7 @@ public class ShowFieldCatalogFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), FieldMapsActivity.class);
+                intent.putExtra("mapStatus", 0);
                 startActivity(intent);
             }
         });

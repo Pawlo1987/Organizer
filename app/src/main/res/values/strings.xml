@@ -67,5 +67,9 @@
     <string name="tvAddressCrFi">Адрес</string>
     <string name="btnCreateCrFi">Создать</string>
     <string name="btnBackCrFi">Отмена</string>
+    <string name="tvCitySePaAc">Город</string>
+    <string name="edBinarySePaAc">Бинарный поиск</string>
+    <string name="btnConfirmSePaAc">Подвердить выбор</string>
+    <string name="btnCancelSePaAc">Отменить выбор</string>
 
 </resources>

@@ -23,12 +23,9 @@
         <activity android:name=".CreateEventActivity" />
         <activity android:name=".CreateAccountActivity" />
         <activity android:name=".ExitActivity" />
-        <activity
-            android:name=".NavigationDrawerActivity"
-            android:label="@string/title_activity_navigation_drawer"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".CreateCityActivity" />
-        <activity android:name=".CreateFieldActivity"></activity>
+        <activity android:name=".CreateFieldActivity" />
+        <activity android:name=".SelectParticipantsActivity" />
     </application>
 
 </manifest>

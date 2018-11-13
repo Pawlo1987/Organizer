@@ -13,6 +13,7 @@
         android:roundIcon="@drawable/icon_main_player"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,7 +32,7 @@
             android:name=".NavigationDrawerLogInActivity"
             android:label="@string/title_activity_navigation_drawer_log_in"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".EditEventActivity"></activity>
+        <activity android:name=".EditEventActivity" />
     </application>
 
 </manifest>

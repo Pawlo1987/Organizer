@@ -2,17 +2,12 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -251,6 +246,27 @@ public class DBUtilities{
         }//try-catch
     }//insertIntoUsers
 
+    //обращяемся к БД на сервер для создания нового записи в таблицу notification
+    public void insertIntoNotifications(String event_id, String user_id, String city_id, String field_id, String time,
+                                String date, String message_id) {
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("insertIntoNotifications", event_id, user_id, city_id, field_id, time, date, message_id);
+
+            String resultdb = bg.get();
+            JSONObject jResult = new JSONObject(resultdb);
+            if(jResult.getString("error").toString().equals("")){
+                //выводим текст с положительным ответом о создании нового уведмления
+//                Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
+            }else{
+                //выводим текст с отрецательным ответом о создании нового уведмления
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }//if-else
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
+    }//insertIntoNotification
+
     //обращяемся к БД на сервер для создания новой записи в таблицу fields
     public void insertIntoFields(String city_id, String name, String phone, String light_status,
                                  String coating_id, String shower_status, String roof_status,
@@ -475,6 +491,63 @@ public class DBUtilities{
 
         return list;
     }//getSomeFieldsfromDB
+
+    // получение списка уведомлений по признаку user_id
+    public List<Notification> getSomeNotifications(String user_id) {
+        List<Notification> listNotification = new ArrayList<>();
+
+        //обращаемся к базе для получения списка имен городов
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("getSomeNotifications", user_id);
+
+            String resultdb = bg.get();
+            Log.d("FOOTBALL", resultdb);
+            JSONObject jResult = new JSONObject(resultdb);
+
+            if(jResult.getString("error").toString().equals("")){
+
+                JSONObject jListId = jResult.getJSONObject("id");
+                List<String> idList = getListFromJSON(jListId);
+
+                JSONObject jListEvent = jResult.getJSONObject("event");
+                List<String> eventList = getListFromJSON(jListEvent);
+
+                JSONObject jListUser = jResult.getJSONObject("user");
+                List<String> userList = getListFromJSON(jListUser);
+
+                JSONObject jListCity = jResult.getJSONObject("city");
+                List<String> cityList = getListFromJSON(jListCity);
+
+                JSONObject jListField = jResult.getJSONObject("field");
+                List<String> fieldList = getListFromJSON(jListField);
+
+                JSONObject jListTime = jResult.getJSONObject("time");
+                List<String> timeList = getListFromJSON(jListTime);
+
+                JSONObject jListDate = jResult.getJSONObject("date");
+                List<String> dateList = getListFromJSON(jListDate);
+
+                JSONObject jListMessage = jResult.getJSONObject("message");
+                List<String> messageList = getListFromJSON(jListMessage);
+
+                int n = idList.size();
+
+                for (int i = 0; i <n ; i++) {
+                    listNotification.add(new Notification(idList.get(i),eventList.get(i),
+                            userList.get(i),cityList.get(i),fieldList.get(i),timeList.get(i),
+                            dateList.get(i),messageList.get(i)));
+                }//fori
+
+            }else{
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }//if-else
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
+
+        return listNotification;
+    }//getSomeNotifications
 
     //получение размера определенной таблицы
     public String getTableSize(String tableName) {
@@ -809,6 +882,26 @@ public class DBUtilities{
             e.printStackTrace();
         }//try-catch
     }//deleteRowById
+
+    //удалить запись по Value
+    public void deleteRowByValue(String tableName, String columnName, String value) {
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("deleteRowByValue", tableName, columnName, value);
+
+            String resultdb = bg.get();
+            JSONObject jResult = new JSONObject(resultdb);
+            if(jResult.getString("error").toString().equals("")){
+                //выводим текст с положительным ответом о создании нового пользователя
+//                Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
+            }else{
+                //выводим текст с отрецательным ответом о создании нового пользователя
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }//if-else
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
+    }//deleteRowByValue
 
     //получить коллекцию значений по задоному значению и его столбцу
     public List<String> getListValuesByValueAndHisColumn(String tableName, String searchColumnName,

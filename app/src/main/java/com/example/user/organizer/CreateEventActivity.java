@@ -337,7 +337,11 @@ public class CreateEventActivity extends AppCompatActivity {
             user_id = dbUtilities.getIdByValue("users",
                     "login", loginUser);
 
+            //добавление новой записи в таблицу participants
             dbUtilities.insertIntoParticipants(event_id, user_id);
+
+            //добавление новой записи в таблицу notifications
+            dbUtilities.insertIntoNotifications(event_id, user_id, city_id, field_id, time, date, "1");
         }//foreach
 
     }//createEvent

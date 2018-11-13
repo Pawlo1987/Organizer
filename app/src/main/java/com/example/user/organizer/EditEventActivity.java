@@ -49,6 +49,7 @@ public class EditEventActivity extends AppCompatActivity {
     List<String> spListCity;             // Данные для спинера выбора города
 
     List<String> loginUserList;          //коллекция login-ов с выбранными игроками
+    List<String> idUserList;             //коллекция id-ов с выбранными игроками
 
     EditText etPriceEdEv;                //Общая стоимость тренеровки
     EditText evPhoneEdEv;                //телефон организатора
@@ -121,7 +122,7 @@ public class EditEventActivity extends AppCompatActivity {
 
         //заполняем список учасников
         //первое - получаем id учасников
-        List<String> idUserList = dbUtilities.getListValuesByValueAndHisColumn("participants","event_id",
+        idUserList = dbUtilities.getListValuesByValueAndHisColumn("participants","event_id",
                 eventId, "user_id");
 
         for (String id : idUserList) {
@@ -362,16 +363,15 @@ public class EditEventActivity extends AppCompatActivity {
 
         if(flChangeLoginUserList){
 
-            //заполняем список учасников(id)
-            List<String> idUsersList = dbUtilities.getListValuesByValueAndHisColumn(
-                    "participants", "participants.event_id",
-                    eventId, "participants.id"
-            );
-
             //удаляем старый список учасников из таблицы participants
-            for (String idUser : idUsersList) {
+            for (String idUser : idUserList) {
                 dbUtilities.deleteRowByTwoValueAndTheyColumnName(
                         "participants", "user_id", idUser,
+                        "event_id", eventId
+                );
+
+                dbUtilities.deleteRowByTwoValueAndTheyColumnName(
+                        "notifications", "user_id", idUser,
                         "event_id", eventId
                 );
             }//foreach
@@ -382,8 +382,11 @@ public class EditEventActivity extends AppCompatActivity {
                 user_id = dbUtilities.getIdByValue("users",
                         "login", loginUser);
 
-                //добваить данные через объект ContentValues(cv), в таблицу "participants"
+                //добваить данные через объект, в таблицу "participants"
                 dbUtilities.insertIntoParticipants(eventId, user_id);
+
+                //добавление новой записи в таблицу notifications
+                dbUtilities.insertIntoNotifications(eventId, user_id, city_id, field_id, time, date, "1");
             }//foreach
         }//if
 

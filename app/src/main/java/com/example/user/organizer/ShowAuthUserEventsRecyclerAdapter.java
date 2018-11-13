@@ -90,7 +90,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         // получение данных
         holder.tvCityShAuUsEvReAd.setText(eventShow.cityName); //город
         holder.tvFieldShAuUsEvReAd.setText(eventShow.fieldName);//поле
-//        holder.tvDateShAuUsEvReAd.setText(dateShowFormat(eventShow.eventData)); // Дата
+        holder.tvDateShAuUsEvReAd.setText(dateShowFormat(eventShow.eventData)); // Дата
         holder.tvTimeShAuUsEvReAd.setText(eventShow.eventTime); //Время
         holder.tvStatusShAuUsEvReAd.setText(
                 (eventShow.eventUserStatus.equals("0"))?"Участник":"Организатор"
@@ -287,7 +287,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
             e.printStackTrace();
         }//try-catch
         //преобразуем DateToString в читабельный формат
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM YYYY", myDateFormatSymbols );
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", myDateFormatSymbols );
         return  dateFormat.format(date);
     } // dateShowFormat
 

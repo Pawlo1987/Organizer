@@ -83,7 +83,7 @@ public class ShowAllEventsRecyclerAdapter extends
         // получение данных
         holder.tvCityShAlEvReAd.setText(eventShow.cityName); //город
         holder.tvFieldShAlEvReAd.setText(eventShow.fieldName);//поле
-//        holder.tvDateShAlEvReAd.setText(dateShowFormat(eventShow.eventData)); // Дата
+        holder.tvDateShAlEvReAd.setText(dateShowFormat(eventShow.eventData)); // Дата
         holder.tvTimeShAlEvReAd.setText(eventShow.eventTime); //Время
     } // onBindViewHolder
 
@@ -229,7 +229,7 @@ public class ShowAllEventsRecyclerAdapter extends
             e.printStackTrace();
         }//try-catch
         //преобразуем DateToString в читабельный формат
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM YYYY", myDateFormatSymbols );
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", myDateFormatSymbols );
         return  dateFormat.format(date);
     } // dateShowFormat
 

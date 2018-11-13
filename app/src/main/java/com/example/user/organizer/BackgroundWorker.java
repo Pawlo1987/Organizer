@@ -1,7 +1,7 @@
 package com.example.user.organizer;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -14,10 +14,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import javax.net.ssl.HttpsURLConnection;
-
 //-------Класс для подключения и выполнения запросов на сервере-----------
 //-------Поделился Валера Дорохольский---------------------------
+@SuppressLint("NewApi")
 public class BackgroundWorker extends AsyncTask<String, Void, String> implements AutoCloseable {
     final String DOMAIN = "http://strahovanie.dn.ua/football_db/index.php";     // домен для запросов
 
@@ -118,6 +117,25 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
                     return "IO:" + e.getMessage();
                 } // try-catch
 
+            case "deleteRowByValue":
+                try {
+                    // параметры для передачи на сервер (для удаления записи по Value)
+                    String tableName = params[1];
+                    String columnName = params[2];
+                    String value = params[3];
+
+                    // формируем строку для отправки на сервер
+                    String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8")
+                            + "&" + URLEncoder.encode("tableName", "utf8") + "=" + URLEncoder.encode(tableName, "utf8")
+                            + "&" + URLEncoder.encode("columnName", "utf8") + "=" + URLEncoder.encode(columnName, "utf8")
+                            + "&" + URLEncoder.encode("value", "utf8") + "=" + URLEncoder.encode(value, "utf8");
+
+                    return workWithServer(postData);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return "IO:" + e.getMessage();
+                } // try-catch
+
             case "deleteRowByTwoValueAndTheyColumnName":
                 try {
                     // параметры для передачи на сервер (для удаления записи по двум значениям и их стобцам)
@@ -176,6 +194,21 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
                     // формируем строку для отправки на сервер
                     String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8")
                             + "&" + URLEncoder.encode("city_id", "utf8") + "=" + URLEncoder.encode(city_id, "utf8");
+
+                    return workWithServer(postData);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return "IO:" + e.getMessage();
+                } // try-catch
+
+            case "getSomeNotifications":
+                try {
+                    // параметры для передачи на сервер (для получения некоторых уведомлений)
+                    String user_id = params[1];
+
+                    // формируем строку для отправки на сервер
+                    String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8")
+                            + "&" + URLEncoder.encode("user_id", "utf8") + "=" + URLEncoder.encode(user_id, "utf8");
 
                     return workWithServer(postData);
                 } catch (IOException e) {
@@ -296,6 +329,33 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
                             + "&" + URLEncoder.encode("phone", "utf8") + "=" + URLEncoder.encode(phone, "utf8")
                             + "&" + URLEncoder.encode("city_id", "utf8") + "=" + URLEncoder.encode(city_id, "utf8")
                             + "&" + URLEncoder.encode("email", "utf8") + "=" + URLEncoder.encode(email, "utf8");
+
+                    return workWithServer(postData);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return "IO:" + e.getMessage();
+                } // try-catch
+
+            case "insertIntoNotifications":
+                try {
+                    // параметры для передачи на сервер (для создания нового уведомления)
+                    String event_id = params[1];
+                    String user_id = params[2];
+                    String city_id = params[3];
+                    String field_id = params[4];
+                    String time = params[5];
+                    String date = params[6];
+                    String message_id = params[7];
+
+                    // формируем строку для отправки на сервер
+                    String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8")
+                            + "&" + URLEncoder.encode("event_id", "utf8") + "=" + URLEncoder.encode(event_id, "utf8")
+                            + "&" + URLEncoder.encode("user_id", "utf8") + "=" + URLEncoder.encode(user_id, "utf8")
+                            + "&" + URLEncoder.encode("city_id", "utf8") + "=" + URLEncoder.encode(city_id, "utf8")
+                            + "&" + URLEncoder.encode("field_id", "utf8") + "=" + URLEncoder.encode(field_id, "utf8")
+                            + "&" + URLEncoder.encode("time", "utf8") + "=" + URLEncoder.encode(time, "utf8")
+                            + "&" + URLEncoder.encode("date", "utf8") + "=" + URLEncoder.encode(date, "utf8")
+                            + "&" + URLEncoder.encode("message_id", "utf8") + "=" + URLEncoder.encode(message_id, "utf8");
 
                     return workWithServer(postData);
                 } catch (IOException e) {

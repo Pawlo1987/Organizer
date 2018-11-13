@@ -1,7 +1,6 @@
 package com.example.user.organizer;
 
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -107,7 +106,16 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         ivProfileLogo.setImageResource(R.drawable.football_ball11);
 
         navigationView.setNavigationItemSelectedListener(this);
-    }
+
+        //Запуск сервиса следящего за обновления информации в БД
+        startServiceWatchingForDb();
+    }//onCreate
+
+    private void startServiceWatchingForDb() {
+        Intent intent = new Intent(this, InfoMessageService.class);
+        intent.putExtra("idAuthUser", idAuthUser);
+        startService(intent);
+    }//startServiceWatchingForDb
 
     @Override
     public void onBackPressed() {
@@ -171,5 +179,11 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         Intent intent = new Intent(this, AuthorizationActivity.class);
         startActivity(intent);
     }//signOut
+
+    @Override
+    protected void onDestroy() {
+        stopService(new Intent(this, InfoMessageService.class));
+        super.onDestroy();
+    }//onDestroy
 
 }//NavigationDrawerLogInActivity

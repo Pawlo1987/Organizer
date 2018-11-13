@@ -70,7 +70,7 @@ public class EditFieldActivity extends AppCompatActivity {
         idAuthUser = getIntent().getStringExtra("idAuthUser");
 
         List<Field> fieldDef = new ArrayList<>();
-        fieldDef = dbUtilities.getListField(field_id);
+        fieldDef = dbUtilities.getListField(field_id,"");
 
         //привязка ресурсов к объектам
         etNameCrFi = (EditText) findViewById(R.id.etNameCrFi);

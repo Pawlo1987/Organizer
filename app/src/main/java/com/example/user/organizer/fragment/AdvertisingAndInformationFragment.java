@@ -128,19 +128,13 @@ public class AdvertisingAndInformationFragment extends Fragment {
         });
 
         //привязка ресурсов к объектам
-        spCityAdAnInAc = result.findViewById(R.id.spCityAdAnInAc);
+        spCityAdAnInAc = getActivity().findViewById(R.id.spCityMain);
 
         //инициализация коллекции для спинера
         spListCity = new ArrayList<>();
 
         //обращаемся к базе для получения списка имен городов
         spListCity = dbUtilities.getStrListTableFromDB("cities", "name");
-
-        //добавляем вариант "Все города"
-        spListCity.add("ВСЕ ГОРОДА");
-
-        spCityAdAnInAc.setAdapter(buildSpinner(spListCity));
-        spCityAdAnInAc.setSelection(spListCity.size()-1);
 
         //Слушатель для позиции спинера и фильтрации RecyclerView по изменению позиции
         spCityAdAnInAc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -162,7 +156,7 @@ public class AdvertisingAndInformationFragment extends Fragment {
 
         //строим новый адаптер RecyclerView
         buildUserRecyclerView(
-                spCityAdAnInAc.getItemAtPosition(spPos).toString()
+                spCityAdAnInAc.getItemAtPosition(spCityAdAnInAc.getSelectedItemPosition()).toString()
         );
         fabMain.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -243,8 +237,6 @@ public class AdvertisingAndInformationFragment extends Fragment {
             //получаем записи новостей из БД по определенному городу
             notes = dbUtilities.getSomeNotesFromDB(cityName);
         }//if-else
-
-        Log.d("FOOTBALL", notes.toString());
 
         // создаем адаптер, передаем в него курсор
         advertisingAndInformationRecyclerAdapter

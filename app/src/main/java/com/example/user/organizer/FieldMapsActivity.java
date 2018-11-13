@@ -116,7 +116,7 @@ public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCal
                         spMapField.getItemAtPosition(position).toString()
                 );//idField
                 //получаем информацию по выбранному полу
-                Field field = dbUtilities.getListField(idField).get(0);
+                Field field = dbUtilities.getListField(idField,"").get(0);
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                         new LatLng(Double.parseDouble(field.geo_lat), Double.parseDouble(field.geo_long))
@@ -136,8 +136,8 @@ public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCal
         mapFragment.getMapAsync(this);
 
         //получаем коллекцию полей
-        if(connection) fieldList = dbUtilities.getListField("");
-        else fieldList = dbLocalUtilities.getFieldList();
+        if(connection) fieldList = dbUtilities.getListField("","");
+        else fieldList = dbLocalUtilities.getFieldList("");
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
     }//onCreate
 

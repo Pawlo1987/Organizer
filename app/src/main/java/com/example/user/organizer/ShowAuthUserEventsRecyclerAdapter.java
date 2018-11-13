@@ -44,12 +44,14 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
     String eventPassword;
     String eventPhone;
     String eventUserId;
+    String cityId;
 
     //конструктор
     public ShowAuthUserEventsRecyclerAdapter(AuthUserEventsInterface authUserEventsInterface,
-                                             Context context, String idAuthUser) {
+                                             Context context, String idAuthUser, String cityId) {
         this.inflater = LayoutInflater.from(context);
         this.context = context;
+        this.cityId = cityId;
         this.idAuthUser = idAuthUser;
         dbUtilities = new DBUtilities(context);
         //получение интерфеса из класса Фрагмента
@@ -57,7 +59,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         this.authUserEventsInterface = authUserEventsInterface;
 
         //получаем коллекцию событий
-        eventsList = dbUtilities.getListEvents("", idAuthUser);
+        eventsList = dbUtilities.getListEvents("", cityId, idAuthUser);
     } // advertisingAndInformationRecyclerAdapter
 
     public ShowAuthUserEventsRecyclerAdapter(Context context) {
@@ -70,7 +72,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         eventsList.clear();
 
         //получаем коллекцию событий
-        eventsList = dbUtilities.getListEvents("", idAuthUser);
+        eventsList = dbUtilities.getListEvents("", cityId, idAuthUser);
         notifyDataSetChanged();
     }
 

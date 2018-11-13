@@ -14,13 +14,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import com.example.user.organizer.DBLocalUtilities;
 import com.example.user.organizer.DBUtilities;
 import com.example.user.organizer.Field;
 import com.example.user.organizer.FieldMapsActivity;
 import com.example.user.organizer.R;
+import com.example.user.organizer.ShowAllEventsRecyclerAdapter;
 import com.example.user.organizer.ShowFieldCatalogRecyclerAdapter;
 
 import java.util.ArrayList;
@@ -35,6 +38,9 @@ public class ShowFieldCatalogFragment extends Fragment {
     DBUtilities dbUtilities;
     DBLocalUtilities dbLocalUtilities;
 
+    int spPos;                      //позиция спинера
+    List<String> spListCity;             // Данные для спинера выбора города
+    Spinner spCityShFiCaFr;
     List<Field> fieldList = new ArrayList<>(); //коллекция полей
     Context context;
 
@@ -79,14 +85,6 @@ public class ShowFieldCatalogFragment extends Fragment {
         // прочитать данные, переданные из активности (из точки вызова)
         idAuthUser = getArguments().getString("idAuthUser");
         connection = getArguments().getBoolean("connection");
-
-        //получаем коллекцию полей
-        if(connection) fieldList = dbUtilities.getListField("");
-        else fieldList = dbLocalUtilities.getFieldList();
-
-        // создаем адаптер, передаем в него курсор
-        showFieldCatalogRecyclerAdapter = new ShowFieldCatalogRecyclerAdapter(context, fieldList, idAuthUser);
-
     }//onAttachToContext
 
     @Override
@@ -109,24 +107,77 @@ public class ShowFieldCatalogFragment extends Fragment {
         });
         // RecyclerView для отображения таблицы users БД
         rvMainShFiCaFr = result.findViewById(R.id.rvMainShFiCaFr);
-        //привязываем адаптер к recycler объекту
-        rvMainShFiCaFr.setAdapter(showFieldCatalogRecyclerAdapter);
+
+        //привязка ресурсов к объектам
+        spCityShFiCaFr = getActivity().findViewById(R.id.spCityMain);
+        //инициализация коллекции для спинера
+        spListCity = new ArrayList<>();
+        //обращаемся к базе для получения списка имен городов
+        spListCity = dbUtilities.getStrListTableFromDB("cities", "name");
+
+        //Слушатель для позиции спинера и фильтрации RecyclerView по изменению позиции
+        spCityShFiCaFr.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spPos = position;
+                //проверка если выбран пункт "Все города"
+                if(spPos == (spListCity.size()))buildUserRecyclerView("");
+                else {
+                    String cityId = dbUtilities.getIdByValue("cities", "name",
+                            spCityShFiCaFr.getItemAtPosition(spPos).toString());
+                    //строим новый адаптер RecyclerView
+                    buildUserRecyclerView(cityId);
+                }//if
+            }//onItemSelected
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }//onNothingSelected
+        });
+
+        //проверка если выбран пункт "Все города"
+        if(spCityShFiCaFr.getSelectedItemPosition() == (spListCity.size()))buildUserRecyclerView("");
+        else {
+            String cityId = dbUtilities.getIdByValue("cities", "name",
+                    spCityShFiCaFr.getItemAtPosition(spCityShFiCaFr.getSelectedItemPosition()).toString());
+            //строим новый адаптер RecyclerView
+            buildUserRecyclerView(cityId);
+        }
 
         fabMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refreshList();
+                if(spCityShFiCaFr.getSelectedItemPosition() == (spListCity.size())) refreshList("");
+                else {
+                    String cityId = dbUtilities.getIdByValue("cities", "name",
+                            spCityShFiCaFr.getItemAtPosition(spCityShFiCaFr.getSelectedItemPosition()).toString());
+                    //строим новый адаптер RecyclerView
+                    refreshList(cityId);
+                }
             }
         });
 
         return result;
     } // onCreateView
 
-    //обновляем recyclerview
-    private void refreshList() {
+    //Строим RecyclerView
+    private void buildUserRecyclerView(String cityId) {
         //получаем коллекцию полей
-        if(connection) fieldList = dbUtilities.getListField("");
-        else fieldList = dbLocalUtilities.getFieldList();
+        if(connection) fieldList = dbUtilities.getListField("", cityId);
+        else fieldList = dbLocalUtilities.getFieldList(cityId);
+        // создаем адаптер, передаем в него курсор
+        showFieldCatalogRecyclerAdapter = new ShowFieldCatalogRecyclerAdapter(context, fieldList, idAuthUser);
+        //привязываем адаптер к recycler объекту
+        rvMainShFiCaFr.setAdapter(showFieldCatalogRecyclerAdapter);
+    }//buildUserRecyclerView
+
+
+    //обновляем recyclerview
+    private void refreshList(String cityId) {
+        //получаем коллекцию полей
+        if(connection) fieldList = dbUtilities.getListField("", cityId);
+        else fieldList = dbLocalUtilities.getFieldList(cityId);
         showFieldCatalogRecyclerAdapter.notifyDataSetChanged();
         //привязываем адаптер к recycler объекту
         rvMainShFiCaFr.setAdapter(showFieldCatalogRecyclerAdapter);

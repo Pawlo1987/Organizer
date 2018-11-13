@@ -13,11 +13,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
 import com.example.user.organizer.DBUtilities;
 import com.example.user.organizer.R;
+import com.example.user.organizer.ShowAllEventsRecyclerAdapter;
 import com.example.user.organizer.ShowAuthUserEventsRecyclerAdapter;
 import com.example.user.organizer.inteface.AuthUserEventsInterface;
+
+import java.util.ArrayList;
+import java.util.List;
 
 //-----------Фрагмент выводит активные события авторизированного пользователя---------------------
 public class ShowAuthUserEventsFragment extends Fragment
@@ -28,6 +34,9 @@ implements AuthUserEventsInterface {
     ShowAuthUserEventsRecyclerAdapter showAuthUserEventsRecyclerAdapter;
     DBUtilities dbUtilities;
 
+    int spPos;                      //позиция спинера
+    List<String> spListCity;             // Данные для спинера выбора города
+    Spinner spCityShAuUsEvAc;
     Context context;
     String idAuthUser;
 
@@ -84,12 +93,6 @@ implements AuthUserEventsInterface {
 
         // прочитать данные, переданные из активности (из точки вызова)
         idAuthUser = getArguments().getString("idAuthUser");
-
-        // создаем адаптер, передаем в него курсор
-        // параметр this в данном случае используется для передачи интерефеса AuthUserEventsInterface
-        // в адаптер
-        showAuthUserEventsRecyclerAdapter
-                = new ShowAuthUserEventsRecyclerAdapter(this, context, idAuthUser);
     }//onAttachToContext
 
     @Override
@@ -102,8 +105,43 @@ implements AuthUserEventsInterface {
 
         // RecyclerView для отображения таблицы users БД
         rvMainShAuUsEvAc = result.findViewById(R.id.rvMainShAuUsEvAc);
-        //привязываем адаптер к recycler объекту
-        rvMainShAuUsEvAc.setAdapter(showAuthUserEventsRecyclerAdapter);
+
+        //привязка ресурсов к объектам
+        spCityShAuUsEvAc = getActivity().findViewById(R.id.spCityMain);
+        //инициализация коллекции для спинера
+        spListCity = new ArrayList<>();
+        //обращаемся к базе для получения списка имен городов
+        spListCity = dbUtilities.getStrListTableFromDB("cities", "name");
+
+        //Слушатель для позиции спинера и фильтрации RecyclerView по изменению позиции
+        spCityShAuUsEvAc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spPos = position;
+                //проверка если выбран пункт "Все города"
+                if(spPos == (spListCity.size()))buildUserRecyclerView("");
+                else {
+                    String cityId = dbUtilities.getIdByValue("cities", "name",
+                            spCityShAuUsEvAc.getItemAtPosition(spPos).toString());
+                    //строим новый адаптер RecyclerView
+                    buildUserRecyclerView(cityId);
+                }//if
+            }//onItemSelected
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }//onNothingSelected
+        });
+
+        //проверка если выбран пункт "Все города"
+        if(spCityShAuUsEvAc.getSelectedItemPosition() == (spListCity.size()))buildUserRecyclerView("");
+        else {
+            String cityId = dbUtilities.getIdByValue("cities", "name",
+                    spCityShAuUsEvAc.getItemAtPosition(spCityShAuUsEvAc.getSelectedItemPosition()).toString());
+            //строим новый адаптер RecyclerView
+            buildUserRecyclerView(cityId);
+        }
 
         fabMain.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,6 +152,17 @@ implements AuthUserEventsInterface {
 
         return result;
     } // onCreateView
+
+    //Строим RecyclerView
+    private void buildUserRecyclerView(String cityId) {
+        // создаем адаптер, передаем в него курсор
+        // параметр this в данном случае используется для передачи интерефеса AuthUserEventsInterface
+        // в адаптер
+        showAuthUserEventsRecyclerAdapter
+                = new ShowAuthUserEventsRecyclerAdapter(this, context, idAuthUser, cityId);
+        //привязываем адаптер к recycler объекту
+        rvMainShAuUsEvAc.setAdapter(showAuthUserEventsRecyclerAdapter);
+    }//buildUserRecyclerView
 
     //обновляем recyclerview
     private void refreshList() {

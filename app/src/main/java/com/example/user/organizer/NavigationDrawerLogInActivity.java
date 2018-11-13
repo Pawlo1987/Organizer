@@ -15,7 +15,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +45,8 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
     String idAuthUser;                  //id Авторизированого пользователя
     String userInfo;
     boolean notificationServiceFlag;
+    Spinner spCityMain; //спиннре (главнный) выбора города (app_bar_navigation_drawer_log_in)
+    List<String> spListCity;             // Данные для спинера выбора города
 
     //параметр для вызова диалога "aboutUserInfoDialog"
     final String ID_ABOUT_USER_INFO_DIALOG = "aboutUserInfoDialog";
@@ -98,6 +103,16 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         FloatingActionButton fabMain = (FloatingActionButton) findViewById(R.id.fabMain);
         fabMain.setVisibility(View.GONE);
 
+        //инициализация коллекции для спинера
+        spListCity = new ArrayList<>();
+        //обращаемся к базе для получения списка имен городов
+        spListCity = dbUtilities.getStrListTableFromDB("cities", "name");
+        //добавляем вариант "Все города"
+        spListCity.add("ВСЕ ГОРОДА");
+        spCityMain = findViewById(R.id.spCityMain);
+        spCityMain.setAdapter(buildSpinner(spListCity));
+        spCityMain.setSelection(spListCity.size()-1);
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -148,10 +163,27 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         );
 
         navigationView.setNavigationItemSelectedListener(this);
-        dbUtilities.getListEvents("", idAuthUser);
         //Запуск сервиса следящего за обновления информации в БД
         startServiceWatchingForDb();
     }//onCreate
+
+    //строим Spinner
+    private ArrayAdapter buildSpinner(List<String> list) {
+
+        ArrayAdapter<String> spinnerAdapter;
+
+        //создание адаптера для спинера
+        spinnerAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_spinner_item,
+                list
+        );
+
+        // назначение адапетра для списка
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        return spinnerAdapter;
+    }//buildCitySpinner
 
     //проверка сообщения после NotificationService
     private void checkNotificationMessage() {
@@ -235,7 +267,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
 
         //получаем данные для уведомления
         List<Event> listEvent = new ArrayList<>();
-        listEvent = dbUtilities.getListEvents(eventId, idAuthUser);
+        listEvent = dbUtilities.getListEvents(eventId, "", idAuthUser);
 
         //увеомление для организатора
         dbUtilities.insertIntoNotifications(eventId,

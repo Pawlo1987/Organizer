@@ -31,14 +31,7 @@
             android:text="@string/btnNewNoteAdAnInAc"
             tools:ignore="OnClick" />
 
-        <Spinner
-            android:id="@+id/spCityAdAnInAc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
     </LinearLayout>
-
-
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvNoteLineAdAnInAc"

@@ -44,19 +44,21 @@ public class ShowAllEventsRecyclerAdapter extends
     String eventPrice;
     String eventPhone;
     String eventUserId;
+    String cityId;
 
     //конструктор
     public ShowAllEventsRecyclerAdapter(AllEventsInterface allEventsInterface,
-                                        Context context, String idAuthUser) {
+                                        Context context, String idAuthUser, String cityId) {
         this.inflater = LayoutInflater.from(context);
         //получение интерфеса из класса Фрагмента
         //для обработки нажатия элементов RecyclerAdapter
         this.allEventsInterface = allEventsInterface;
+        this.cityId = cityId;
         this.context = context;
         this.idAuthUser = idAuthUser;
         dbUtilities = new DBUtilities(context);
 
-        this.eventsList = dbUtilities.getListEvents("", idAuthUser);
+        this.eventsList = dbUtilities.getListEvents("", cityId, idAuthUser);
     } // ShowAllEventsRecyclerAdapter
 
     // метод для обновления адаптера
@@ -65,7 +67,7 @@ public class ShowAllEventsRecyclerAdapter extends
         eventsList.clear();
 
         //получаем коллекцию событий
-        eventsList = dbUtilities.getListEvents("", idAuthUser);
+        eventsList = dbUtilities.getListEvents("", cityId, idAuthUser);
         notifyDataSetChanged();
 
     }//updateEventList

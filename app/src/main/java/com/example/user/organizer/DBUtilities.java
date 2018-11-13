@@ -691,12 +691,12 @@ public class DBUtilities{
     }//getListParticipantsUser
 
     //получение коллекции полей
-    public List<Field> getListField(String fieldId) {
+    public List<Field> getListField(String fieldId, String cityId) {
         List<Field> fieldList = new ArrayList<>();
 
         //обращаемся к базе для получения списка имен городов
         try(BackgroundWorker bg = new BackgroundWorker()){
-            bg.execute("getListField", fieldId);
+            bg.execute("getListField", fieldId, cityId);
 
             String resultdb = bg.get();
             Log.d("FOOTBALL", resultdb);
@@ -915,12 +915,12 @@ public class DBUtilities{
     }//getLogoList
 
     //получение коллекции событий для авторизированого пользователя
-    public List<Event> getListEvents(String eventId, String idAuthUser) {
+    public List<Event> getListEvents(String eventId, String cityId, String idAuthUser) {
         List<Event> eventsList = new ArrayList<>();
 
         //обращаемся к базе для получения списка имен городов
         try(BackgroundWorker bg = new BackgroundWorker()){
-            bg.execute("getListEvents", eventId, idAuthUser);
+            bg.execute("getListEvents", eventId, cityId, idAuthUser);
 
             String resultdb = bg.get();
             Log.d("FOOTBALL", resultdb);

@@ -95,7 +95,7 @@ public class DeleteEventDialog extends DialogFragment {
         //удаляем старый список учасников из таблицы participants
         for (String idParticipants : idParticipantsList) {
             //получаем данные для уведомления
-            listEvent = dbUtilities.getListEvents(event_id, user_id);
+            listEvent = dbUtilities.getListEvents(event_id, "", user_id);
 
             dbUtilities.insertIntoNotifications(event_id,
                  dbUtilities.searchValueInColumn("participants", "id",

@@ -234,10 +234,12 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
                 try {
                     // параметры для передачи на сервер (для получения списка полей)
                     String fieldId = params[1];
+                    String cityId = params[2];
 
                     // формируем строку для отправки на сервер
                     String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8")
-                            + "&" + URLEncoder.encode("fieldId", "utf8") + "=" + URLEncoder.encode(fieldId, "utf8");
+                            + "&" + URLEncoder.encode("fieldId", "utf8") + "=" + URLEncoder.encode(fieldId, "utf8")
+                            + "&" + URLEncoder.encode("cityId", "utf8") + "=" + URLEncoder.encode(cityId, "utf8");
 
                     return workWithServer(postData);
                 } catch (IOException e) {
@@ -305,11 +307,13 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
                 try {
                     // параметры для передачи на сервер (для получения списка событий для авторизированого пользователя)
                     String eventId = params[1];
-                    String idAuthUser = params[2];
+                    String cityId = params[2];
+                    String idAuthUser = params[3];
 
                     // формируем строку для отправки на сервер
                     String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8")
                             + "&" + URLEncoder.encode("eventId", "utf8") + "=" + URLEncoder.encode(eventId, "utf8")
+                            + "&" + URLEncoder.encode("cityId", "utf8") + "=" + URLEncoder.encode(cityId, "utf8")
                             + "&" + URLEncoder.encode("idAuthUser", "utf8") + "=" + URLEncoder.encode(idAuthUser, "utf8");
 
                     return workWithServer(postData);

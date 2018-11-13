@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         //получаем коллекцию покрытий
         List<Coating> coatingList = dbUtilities.getListCoating("");
         //получаем коллекцию полей
-        List<Field> fieldList = dbUtilities.getListField("");
+        List<Field> fieldList = dbUtilities.getListField("","");
 
         for (User user : userList) {
             ContentValues cv = new ContentValues();

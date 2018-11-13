@@ -94,7 +94,7 @@ public class TakePartShowAllEventDialog extends DialogFragment {
     }//onCreateDialog
 
     private void takeInPart(String event_id, String user_id) {
-        Event event = dbUtilities.getListEvents(event_id,"").get(0);
+        Event event = dbUtilities.getListEvents(event_id,"","").get(0);
         //увеомление для организатора
         dbUtilities.insertIntoNotifications(event_id,
                 event.getEventUserId(),

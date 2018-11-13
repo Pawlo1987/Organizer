@@ -13,14 +13,22 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
+import com.example.user.organizer.AdvertisingAndInformationRecyclerAdapter;
 import com.example.user.organizer.DBUtilities;
+import com.example.user.organizer.Note;
 import com.example.user.organizer.R;
 import com.example.user.organizer.ShowAllEventsRecyclerAdapter;
 import com.example.user.organizer.inteface.AllEventsInterface;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ShowAllEventsFragment extends Fragment
         implements AllEventsInterface {
@@ -28,6 +36,9 @@ public class ShowAllEventsFragment extends Fragment
     RecyclerView rvMainShAlEvAc;
     private static final int REQUEST_POS = 1;
 
+    int spPos;                      //позиция спинера
+    List<String> spListCity;             // Данные для спинера выбора города
+    Spinner spCityShAlEvAc;
     // адаптер для отображения recyclerView
     ShowAllEventsRecyclerAdapter showAllEventsRecyclerAdapter;
     DBUtilities dbUtilities;
@@ -79,9 +90,6 @@ public class ShowAllEventsFragment extends Fragment
 
         // прочитать данные, переданные из активности (из точки вызова)
         idAuthUser = getArguments().getString("idAuthUser");
-
-        // создаем адаптер, передаем в него курсор
-        showAllEventsRecyclerAdapter = new ShowAllEventsRecyclerAdapter(this, context, idAuthUser);
     }//onAttachToContext
 
     @Override
@@ -92,11 +100,45 @@ public class ShowAllEventsFragment extends Fragment
 
         FloatingActionButton fabMain = getActivity().findViewById(R.id.fabMain);
         fabMain.setVisibility(View.VISIBLE);
+
         // RecyclerView для отображения таблицы users БД
         rvMainShAlEvAc = result.findViewById(R.id.rvMainShAlEvAc);
+        //привязка ресурсов к объектам
+        spCityShAlEvAc = getActivity().findViewById(R.id.spCityMain);
+        //инициализация коллекции для спинера
+        spListCity = new ArrayList<>();
+        //обращаемся к базе для получения списка имен городов
+        spListCity = dbUtilities.getStrListTableFromDB("cities", "name");
 
-        //привязываем адаптер к recycler объекту
-        rvMainShAlEvAc.setAdapter(showAllEventsRecyclerAdapter);
+        //Слушатель для позиции спинера и фильтрации RecyclerView по изменению позиции
+        spCityShAlEvAc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spPos = position;
+                //проверка если выбран пункт "Все города"
+                if(spPos == (spListCity.size()))buildUserRecyclerView("");
+                else {
+                    String cityId = dbUtilities.getIdByValue("cities", "name",
+                            spCityShAlEvAc.getItemAtPosition(spPos).toString());
+                    //строим новый адаптер RecyclerView
+                    buildUserRecyclerView(cityId);
+                }//if
+            }//onItemSelected
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }//onNothingSelected
+        });
+
+        //проверка если выбран пункт "Все города"
+        if(spCityShAlEvAc.getSelectedItemPosition() == (spListCity.size()))buildUserRecyclerView("");
+        else {
+            String cityId = dbUtilities.getIdByValue("cities", "name",
+                    spCityShAlEvAc.getItemAtPosition(spCityShAlEvAc.getSelectedItemPosition()).toString());
+            //строим новый адаптер RecyclerView
+            buildUserRecyclerView(cityId);
+        }
 
         fabMain.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +149,15 @@ public class ShowAllEventsFragment extends Fragment
 
         return result;
     } // onCreateView
+
+    //Строим RecyclerView
+    private void buildUserRecyclerView(String cityId) {
+        // создаем адаптер, передаем в него курсор
+        showAllEventsRecyclerAdapter = new ShowAllEventsRecyclerAdapter(
+                this, context, idAuthUser, cityId);
+        //привязываем адаптер к recycler объекту
+        rvMainShAlEvAc.setAdapter(showAllEventsRecyclerAdapter);
+    }//buildUserRecyclerView
 
     //обновляем recyclerview
     private void refreshList() {

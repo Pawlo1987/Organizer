@@ -70,12 +70,14 @@ public class DBLocalUtilities {
     }//fillListStr
 
     //заполнить коллекцию(List) данные для отображения в Spinner
-    public List<Field> getFieldList() {
+    public List<Field> getFieldList(String cityId) {
         List<Field> list = new ArrayList<>();
         Cursor cursor;
 
         // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
-        String query = "SELECT * FROM fields;";
+        String query = null;
+        if(cityId.equals("")) query = "SELECT * FROM fields;";
+        else query = "SELECT * FROM fields WHERE city_id = " + cityId + ";";
         // получаем данные из БД в виде курсора
         cursor = db.rawQuery(query, null);
         int n = cursor.getCount();        //количество строк в курсоре

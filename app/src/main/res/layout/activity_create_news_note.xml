@@ -17,80 +17,129 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvHeadCrNeNoAc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="@string/tvHeadCrNeNoAc"
-        android:textAlignment="center"
-        android:textColor="@android:color/background_dark"
-        android:textSize="30sp" />
+        <TextView
+            android:id="@+id/tvNewNoteCrNeNoAc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/tvNewNoteCrNeNoAc"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_dark"
+            android:textSize="30sp" />
 
-    <Spinner
-        android:id="@+id/spCityCrNeNoAc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ball" />
+
+            <Button
+                android:id="@+id/btnSelectLogoNoNeNoAc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="@string/btnSelectLogoNoNeNoAc" />
+        </LinearLayout>
+
+        <Spinner
+            android:id="@+id/spCityCrNeNoAc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="70dp"
+            android:layout_marginTop="10dp"
+            android:textAlignment="center" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Дата публикации" />
+
+            <TextView
+                android:id="@+id/tvDateCrNeNoAc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/btnDateCrEv"
+                android:textAlignment="center" />
+
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/tvHeadCrNeNoAc"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
             android:layout_weight="1"
-            android:text="Запись появится" />
+            android:text="@string/tvHeadCrNeNoAc"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            tools:ignore="DuplicateIds" />
+
+        <EditText
+            android:id="@+id/etHeadCrNeNoAc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="20dp"
+            android:gravity="top|left"
+            android:inputType="textMultiLine" />
 
         <TextView
-            android:id="@+id/tvDateCrNeNoAc"
+            android:id="@+id/tvMessCrNeNoAc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:text="@string/tvMessCrNeNoAc"
+            android:textAlignment="center"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/etMessCrNeNoAc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="20dp"
+            android:gravity="top|left"
+            android:inputType="textMultiLine" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/btnDateCrEv" />
-    </LinearLayout>
+            android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/etHeadCrNeNoAc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:hint="@string/etHeadCrNeNoAc"
-        android:inputType="textPersonName" />
+            <Button
+                android:id="@+id/btnConfirmCrNeNoAc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="onClick"
+                android:text="@string/btnConfirmCrNeNoAc" />
 
-    <EditText
-        android:id="@+id/etMessCrNeNoAc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:hint="@string/etMessCrNeNoAc"
-        android:inputType="textPersonName" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btnConfirmCrNeNoAc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="onClick"
-            android:text="@string/btnConfirmCrNeNoAc" />
-
-        <Button
-            android:id="@+id/btnCancelCrNeNoAc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="onClick"
-            android:text="@string/btnCancelCrNeNoAc" />
-    </LinearLayout>
+            <Button
+                android:id="@+id/btnCancelCrNeNoAc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="onClick"
+                android:text="@string/btnCancelCrNeNoAc" />
+        </LinearLayout>
 
     </LinearLayout>
 

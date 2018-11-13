@@ -122,7 +122,7 @@ public class CreateNewsNoteActivity extends AppCompatActivity {
         Intent intent = new Intent();
         //пакуем при помощи Extra - объект
         intent.putExtra(AdvertisingAndInformationFragment.PAR_HEAD, etHeadCrNeNoAc.getText().toString());
-        intent.putExtra(AdvertisingAndInformationFragment.PAR_MESS, etMessCrNeNoAc.getText().toString());
+        intent.putExtra(AdvertisingAndInformationFragment.PAR_MESSAGE, etMessCrNeNoAc.getText().toString());
         intent.putExtra(AdvertisingAndInformationFragment.PAR_DATE, date);
         intent.putExtra(AdvertisingAndInformationFragment.PAR_CITY,
                         dbUtilities.getIdByValue(

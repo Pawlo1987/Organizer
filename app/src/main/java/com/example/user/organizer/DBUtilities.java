@@ -179,11 +179,14 @@ public class DBUtilities{
 
             if(jResult.getString("error").toString().equals("")){
 
+                JSONObject jListLogo = jResult.getJSONObject("logo");
+                List<String> logoList = getListFromJSON(jListLogo);
+
                 JSONObject jListHead = jResult.getJSONObject("head");
                 List<String> headList = getListFromJSON(jListHead);
 
-                JSONObject jListName = jResult.getJSONObject("name");
-                List<String> nameList = getListFromJSON(jListName);
+                JSONObject jListCity = jResult.getJSONObject("city");
+                List<String> cityList = getListFromJSON(jListCity);
 
                 JSONObject jListDate = jResult.getJSONObject("date");
                 List<String> dateList = getListFromJSON(jListDate);
@@ -191,10 +194,21 @@ public class DBUtilities{
                 JSONObject jListMess = jResult.getJSONObject("message");
                 List<String> messList = getListFromJSON(jListMess);
 
+                JSONObject jListTSizeHead = jResult.getJSONObject("tsizehead");
+                List<String> tSizeHeadList = getListFromJSON(jListTSizeHead);
+
+                JSONObject jListTSizeMessage = jResult.getJSONObject("tsizemessage");
+                List<String> tSizeMessageList = getListFromJSON(jListTSizeMessage);
+
+                JSONObject jListTStyleMessage = jResult.getJSONObject("tstylemessage");
+                List<String> tStyleMessageList = getListFromJSON(jListTStyleMessage);
+
                 int n = headList.size();
 
                 for (int i = 0; i <n ; i++) {
-                    notes.add(new Note(headList.get(i),dateList.get(i),nameList.get(i),messList.get(i)));
+                    notes.add(new Note(logoList.get(i),headList.get(i),dateList.get(i),
+                            cityList.get(i),messList.get(i),tSizeHeadList.get(i),
+                            tSizeMessageList.get(i),tStyleMessageList.get(i)));
                 }//fori
 
             }else{
@@ -394,9 +408,10 @@ public class DBUtilities{
     }//insertIntoCities
 
     //обращяемся к БД на сервер для создания новой записи в таблицу notes
-    public void insertIntoNotes(String head, String message, String date, String city_id) {
+    public void insertIntoNotes(String logo, String head, String date, String city_id, String message,
+                                String tsizehead, String tsizemessage, String tstylemessage) {
         try(BackgroundWorker bg = new BackgroundWorker()){
-            bg.execute("insertIntoNotes", head, message, date, city_id);
+            bg.execute("insertIntoNotes", logo, head, date, city_id, message, tsizehead, tsizemessage, tstylemessage);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
@@ -430,11 +445,14 @@ public class DBUtilities{
 
             if(jResult.getString("error").toString().equals("")){
 
+                JSONObject jListLogo = jResult.getJSONObject("logo");
+                List<String> logoList = getListFromJSON(jListLogo);
+
                 JSONObject jListHead = jResult.getJSONObject("head");
                 List<String> headList = getListFromJSON(jListHead);
 
-                JSONObject jListName = jResult.getJSONObject("name");
-                List<String> nameList = getListFromJSON(jListName);
+                JSONObject jListCity = jResult.getJSONObject("city");
+                List<String> cityList = getListFromJSON(jListCity);
 
                 JSONObject jListDate = jResult.getJSONObject("date");
                 List<String> dateList = getListFromJSON(jListDate);
@@ -442,10 +460,21 @@ public class DBUtilities{
                 JSONObject jListMess = jResult.getJSONObject("message");
                 List<String> messList = getListFromJSON(jListMess);
 
+                JSONObject jListTSizeHead = jResult.getJSONObject("tsizehead");
+                List<String> tSizeHeadList = getListFromJSON(jListTSizeHead);
+
+                JSONObject jListTSizeMessage = jResult.getJSONObject("tsizemessage");
+                List<String> tSizeMessageList = getListFromJSON(jListTSizeMessage);
+
+                JSONObject jListTStyleMessage = jResult.getJSONObject("tstylemessage");
+                List<String> tStyleMessageList = getListFromJSON(jListTStyleMessage);
+
                 int n = headList.size();
 
                 for (int i = 0; i <n ; i++) {
-                    notes.add(new Note(headList.get(i),dateList.get(i),nameList.get(i),messList.get(i)));
+                    notes.add(new Note(logoList.get(i),headList.get(i),dateList.get(i),
+                            cityList.get(i),messList.get(i),tSizeHeadList.get(i),
+                            tSizeMessageList.get(i),tStyleMessageList.get(i)));
                 }//fori
 
             }else{

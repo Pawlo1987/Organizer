@@ -37,10 +37,14 @@ public class AdvertisingAndInformationFragment extends Fragment {
     public final int REQ_CREATE_NOTE = 1001;
 
     //Параметр -- "ИМЯ КЛЮЧА"
+    public static final String PAR_LOGO = "logo";
     public static final String PAR_HEAD = "head";
-    public static final String PAR_MESS = "message";
     public static final String PAR_CITY = "city";
     public static final String PAR_DATE = "date";
+    public static final String PAR_MESSAGE = "message";
+    public static final String PAR_TSIZE_HEAD = "tsizehead";
+    public static final String PAR_TSIZE_MESSAGE = "tsizemessage";
+    public static final String PAR_TSTYLE_MESSAGE = "tstylemessage";
 
     RecyclerView rvNoteLineAdAnInAc;
 
@@ -172,13 +176,17 @@ public class AdvertisingAndInformationFragment extends Fragment {
         if (resultCode == RESULT_OK) {
             // читаем из объекта data полученные данные и выводим в поле результата
 
+            String logo = "1";
             String head = data.getStringExtra(PAR_HEAD);
-            String message = data.getStringExtra(PAR_MESS);
             String date = data.getStringExtra(PAR_DATE);
             String city_id = data.getStringExtra(PAR_CITY);
+            String message = data.getStringExtra(PAR_MESSAGE);
+            String tsizehead = "14";
+            String tsizemessage = "14";
+            String tstylemessage = "14";
 
             //обращяемся к БД на сервер для создания новой записи в таблицу notes
-            dbUtilities.insertIntoNotes(head, message, date, city_id);
+            dbUtilities.insertIntoNotes(logo, head, date, city_id, message, tsizehead, tsizemessage, tstylemessage);
         }//RESULT_OK
 
         //устанавливаем спинер в позицию "ВСЕ ГОРОДА"

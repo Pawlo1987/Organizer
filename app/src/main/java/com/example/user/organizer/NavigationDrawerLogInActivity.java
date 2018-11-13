@@ -181,7 +181,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
             case 5:
                 alertDialogTwoButton(title, messageText, messageId);
                 break;
-        }
+        }//switch
     }//checkNotificationMessage
 
     //AlertDialog с одной кнопкой
@@ -361,8 +361,8 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
     @Override
     public void signOut() {
         moveTaskToBack(true);
-        finish();
         System.runFinalizersOnExit(true);
+        finish();
         Intent intent = new Intent(this, AuthorizationActivity.class);
         startActivity(intent);
     }//signOut

@@ -115,16 +115,22 @@ public class SettingsFragment extends Fragment implements SettingsInterface {
         new DownloadImageTask( view.findViewById(R.id.ivProfileLogoSeFr))
                 .execute("http://strahovanie.dn.ua/football_db/logo/logo_" + user.getLogo() + ".png");
 
+
         // привязка поля ввода нового имени
         etChangeNameSeFr = view.findViewById(R.id.etChangeNameSeFr);
+        etChangeNameSeFr.setText(user.getName());
         // привязка поля ввода нового логина
         etChangeLoginSeFr = view.findViewById(R.id.etChangeLoginSeFr);
+        etChangeLoginSeFr.setText(user.getLogin());
         // привязка поля ввода нового пароля
         etChangePasSeFr = view.findViewById(R.id.etChangePasSeFr);
+        etChangePasSeFr.setText(user.getPassword());
         // привязка поля ввода нового имейла
         etChangeEmailSeFr = view.findViewById(R.id.etChangeEmailSeFr);
+        etChangeEmailSeFr.setText(user.getEmail());
         // привязка поля ввода нового номера телефона
         etChangePhoneSeFr = view.findViewById(R.id.etChangePhoneSeFr);
+        etChangePhoneSeFr.setText(user.getPhone());
         // привязка поля ввода нового города пользователя
         spChangeCitySeFr = view.findViewById(R.id.spChangeCitySeFr);
 

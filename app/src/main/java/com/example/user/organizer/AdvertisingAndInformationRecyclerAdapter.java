@@ -1,11 +1,15 @@
 package com.example.user.organizer;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -39,10 +43,14 @@ public class AdvertisingAndInformationRecyclerAdapter extends RecyclerView.Adapt
     public void onBindViewHolder(ViewHolder holder, int position) {
         note = notes.get(position); // переходим в курсоре на текущую позицию
 
-        holder.tvHeadAdAvInReAd.setText(note.getNoteHead());     //заголовок
+//        holder.ivLogoAdAvInReAd.setText(note.getNoteHead());     //лого
+        holder.etHeadAdAvInReAd.setText(Html.fromHtml("<u>" + note.getNoteHead() + "</u>"));     //заголовок
         holder.tvDateAdAvInReAd.setText(note.getNoteDate());     //дата
         holder.tvCityAdAvInReAd.setText(note.getNoteCityName()); //город
-
+        holder.etMessageAdAvInReAd.setText(note.getNoteMessage());     //сообшение
+        //настраиваем EditText не редактируемые
+        holder.etHeadAdAvInReAd.setKeyListener(null);
+        holder.etMessageAdAvInReAd.setKeyListener(null);
 
     } // onBindViewHolder
 
@@ -53,14 +61,18 @@ public class AdvertisingAndInformationRecyclerAdapter extends RecyclerView.Adapt
     //Создаем класс ViewHolder с помощью которого мы получаем ссылку на каждый элемент
     //отдельного пункта списка
     public class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView tvHeadAdAvInReAd, tvDateAdAvInReAd, tvCityAdAvInReAd;
+        final TextView etHeadAdAvInReAd, tvDateAdAvInReAd, tvCityAdAvInReAd, etMessageAdAvInReAd;
+//              ImageView ivLogoAdAvInReAd;
 
+        @SuppressLint("WrongViewCast")
         ViewHolder(View view){
             super(view);
 
-            tvHeadAdAvInReAd = view.findViewById(R.id.tvHeadAdAvInReAd);
+//            ivLogoAdAvInReAd = view.findViewById(R.id.ivLogoAdAvInReAd);
+            etHeadAdAvInReAd = view.findViewById(R.id.etHeadAdAvInReAd);
             tvDateAdAvInReAd = view.findViewById(R.id.tvDateAdAvInReAd);
             tvCityAdAvInReAd = view.findViewById(R.id.tvCityAdAvInReAd);
+            etMessageAdAvInReAd = view.findViewById(R.id.etMessageAdAvInReAd);
         } // ViewHolder
     } // class ViewHolder
 }//advertisingAndInformationRecyclerAdapter

@@ -48,16 +48,6 @@
         android:text="@string/btnLocalDbFieldMaAc" />
 
     <Button
-        android:id="@+id/btnPreCreateFieldMaAc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="20dp"
-        android:onClick="onClick"
-        android:text="@string/btnPreCreateFieldMaAc" />
-
-    <Button
         android:id="@+id/btnExitMaAc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

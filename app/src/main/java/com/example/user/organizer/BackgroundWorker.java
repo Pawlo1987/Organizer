@@ -599,17 +599,25 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
             case "insertIntoNotes":
                 try {
                     // параметры для передачи на сервер (для создания новой записи новостей)
-                    String head = params[1];
-                    String message = params[2];
+                    String logo = params[1];
+                    String head = params[2];
                     String date = params[3];
                     String city_id = params[4];
+                    String message = params[5];
+                    String tsizehead = params[6];
+                    String tsizemessage = params[7];
+                    String tstylemessage = params[8];
 
                     // формируем строку для отправки на сервер
                     String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8")
+                            + "&" + URLEncoder.encode("logo", "utf8") + "=" + URLEncoder.encode(logo, "utf8")
                             + "&" + URLEncoder.encode("head", "utf8") + "=" + URLEncoder.encode(head, "utf8")
-                            + "&" + URLEncoder.encode("message", "utf8") + "=" + URLEncoder.encode(message, "utf8")
                             + "&" + URLEncoder.encode("date", "utf8") + "=" + URLEncoder.encode(date, "utf8")
-                            + "&" + URLEncoder.encode("city_id", "utf8") + "=" + URLEncoder.encode(city_id, "utf8");
+                            + "&" + URLEncoder.encode("city_id", "utf8") + "=" + URLEncoder.encode(city_id, "utf8")
+                            + "&" + URLEncoder.encode("message", "utf8") + "=" + URLEncoder.encode(message, "utf8")
+                            + "&" + URLEncoder.encode("tsizehead", "utf8") + "=" + URLEncoder.encode(tsizehead, "utf8")
+                            + "&" + URLEncoder.encode("tsizemessage", "utf8") + "=" + URLEncoder.encode(tsizemessage, "utf8")
+                            + "&" + URLEncoder.encode("tstylemessage", "utf8") + "=" + URLEncoder.encode(tstylemessage, "utf8");
 
                     return workWithServer(postData);
                 } catch (IOException e) {

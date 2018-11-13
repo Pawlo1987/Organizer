@@ -78,9 +78,9 @@
     <string name="tvFifthLineShAuUsEvReAd">ваш статус</string>
     <string name="tvHeadAdAnInAc">Новости и реклама</string>
     <string name="btnNewNoteAdAnInAc">Создать новость</string>
-    <string name="tvHeadCrNeNoAc">Новая запись</string>
-    <string name="etMessCrNeNoAc">текст записи</string>
-    <string name="etHeadCrNeNoAc">загаловок записи</string>
+    <string name="tvNewNoteCrNeNoAc">Новая запись</string>
+    <string name="tvMessCrNeNoAc">текст записи</string>
+    <string name="tvHeadCrNeNoAc">загаловок записи</string>
     <string name="btnConfirmCrNeNoAc">Создать</string>
     <string name="btnCancelCrNeNoAc">Отмена</string>
     <string name="title_activity_navigation_drawer_log_in">NavigationDrawerLogInActivity</string>
@@ -127,7 +127,6 @@
     <string name="btnSelectGeoposCrFi">на карте</string>
     <string name="btnGeoSelect">OK</string>
     <string name="btnLocalDbFieldMaAc">Каталог футбольных полей</string>
-    <string name="btnPreCreateFieldMaAc">Создание футбольного поля</string>
     <string name="btnExitMaAc">Завершить приложение</string>
     <string name="btnAuthorizationMaAc">Авторизация</string>
     <string name="settings">Настройки аккаунта</string>
@@ -139,5 +138,6 @@
     <string name="btnChangePhoneSeFr">Изменить телефон пользователя</string>
     <string name="btnChangeCitySeFr">Изменить город пользователя</string>
     <string name="btnDeleteProfileSeFr">Удалить аккаунт</string>
+    <string name="btnSelectLogoNoNeNoAc">Выбрать логотип поста</string>
 
 </resources>

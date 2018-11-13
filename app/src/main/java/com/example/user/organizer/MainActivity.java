@@ -118,9 +118,6 @@ public class MainActivity extends AppCompatActivity {
                 showFieldCatalog();
                 break;
 
-            case R.id.btnPreCreateFieldMaAc:
-                break;
-
             case R.id.btnExitMaAc:
                 finish();
                 break;

@@ -14,11 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.example.user.organizer.DBUtilities;
-import com.example.user.organizer.R;
-import com.example.user.organizer.SelectParticipantsRecyclerAdapter;
-import com.example.user.organizer.activity.CreateEventActivity;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -154,7 +149,7 @@ public class SelectParticipantsActivity extends AppCompatActivity {
     //строим Spinner City
     private void buildCitySpinner(String query) {
         //заполнить spListCity данные для отображения в Spinner
-        spListCity = dbUtilities.fillList(query);
+        spListCity = dbUtilities.fillListStr(query);
         spListCity.add("ВСЕ ГОРОДА");
 
         //создание адаптера для спинера

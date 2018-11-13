@@ -36,6 +36,7 @@ SELECT events._id FROM events WHERE events.user_id = 7
 UNION
 Select events._id FROM participants INNER JOIN events ON events._id =     participants.event_id WHERE participants.user_id = 7;
 
+--для фрагмента showUserEvent
 SELECT cities.name, fields.name, events.date, events.time FROM events 
 INNER JOIN fields ON fields._id = events.field_id 
 INNER JOIN cities ON cities._id = events.city_id 
@@ -43,4 +44,16 @@ WHERE events.user_id = 7 UNION SELECT cities.name, fields.name, events.date, eve
 INNER JOIN events ON events._id = participants.event_id 
 INNER JOIN fields ON fields._id = events.field_id 
 INNER JOIN cities ON cities._id = events.city_id 
-WHERE participants.user_id = 7
+WHERE participants.user_id = 7;
+
+-- для меню aboutEventShowAllEvent
+SELECT cities.name, fields.name, date, time, duration, price, phone FROM events INNER JOIN cities ON cities._id = events.city_id 
+INNER JOIN fields ON fields._id = events.field_id 
+WHERE events._id = 4;
+
+--поиск определенного пользователя в определенном событии 
+SELECT events._id FROM events 
+WHERE events._id = 4 AND events.user_id = 8
+UNION
+SELECT participants._id FROM participants 
+WHERE participants.event_id = 3 AND participants.user_id = 1;

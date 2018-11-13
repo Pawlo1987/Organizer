@@ -10,17 +10,15 @@ import android.support.v7.app.AlertDialog;
 
 import com.example.user.organizer.inteface.CustomInterface;
 
-//---------------------- Фрагмент с диалогом подтверждения выхода из приложения-------------------
-
-public class ExitConfirmDialog extends DialogFragment {
-
-    //интерфейс для закрытия приложения
-    CustomInterface closeApp;
+//---------------------- Фрагмент с диалогом принять участие -------------------
+public class TakePartShowAllEventDialog extends DialogFragment {
+    //интерфейс для Принятия участия
+    CustomInterface takePart;
 
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
-        closeApp = (CustomInterface) context;
+        takePart = (CustomInterface) context;
     } // onAttach
 
     @NonNull // создание диалога
@@ -31,27 +29,31 @@ public class ExitConfirmDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(current);
 
         // прочитать данные, переданные из активности (из точки вызова)
-        boolean flag = getArguments().getBoolean("flag", false);
+        String message = getArguments().getString("message");
+        Boolean userTakeInPart = getArguments().getBoolean("userTakeInPart", false);
+        int event_id = getArguments().getInt("event_id", 0);
+        int user_id = getArguments().getInt("user_id", 0);
 
-        if (flag)
+        if (userTakeInPart)
             return builder
-                    .setTitle("Выход")
-                    .setMessage("Вы уверены?")
+                    .setTitle("Подтверждение не требуется")
+                    .setMessage(message)
 //                .setIcon(R.drawable.exlamation)
                     // лямбда-выражение на клик кнопки "Да"
-                    .setPositiveButton("Да", (dialog, whichButton) -> current.finish())
-                    .setNegativeButton("Нет", null) // не назначаем слушателя кликов по кнопке "Нет"
+                    .setPositiveButton("Ок", null)
+//                    .setNegativeButton("Нет", null) // не назначаем слушателя кликов по кнопке "Нет"
                     .setCancelable(false)           // запрет закрытия диалога кнопкой Назад
                     .create();
         else
             return builder
-                    .setTitle("Выход")
-                    .setMessage("Вы уверены?")
+                    .setTitle("Подтверждение на участие в событии")
+                    .setMessage(message)
 //                .setIcon(R.drawable.exlamation)
                     // лямбда-выражение на клик кнопки "Да"
-                    .setPositiveButton("Да", (dialog, whichButton) -> closeApp.closeApp())
-                    .setNegativeButton("Нет", null) // не назначаем слушателя кликов по кнопке "Нет"
+                    .setPositiveButton("Подтверждаю",
+                            (dialog, whichButton) -> takePart.insertIntoParticipants(event_id, user_id))
+                    .setNegativeButton("Не подтверждаю", null) // не назначаем слушателя кликов по кнопке "Нет"
                     .setCancelable(false)           // запрет закрытия диалога кнопкой Назад
                     .create();
     }//onCreateDialog
-}//class ExitConfirmDialog
+}//TakePartShowAllEventDialog

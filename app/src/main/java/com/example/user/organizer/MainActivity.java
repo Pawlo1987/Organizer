@@ -6,8 +6,6 @@ import android.os.Bundle;
 
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.user.organizer.activity.NavigationDrawerLogInActivity;
-
 //-------Главная Активность----------------
 public class MainActivity extends AppCompatActivity {
 

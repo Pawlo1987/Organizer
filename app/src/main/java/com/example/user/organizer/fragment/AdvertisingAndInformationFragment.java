@@ -16,8 +16,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.user.organizer.activity.AdvertisingAndInformationRecyclerAdapter;
-import com.example.user.organizer.activity.CreateNewsNoteActivity;
+import com.example.user.organizer.AdvertisingAndInformationRecyclerAdapter;
+import com.example.user.organizer.CreateNewsNoteActivity;
 import com.example.user.organizer.DBUtilities;
 import com.example.user.organizer.R;
 
@@ -104,7 +104,7 @@ public class AdvertisingAndInformationFragment extends Fragment {
         String query = "SELECT name FROM cities;";
 
         //заполнить spListCity данные для отображения в Spinner
-        spListCity = dbUtilities.fillList(query);
+        spListCity = dbUtilities.fillListStr(query);
         spListCity.add("ВСЕ ГОРОДА");
 
         spCityAdAnInAc.setAdapter(buildSpinner(spListCity));

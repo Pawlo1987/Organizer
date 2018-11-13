@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.user.organizer.activity.UnauthorizedPartActivity">
+    tools:context="com.example.user.organizer.UnauthorizedPartActivity">
 
     <TabHost
         android:id="@android:id/tabhost"

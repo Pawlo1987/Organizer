@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TabHost;
 
+import com.example.user.organizer.CreateEventActivity;
 import com.example.user.organizer.R;
 
 //--Активность с инициализацией активных клавиш Tab Tools после авторизации-----

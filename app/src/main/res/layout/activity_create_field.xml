@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.user.organizer.activity.CreateFieldActivity">
+    tools:context="com.example.user.organizer.CreateFieldActivity">
 
     <TextView
         android:id="@+id/tvCreateField"
@@ -192,6 +192,27 @@
             android:layout_weight="1"
             android:inputType="number" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvPhoneCrFi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/tvPhoneCrFi" />
+
+        <EditText
+            android:id="@+id/etPhoneCrFi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="phone" />
     </LinearLayout>
 
     <LinearLayout

@@ -1,4 +1,4 @@
-package com.example.user.organizer.activity;
+package com.example.user.organizer;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,8 +12,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.user.organizer.DBUtilities;
-import com.example.user.organizer.R;
 import com.example.user.organizer.activity.AdvertisingAndInformationActivity;
 
 import java.util.ArrayList;
@@ -67,7 +65,7 @@ public class CreateNewsNoteActivity extends AppCompatActivity {
     private void buildCitySpinner(String query) {
         List<String> spListCity = new ArrayList<>();    // Данные для спинера выбора города
         //заполнить spListCity данные для отображения в Spinner
-        spListCity = dbUtilities.fillList(query);
+        spListCity = dbUtilities.fillListStr(query);
 
         ArrayAdapter<String> spinnerAdapter;
         //создание адаптера для спинера

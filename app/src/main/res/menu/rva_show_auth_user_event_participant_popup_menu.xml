@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- всплывающие меню для элемента ShowAuthUserRecyclerAdapter -->
+<!-- в роли учасника-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/item_leave_event_show_auth_user_rva"
+        android:title="@string/item_leave_event_show_auth_user_rva" />
+    <item android:id="@+id/item_about_event_show_auth_user_rva"
+        android:title="@string/item_about_event_show_auth_user_rva" />
+</menu>

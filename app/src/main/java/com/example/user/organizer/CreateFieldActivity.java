@@ -1,4 +1,4 @@
-package com.example.user.organizer.activity;
+package com.example.user.organizer;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,8 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.example.user.organizer.DBUtilities;
-import com.example.user.organizer.R;
+import com.example.user.organizer.activity.LoginActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +30,7 @@ public class CreateFieldActivity extends AppCompatActivity {
     EditText etNameCrFi;
     EditText etGeolocationCrFi;
     EditText etAddressCrFi;
+    EditText etPhoneCrFi;
 
     Spinner spCityCrFi;
     Spinner spLightCrFi;
@@ -51,6 +51,7 @@ public class CreateFieldActivity extends AppCompatActivity {
         etNameCrFi = (EditText) findViewById(R.id.etNameCrFi);
         etGeolocationCrFi = (EditText) findViewById(R.id.etGeolocationCrFi);
         etAddressCrFi = (EditText) findViewById(R.id.etAddressCrFi);
+        etPhoneCrFi = (EditText) findViewById(R.id.etPhoneCrFi);
         spCityCrFi = (Spinner) findViewById(R.id.spCityCrFi);
         spLightCrFi = (Spinner) findViewById(R.id.spLightCrFi);
         spCoatingCrFi = (Spinner) findViewById(R.id.spCoatingCrFi);
@@ -70,7 +71,7 @@ public class CreateFieldActivity extends AppCompatActivity {
         String query = "SELECT name FROM cities;";
 
         //заполнить spListCity данные для отображения в Spinner
-        spListCity = dbUtilities.fillList(query);
+        spListCity = dbUtilities.fillListStr(query);
 
         //заполнить spListBooleanInt данные для отображения в Spinner
         spListBoolean.add("Нет");
@@ -80,7 +81,7 @@ public class CreateFieldActivity extends AppCompatActivity {
         query = "SELECT type FROM coatings;";
 
         //заполнить spListCoating данные для отображения в Spinner
-        spListCoating = dbUtilities.fillList(query);
+        spListCoating = dbUtilities.fillListStr(query);
 
         //создание адаптера для спинера
         spAdapterCity = new ArrayAdapter<String>(
@@ -134,6 +135,7 @@ public class CreateFieldActivity extends AppCompatActivity {
         cv.put("geo_long", etGeolocationCrFi.getText().toString());
         cv.put("geo_lat", etGeolocationCrFi.getText().toString());
         cv.put("address", etAddressCrFi.getText().toString());
+        cv.put("phone", etPhoneCrFi.getText().toString());
         //добваить данные через объект ContentValues(cv), в таблицу "field"
         dbUtilities.insertInto(cv, "fields");
 

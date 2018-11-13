@@ -47,7 +47,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="btnBackCrAcAc">Вернутся назад</string>
-    <string name="btnAddUser">Добавить участника</string>
+    <string name="btnAddUserCrEv">Добавить участника</string>
     <string name="tvCityCrEv">Город</string>
     <string name="btnNewCityCrEv">Создать Город</string>
     <string name="tvCreateCity">Создать город</string>
@@ -94,5 +94,26 @@
     <string name="log_out">Выйти из аккаунта</string>
     <string name="item_take_part_show_all_rva">принять участие</string>
     <string name="item_about_event_show_all_rva">подробная информация</string>
+    <string name="item_about_event_show_auth_user_rva">подробная информация</string>
+    <string name="item_leave_event_show_auth_user_rva">покинуть событие</string>
+    <string name="item_delete_event_show_auth_user_rva">удалить событие</string>
+    <string name="item_edit_event_show_auth_user_rva">редактировать событие</string>
+    <string name="tvHeaderEdEv">Редактирование События</string>
+    <string name="tvCityEdEv">Город</string>
+    <string name="btnNewCityEdEv">Создать город</string>
+    <string name="tvFieldEdEv">Поле</string>
+    <string name="btnNewFieldEdEv">Создать новое поле</string>
+    <string name="tvDateEdEv">Дата</string>
+    <string name="btnDateEdEv">Дата</string>
+    <string name="tvStartTimeEdEv">Время начала</string>
+    <string name="btnStartTimeEdEv">Время начала</string>
+    <string name="tvDurationEdEv">Длительность</string>
+    <string name="tvPriceEdEv">Цена</string>
+    <string name="tvListOfParticipantsEdEv">Список учасников</string>
+    <string name="btnAddUserEdEv">Добавить учасников</string>
+    <string name="tvPhoneEdEv">Номер организатора</string>
+    <string name="tvPasswordEdEv">Пароль</string>
+    <string name="btnConfirmEdEv">Подтвердить</string>
+    <string name="tvPhoneCrFi">Телефон</string>
 
 </resources>

@@ -21,6 +21,7 @@ public class ShowAllEventActivity extends AppCompatActivity {
     // поля для доступа к записям БД
     Cursor eventsCursor;                // прочитанные данные
 
+    int idAuthUser = 6;                 //Авторизированый пользователь
     TextView tvallevents;
     Context context;
 
@@ -39,7 +40,7 @@ public class ShowAllEventActivity extends AppCompatActivity {
         eventsCursor =  dbUtilities.getDb().rawQuery(query, null);
 
         // создаем адаптер, передаем в него курсор
-        showAllEventsRecyclerAdapter = new ShowAllEventsRecyclerAdapter(context, eventsCursor);
+        showAllEventsRecyclerAdapter = new ShowAllEventsRecyclerAdapter(context, eventsCursor, idAuthUser);
         // RecycerView для отображения таблицы users БД
         rvMainShAlEvAc = (RecyclerView) findViewById(R.id.rvMainShAlEvAc);
 

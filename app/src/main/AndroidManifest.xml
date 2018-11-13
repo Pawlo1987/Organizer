@@ -16,24 +16,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.AuthorizationActivity" />
+        <activity android:name=".AuthorizationActivity" />
         <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.UnauthorizedPartActivity" />
+        <activity android:name=".UnauthorizedPartActivity" />
         <activity android:name=".activity.ShowAllEventActivity" />
-        <activity android:name=".activity.CreateEventActivity" />
-        <activity android:name=".activity.CreateAccountActivity" />
-        <activity android:name=".activity.CreateCityActivity" />
-        <activity android:name=".activity.CreateFieldActivity" />
+        <activity android:name=".CreateEventActivity" />
+        <activity android:name=".CreateAccountActivity" />
+        <activity android:name=".CreateCityActivity" />
+        <activity android:name=".CreateFieldActivity" />
         <activity android:name=".SelectParticipantsActivity" />
         <activity android:name=".activity.ShowAuthUserEventsActivity" />
         <activity android:name=".ShowAuthUserEventsRecyclerAdapter" />
         <activity android:name=".activity.AdvertisingAndInformationActivity" />
-        <activity android:name=".activity.AdvertisingAndInformationRecyclerAdapter" />
-        <activity android:name=".activity.CreateNewsNoteActivity" />
+        <activity android:name=".AdvertisingAndInformationRecyclerAdapter" />
+        <activity android:name=".CreateNewsNoteActivity" />
         <activity
-            android:name=".activity.NavigationDrawerLogInActivity"
+            android:name=".NavigationDrawerLogInActivity"
             android:label="@string/title_activity_navigation_drawer_log_in"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".EditEventActivity"></activity>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.example.user.organizer.activity;
+package com.example.user.organizer;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,9 +10,6 @@ import android.os.Bundle;
 import android.util.ArrayMap;
 import android.view.View;
 import android.widget.EditText;
-
-import com.example.user.organizer.DBUtilities;
-import com.example.user.organizer.R;
 
 //--------Активность для авторизация пользователя или перехода в актиность создания нового акаунта-
 

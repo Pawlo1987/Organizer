@@ -1,4 +1,4 @@
-package com.example.user.organizer.activity;
+package com.example.user.organizer;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -21,19 +21,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.user.organizer.DBUtilities;
-import com.example.user.organizer.R;
-import com.example.user.organizer.SelectParticipantsActivity;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-//--Активность для создания нового события(переход на активность создание нового поля --------------
+//--Активность для редактирования события(переход на активность создание нового поля --------------
 //-- или нового города или активность для добавления нового участника в событие)-------
-
-public class CreateEventActivity extends AppCompatActivity {
+public class EditEventActivity extends AppCompatActivity {
 
     // коды для идентификации активностей при получении результата
     public final int REQ_ADD_USER = 1001;
@@ -42,48 +36,59 @@ public class CreateEventActivity extends AppCompatActivity {
     public static final String PAR_USERS = "select";
 
     DBUtilities dbUtilities;
-    Cursor creEvCursor;                  // курсор для чтения данных из БД
+    Cursor edEvCursor;                  // курсор для чтения данных из БД
     Context context;
 
     String authorizLogin = "user1";      // Логин авторизированого пользователя
 
-    ListView lvListOfParticipantsCrEv;   // ListView для выбранных выбранных участников
+    boolean flChangeLoginUserList = false;      //  Поменялся список учасников
+
+    ListView lvListOfParticipantsEdEv;   // ListView для выбранных выбранных участников
     List<String> spListField;            // Данные для спинера выбора поля
     List<Integer> spListDuration;        // Данные для спинера выбора длительности события
     List<String> spListCity;             // Данные для спинера выбора города
 
     List<String> loginUserList;          //коллекция login-ов с выбранными игроками
 
-    EditText etPriceCrEv;                //Общая стоимость тренеровки
-    EditText evPhoneCrEv;                //телефон организатора
-    EditText evPasswordCrEv;             //пароль для приватной тренировки
-    TextView tvDateCrEv;                 //Строка для отображения даты
-    TextView tvStartTimeCrEv;            //Строка для отображения время
+    EditText etPriceEdEv;                //Общая стоимость тренеровки
+    EditText evPhoneEdEv;                //телефон организатора
+    EditText evPasswordEdEv;             //пароль для приватной тренировки
+    TextView tvDateEdEv;                 //Строка для отображения даты
+    TextView tvStartTimeEdEv;            //Строка для отображения время
 
-    Spinner spFieldCrEv;                 //объект спинер выбора поля
-    Spinner spDurationCrEv;              //объект спинер выбора длительности события
-    Spinner spCityCrEv;                  //объект спинер выбора города
+    Spinner spFieldEdEv;                 //объект спинер выбора поля
+    Spinner spDurationEdEv;              //объект спинер выбора длительности события
+    Spinner spCityEdEv;                  //объект спинер выбора города
 
     Calendar calendar = Calendar.getInstance();      // объект для работы с датой и временем
 
+    Intent intent;                          // для получения результатов из активности
+    int event_id;
     String query;                           //переменная для запроса
     String eventDate;                       // назначения дата события
     String eventStartTime;                  // Время начала события
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_event);
-
+        setContentView(R.layout.activity_edit_event);
         //привязка ресурсов к объектам
-        tvDateCrEv = (TextView) findViewById(R.id.tvDateCrEv);
-        tvStartTimeCrEv = (TextView) findViewById(R.id.tvStartTimeCrEv);
-        etPriceCrEv = (EditText) findViewById(R.id.etPriceCrEv);
-        evPhoneCrEv = (EditText) findViewById(R.id.evPhoneCrEv);
-        evPasswordCrEv = (EditText) findViewById(R.id.evPasswordCrEv);
-        spCityCrEv = (Spinner) findViewById(R.id.spCityCrEv);
-        spFieldCrEv = (Spinner) findViewById(R.id.spFieldCrEv);
-        spDurationCrEv = (Spinner) findViewById(R.id.spDurationCrEv);
-        lvListOfParticipantsCrEv = (ListView) findViewById(R.id.lvListOfParticipantsCrEv);
+        tvDateEdEv = (TextView) findViewById(R.id.tvDateEdEv);
+        tvStartTimeEdEv = (TextView) findViewById(R.id.tvStartTimeEdEv);
+        etPriceEdEv = (EditText) findViewById(R.id.etPriceEdEv);
+        evPhoneEdEv = (EditText) findViewById(R.id.evPhoneEdEv);
+        evPasswordEdEv = (EditText) findViewById(R.id.evPasswordEdEv);
+        spCityEdEv = (Spinner) findViewById(R.id.spCityEdEv);
+        spFieldEdEv = (Spinner) findViewById(R.id.spFieldEdEv);
+        spDurationEdEv = (Spinner) findViewById(R.id.spDurationEdEv);
+        lvListOfParticipantsEdEv = (ListView) findViewById(R.id.lvListOfParticipantsEdEv);
+
+        //подготовка данных для редактирования
+        intent = getIntent();
+        event_id = intent.getIntExtra("_id", 0);
+        spDurationEdEv.setSelection(intent.getIntExtra("duration", 0));
+        etPriceEdEv.setText(String.valueOf(intent.getIntExtra("price", 0)));
+        evPasswordEdEv.setText(intent.getStringExtra("password"));
+        evPhoneEdEv.setText(intent.getStringExtra("phone"));
 
         //инициализация коллекции для спинера
         spListField = new ArrayList<>();
@@ -102,9 +107,10 @@ public class CreateEventActivity extends AppCompatActivity {
         query = "SELECT name FROM cities;";
 
         //заполнить spListCity данные для отображения в Spinner
-        spListCity = dbUtilities.fillList(query);
+        spListCity = dbUtilities.fillListStr(query);
 
-        spCityCrEv.setAdapter(buildSpinnerStr(spListCity));
+        spCityEdEv.setAdapter(buildSpinnerStr(spListCity));
+        spCityEdEv.setSelection(spListCity.indexOf(intent.getStringExtra("city_name")));
 
         //заполнить spListField данные для отображения в Spinner
         int[] a = {30, 45, 60, 90, 120, 150, 180};
@@ -112,20 +118,30 @@ public class CreateEventActivity extends AppCompatActivity {
             spListDuration.add(i);
         }//foreach
 
-        spDurationCrEv.setAdapter(buildSpinnerInt(spListDuration));
+        spDurationEdEv.setAdapter(buildSpinnerInt(spListDuration));
+        spDurationEdEv.setSelection(spListDuration.indexOf(intent.getIntExtra("duration", 0)));
 
-        spCityCrEv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        //заполняем список учасников
+        query = "SELECT users.name FROM participants " +
+                "INNER JOIN users ON users._id = participants.user_id " +
+                "WHERE participants.event_id = " + event_id + ";";
+        loginUserList = dbUtilities.fillListStr(query);
+        fillLV();
+
+        spCityEdEv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id){
                 //запрос для получения курсор с данными
                 query = "SELECT fields.name FROM fields INNER JOIN cities ON cities._id = fields.city_id" +
-                        " WHERE cities.name = \"" + spCityCrEv.getItemAtPosition(position) +"\";";
+                        " WHERE cities.name = \"" + spCityEdEv.getItemAtPosition(position) +"\";";
 
                 //заполнить spListField данные для отображения в Spinner
-                spListField = dbUtilities.fillList(query);
+                spListField = dbUtilities.fillListStr(query);
 
-                spFieldCrEv.setAdapter(buildSpinnerStr(spListField));
+                spFieldEdEv.setAdapter(buildSpinnerStr(spListField));
+                spFieldEdEv.setSelection(spListField.indexOf(intent.getStringExtra("field_name")));
+
             }//onItemSelected
 
             @Override
@@ -133,6 +149,10 @@ public class CreateEventActivity extends AppCompatActivity {
 
             }//onNothingSelected
         });
+
+        // установка значений даты и время из БД к данному событию
+        tvDateEdEv.setText(intent.getStringExtra("date"));
+        tvStartTimeEdEv.setText(intent.getStringExtra("time"));
     }//onCreate
 
     //строим Spinner
@@ -202,7 +222,7 @@ public class CreateEventActivity extends AppCompatActivity {
                 DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR);
 
         //установка текста в TextView
-        tvDateCrEv.setText("Дата " + eventDate);
+        tvDateEdEv.setText("Дата " + eventDate);
     } // setInitialDateTime
 
     // установка начальных времени
@@ -215,7 +235,7 @@ public class CreateEventActivity extends AppCompatActivity {
                 DateUtils.FORMAT_SHOW_TIME);
 
         //установка текста в TextView
-        tvStartTimeCrEv.setText("Время " + eventStartTime);
+        tvStartTimeEdEv.setText("Время " + eventStartTime);
     } // setInitialDateTime
 
     // отображаем диалоговое окно для выбора даты - DatePickerDialog
@@ -243,23 +263,23 @@ public class CreateEventActivity extends AppCompatActivity {
 
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btnNewCityCrEv:            //кнопка создать новое поле
+            case R.id.btnNewCityEdEv:            //кнопка создать новое поле
                 createNewCity();
                 break;
-            case R.id.btnNewFieldCrEv:           //кнопка создать новое поле
+            case R.id.btnNewFieldEdEv:           //кнопка создать новое поле
                 createNewField();
                 break;
-            case R.id.btnDateCrEv:               //кнопка дата
+            case R.id.btnDateEdEv:               //кнопка дата
                 setDate();
                 break;
-            case R.id.btnStartTimeCrEv:          //кнопка время начала
+            case R.id.btnStartTimeEdEv:          //кнопка время начала
                 setTime24();
                 break;
-            case R.id.btnAddUser:                //кнопка добавить участника
+            case R.id.btnAddUserEdEv:                //кнопка добавить участника
                 addUser();
                 break;
-            case R.id.btnConfirmCrEv:            //кнопка создать
-                createEvent();
+            case R.id.btnConfirmEdEv:            //кнопка обновить
+                updateEvent();
                 break;
         }//switch
     }//onClick
@@ -277,6 +297,7 @@ public class CreateEventActivity extends AppCompatActivity {
             //создаем новые данные о самолете из полученных данных
             loginUserList.clear();
             loginUserList.addAll(data.getParcelableArrayListExtra(PAR_USERS));
+            flChangeLoginUserList = true;
             fillLV();   //Заполнение и вывод в ListView
         }
 
@@ -290,7 +311,7 @@ public class CreateEventActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, loginUserList);
 
         // присваиваем адаптер списку
-        lvListOfParticipantsCrEv.setAdapter(adapter);
+        lvListOfParticipantsEdEv.setAdapter(adapter);
     }//fillLV
 
     //обработка нажатия клавиши добавить участника
@@ -308,57 +329,67 @@ public class CreateEventActivity extends AppCompatActivity {
 
     //обработка нажатия клавиши создания нового города
     private void createNewCity() {
-
+        Intent intent = new Intent(this, CreateCityActivity.class);
+        startActivity(intent);
     }//createNewCity
 
-    //Создать новое событие
-    private void createEvent() {
-
+    //обновление событие
+    private void updateEvent() {
         //делаем новую запись в таблицу с событиями
         ContentValues cv = new ContentValues();
         cv.put("city_id", dbUtilities.findIdbySPObject(
-                spCityCrEv.getSelectedItem().toString(),    //Объект спинера(название города)
+                spCityEdEv.getSelectedItem().toString(),    //Объект спинера(название города)
                 "cities",                                   //название таблицы
                 "name")                                     //название столбца
         );
         cv.put("field_id", dbUtilities.findIdbySPObject(
-                spFieldCrEv.getSelectedItem().toString(),   //Объект спинера(название поля)
+                spFieldEdEv.getSelectedItem().toString(),   //Объект спинера(название поля)
                 "fields",                                   //название таблицы
                 "name")                                     //название столбца
         );
         cv.put("date", eventDate);
         cv.put("time", eventStartTime);
-        cv.put("duration", spDurationCrEv.getSelectedItem().toString());
-        cv.put("price", etPriceCrEv.getText().toString());
-        cv.put("password", evPasswordCrEv.getText().toString());
-        cv.put("phone", evPhoneCrEv.getText().toString());
-        cv.put("user_id", dbUtilities.findIdbySPObject(
-                authorizLogin,   //Объект (название поля)
-                "users",                                   //название таблицы
-                "login")
-        );
+        cv.put("duration", spDurationEdEv.getSelectedItem().toString());
+        cv.put("price", etPriceEdEv.getText().toString());
+        cv.put("password", evPasswordEdEv.getText().toString());
+        cv.put("phone", evPhoneEdEv.getText().toString());
+        cv.put("user_id", intent.getIntExtra("user_id", 0));
 
         //добваить данные через объект ContentValues(cv), в таблицу "event"
-        dbUtilities.insertInto(cv, "events");
+        dbUtilities.updateTable(cv, "events", String.valueOf(event_id));
 
-        //добавляем участников в таблицу participants
-        for (String loginUser : loginUserList) {
+        if(flChangeLoginUserList){
 
-            cv = new ContentValues();
-            cv.put("event_id", dbUtilities.tableSize("events"));
-            cv.put("user_id", dbUtilities.findIdbySPObject(
-                    loginUser,
-                    "users",
-                    "login")
-            );
-            cv.put("status", 1);
+            //заполняем список учасников(_id)
+            List<Integer> idUsersList = new ArrayList<>();
+            query = "SELECT participants._id FROM participants " +
+                    "WHERE participants.event_id = " + event_id + ";";
+            idUsersList = dbUtilities.fillListInt(query);
 
-            //добваить данные через объект ContentValues(cv), в таблицу "participants"
-            dbUtilities.insertInto(cv, "participants");
+            //удаляем старый список учасников из таблицы participants
+            for (Integer idUser : idUsersList) {
+                dbUtilities.deleteRowById("participants", idUser);
+            }//foreach
 
-        }
-        //переходин в актиность LoginActivity
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-    }//createEvent
-}//CreateEventActivity
+            //добавляем участников в таблицу participants
+            for (String loginUser : loginUserList) {
+
+                cv = new ContentValues();
+                cv.put("event_id", event_id);
+                cv.put("user_id", dbUtilities.findIdbySPObject(
+                        loginUser,
+                        "users",
+                        "login")
+                );
+
+                //добваить данные через объект ContentValues(cv), в таблицу "participants"
+                dbUtilities.insertInto(cv, "participants");
+
+            }//for
+        }//if
+//        //переходин в актиность LoginActivity
+//        Intent intent = new Intent(this, LoginActivity.class);
+//        startActivity(intent);
+        finish();
+    }//updateEvent
+}//EditEventActivity

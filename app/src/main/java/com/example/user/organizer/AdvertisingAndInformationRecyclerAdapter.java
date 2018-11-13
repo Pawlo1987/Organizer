@@ -1,4 +1,4 @@
-package com.example.user.organizer.activity;
+package com.example.user.organizer;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -7,9 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.example.user.organizer.DBUtilities;
-import com.example.user.organizer.R;
 
 //-------Активность адаптера для вывода(просмотра) новости и реклама --------------
 

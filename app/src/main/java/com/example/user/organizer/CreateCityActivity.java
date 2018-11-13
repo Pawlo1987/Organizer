@@ -1,4 +1,4 @@
-package com.example.user.organizer.activity;
+package com.example.user.organizer;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,9 +10,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-
-import com.example.user.organizer.DBUtilities;
-import com.example.user.organizer.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +47,7 @@ public class CreateCityActivity extends AppCompatActivity {
         String query = "SELECT name FROM regions;";
 
         //заполнить spListCity данные для отображения в Spinner
-        spListRegion = dbUtilities.fillList(query);
+        spListRegion = dbUtilities.fillListStr(query);
 
         //создание адаптера для спинера
         spAdapterRegion = new ArrayAdapter<String>(

@@ -1,11 +1,13 @@
-package com.example.user.organizer.activity;
+package com.example.user.organizer;
 
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TabHost;
 
+import com.example.user.organizer.AuthorizationActivity;
 import com.example.user.organizer.R;
+import com.example.user.organizer.activity.ShowAllEventActivity;
 
 ////--Активность с инициализацией активных клавиш Tab Tools до авторизации-----
 

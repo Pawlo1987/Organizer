@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //--------------Вспомагательный класс для работы с БД-----------------------------
-public class DBUtilities {
+public class DBUtilities{
 
     private DBHelper dbHelper;
     private Context context;
@@ -26,6 +26,16 @@ public class DBUtilities {
     //добавить строку в таблицу, соответственно параметры(cv - данные, table - таблица)
     public void insertInto(ContentValues cv, String table){
         db.insert(table, null,  cv);
+    }//insertInto
+
+    //обновить строку в таблице, соответственно параметры(cv - данные, table - таблица, id таблицы)
+    public void updateTable(ContentValues cv, String table, String id){
+        db.update(table, cv,  "_id = ?", new String[] { id });
+    }//updateTable
+
+    //удалить строку из таблицы, соответственно параметры(cv - данные, table - таблица)
+    public void deleteRowById(String table, int id){
+        db.delete(table, "_id = " + id,  null);
     }//insertInto
 
     //длина определенного столбца
@@ -45,7 +55,7 @@ public class DBUtilities {
     }//insertInto
 
     //заполнить коллекцию(List) данные для отображения в Spinner
-    public List<String> fillList(String query) {
+    public List<String> fillListStr(String query) {
         List<String> list = new ArrayList<>();
         Cursor cursor;
 
@@ -57,7 +67,22 @@ public class DBUtilities {
             list.add(cursor.getString(0));
         }//for
         return list;
-    }//fillList
+    }//fillListStr
+
+    //заполнить коллекцию(List) данные для отображения в Spinner
+    public List<Integer> fillListInt(String query) {
+        List<Integer> list = new ArrayList<>();
+        Cursor cursor;
+
+        // получаем данные из БД в виде курсора
+        cursor = db.rawQuery(query, null);
+        int n = cursor.getCount();        //количество строк в курсоре
+        for (int i = 0; i < n; i++) {
+            cursor.moveToPosition(i); // переходим в курсоре на текущую позицию
+            list.add(cursor.getInt(0));
+        }//for
+        return list;
+    }//fillListStr
 
     public SQLiteDatabase getDb() {
         return db;

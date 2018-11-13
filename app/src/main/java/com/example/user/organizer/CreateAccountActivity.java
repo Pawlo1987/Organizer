@@ -1,4 +1,4 @@
-package com.example.user.organizer.activity;
+package com.example.user.organizer;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,10 +10,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-
-import com.example.user.organizer.DBUtilities;
-import com.example.user.organizer.R;
-import com.example.user.organizer.activity.UnauthorizedPartActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +57,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         String query = "SELECT name FROM cities;";
 
         //заполнить spListCity данные для отображения в Spinner
-        spListCity = dbUtilities.fillList(query);
+        spListCity = dbUtilities.fillListStr(query);
 
         //создание адаптера для спинера
         spAdapterCity = new ArrayAdapter<String>(

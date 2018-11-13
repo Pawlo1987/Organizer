@@ -28,6 +28,8 @@ public class ShowAllEventsFragment extends Fragment {
     TextView tvallevents;
     Context context;
 
+    int idAuthUser = 6;                 //авторизированный пользователь
+
     public ShowAllEventsFragment newInstance() {
 
         ShowAllEventsFragment fragment = new ShowAllEventsFragment();
@@ -44,13 +46,13 @@ public class ShowAllEventsFragment extends Fragment {
         dbUtilities.open();
         // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
         String query = "SELECT cities.name, fields.name, events.date, " +
-                "events.time, events._id FROM events " +
+                "events.time, events._id, events.user_id FROM events " +
                 "INNER JOIN cities ON cities._id = events.city_id " +
                 "INNER JOIN fields ON fields._id = events.field_id;";
         eventsCursor =  dbUtilities.getDb().rawQuery(query, null);
 
         // создаем адаптер, передаем в него курсор
-        showAllEventsRecyclerAdapter = new ShowAllEventsRecyclerAdapter(context, eventsCursor);
+        showAllEventsRecyclerAdapter = new ShowAllEventsRecyclerAdapter(context, eventsCursor, idAuthUser);
         super.onAttach(context);
     } // onAttach
 

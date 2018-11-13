@@ -31,28 +31,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/tvFirstLineShAlEvReAd" />
+                android:text="@string/tvFirstLineShAlEvReAd"
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/tvDateShAlEvReAd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="DATE" />
+                android:text="DATE"
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/tvSecondLineShAlEvReAd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/tvSecondLineShAlEvReAd" />
+                android:text="@string/tvSecondLineShAlEvReAd"
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/tvTimeShAlEvReAd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TIME" />
+                android:text="TIME"
+                android:textAlignment="center" />
 
         </LinearLayout>
 
@@ -66,28 +70,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/tvThirdLineShAlEvReAd" />
+                android:text="@string/tvThirdLineShAlEvReAd"
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/tvCityShAlEvReAd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="CITY" />
+                android:text="CITY"
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/tvFourthLineShAlEvReAd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/tvFourthLineShAlEvReAd" />
+                android:text="@string/tvFourthLineShAlEvReAd"
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/tvFieldShAlEvReAd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="FIELD" />
+                android:text="FIELD"
+                android:textAlignment="center" />
         </LinearLayout>
 
     </LinearLayout>

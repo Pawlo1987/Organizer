@@ -2,7 +2,6 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -58,7 +57,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         this.callDialogsAuthUserEvents = callDialogsAuthUserEvents;
 
         //получаем коллекцию событий
-        eventsList = dbUtilities.getListEventsForAuthUser("", idAuthUser);
+        eventsList = dbUtilities.getListEvents("", idAuthUser);
     } // advertisingAndInformationRecyclerAdapter
 
     public ShowAuthUserEventsRecyclerAdapter(Context context) {
@@ -71,7 +70,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         eventsList.clear();
 
         //получаем коллекцию событий
-        eventsList = dbUtilities.getListEventsForAuthUser("", idAuthUser);
+        eventsList = dbUtilities.getListEvents("", idAuthUser);
         notifyDataSetChanged();
     }
 

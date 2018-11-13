@@ -649,70 +649,6 @@ public class DBUtilities{
         return participantList;
     }//getListParticipantsUser
 
-    //получение коллекции событий
-    public List<Event> getListEvents(String eventId) {
-        List<Event> eventsList = new ArrayList<>();
-
-        //обращаемся к базе для получения списка имен городов
-        try(BackgroundWorker bg = new BackgroundWorker()){
-            bg.execute("getListEvents", eventId);
-
-            String resultdb = bg.get();
-            Log.d("FOOTBALL", resultdb);
-            JSONObject jResult = new JSONObject(resultdb);
-
-            if(jResult.getString("error").toString().equals("")){
-
-                JSONObject jListEventId = jResult.getJSONObject("id");
-                List<String> listEventId = getListFromJSON(jListEventId);
-
-                JSONObject jListCityName = jResult.getJSONObject("city");
-                List<String> listCityName = getListFromJSON(jListCityName);
-
-                JSONObject jListFieldName = jResult.getJSONObject("field");
-                List<String> listFieldName = getListFromJSON(jListFieldName);
-
-                JSONObject jListEventData = jResult.getJSONObject("date");
-                List<String> listEventData = getListFromJSON(jListEventData);
-
-                JSONObject jListEventTime = jResult.getJSONObject("time");
-                List<String> listEventTime = getListFromJSON(jListEventTime);
-
-                JSONObject jListEventDuration = jResult.getJSONObject("duration");
-                List<String> listEventDuration = getListFromJSON(jListEventDuration);
-
-                JSONObject jListEventPrice = jResult.getJSONObject("price");
-                List<String> listEventPrice = getListFromJSON(jListEventPrice);
-
-                JSONObject jListEventPassword = jResult.getJSONObject("password");
-                List<String> listEventPassword = getListFromJSON(jListEventPassword);
-
-                JSONObject jListEventPhone = jResult.getJSONObject("phone");
-                List<String> listEventPhone = getListFromJSON(jListEventPhone);
-
-                JSONObject jListEventUser = jResult.getJSONObject("user");
-                List<String> listEventUser = getListFromJSON(jListEventUser);
-
-                int n = listCityName.size();
-
-                for (int i = 0; i <n ; i++) {
-                    eventsList.add(new Event(listEventId.get(i), listCityName.get(i),
-                            listFieldName.get(i), listEventData.get(i), listEventTime.get(i),
-                            listEventDuration.get(i), listEventPrice.get(i), listEventPassword.get(i),
-                            listEventPhone.get(i), listEventUser.get(i), "0"));
-                }//fori
-
-            }else{
-                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
-            }//if-else
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }//try-catch
-
-        return eventsList;
-    }//getListEvents
-
     //получение коллекции полей
     public List<Field> getListField(String fieldId) {
         List<Field> fieldList = new ArrayList<>();
@@ -780,12 +716,12 @@ public class DBUtilities{
     }//getListEvents
 
     //получение коллекции событий для авторизированого пользователя
-    public List<Event> getListEventsForAuthUser(String eventId, String idAuthUser) {
+    public List<Event> getListEvents(String eventId, String idAuthUser) {
         List<Event> eventsList = new ArrayList<>();
 
         //обращаемся к базе для получения списка имен городов
         try(BackgroundWorker bg = new BackgroundWorker()){
-            bg.execute("getListEventsForAuthUser", eventId, idAuthUser);
+            bg.execute("getListEvents", eventId, idAuthUser);
 
             String resultdb = bg.get();
             Log.d("FOOTBALL", resultdb);

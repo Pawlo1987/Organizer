@@ -14,7 +14,6 @@ import android.support.v7.app.AlertDialog;
 
 import com.example.user.organizer.DBUtilities;
 import com.example.user.organizer.Event;
-import com.example.user.organizer.ShowAllEventsRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,7 +95,7 @@ public class DeleteEventDialog extends DialogFragment {
         //удаляем старый список учасников из таблицы participants
         for (String idParticipants : idParticipantsList) {
             //получаем данные для уведомления
-            listEvent = dbUtilities.getListEventsForAuthUser(event_id, user_id);
+            listEvent = dbUtilities.getListEvents(event_id, user_id);
 
             dbUtilities.insertIntoNotifications(event_id,
                  dbUtilities.searchValueInColumn("participants", "id",

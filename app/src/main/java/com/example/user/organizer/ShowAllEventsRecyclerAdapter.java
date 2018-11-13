@@ -1,7 +1,6 @@
 package com.example.user.organizer;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -55,7 +54,7 @@ public class ShowAllEventsRecyclerAdapter extends
         this.idAuthUser = idAuthUser;
         dbUtilities = new DBUtilities(context);
 
-        this.eventsList = dbUtilities.getListEventsForAuthUser("", idAuthUser);
+        this.eventsList = dbUtilities.getListEvents("", idAuthUser);
     } // ShowAllEventsRecyclerAdapter
 
     // метод для обновления адаптера
@@ -64,7 +63,7 @@ public class ShowAllEventsRecyclerAdapter extends
         eventsList.clear();
 
         //получаем коллекцию событий
-        eventsList = dbUtilities.getListEventsForAuthUser("", idAuthUser);
+        eventsList = dbUtilities.getListEvents("", idAuthUser);
 
         notifyDataSetChanged();
     }//updateEventList

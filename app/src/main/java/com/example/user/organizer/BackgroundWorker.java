@@ -231,21 +231,6 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
                     return "IO:" + e.getMessage();
                 } // try-catch
 
-            case "getListEvents":
-                try {
-                    // параметры для передачи на сервер (для получения списка событий)
-                    String eventId = params[1];
-
-                    // формируем строку для отправки на сервер
-                    String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8")
-                            + "&" + URLEncoder.encode("eventId", "utf8") + "=" + URLEncoder.encode(eventId, "utf8");
-
-                    return workWithServer(postData);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return "IO:" + e.getMessage();
-                } // try-catch
-
             case "getListField":
                 try {
                     // параметры для передачи на сервер (для получения списка полей)
@@ -261,7 +246,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
                     return "IO:" + e.getMessage();
                 } // try-catch
 
-            case "getListEventsForAuthUser":
+            case "getListEvents":
                 try {
                     // параметры для передачи на сервер (для получения списка событий для авторизированого пользователя)
                     String eventId = params[1];

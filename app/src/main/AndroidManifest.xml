@@ -24,19 +24,29 @@
         android:roundIcon="@drawable/icon_main_player"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" />
-        <activity android:name=".AuthorizationActivity" />
-        <activity android:name=".CreateEventActivity" />
-        <activity android:name=".CreateAccountActivity" />
-        <activity android:name=".CreateCityActivity" />
-        <activity android:name=".CreateFieldActivity" />
-        <activity android:name=".SelectParticipantsActivity" />
-        <activity android:name=".CreateNewsNoteActivity" />
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".AuthorizationActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".CreateEventActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".CreateAccountActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".CreateCityActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".CreateFieldActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SelectParticipantsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".CreateNewsNoteActivity"
+            android:screenOrientation="portrait"/>
         <activity
+            android:screenOrientation="portrait"
             android:name=".NavigationDrawerLogInActivity"
             android:label="@string/title_activity_navigation_drawer_log_in"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".EditEventActivity" />
+        <activity android:name=".EditEventActivity"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".NotificationService"
@@ -58,13 +68,19 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity
+            android:screenOrientation="portrait"
             android:name=".FieldMapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".EditFieldActivity" />
-        <activity android:name=".ShowSomeFragmentBeforeAuthActivity" />
-        <activity android:name=".SelectLogoActivity" />
-        <activity android:name=".EditNewsNoteActivity" />
-        <activity android:name=".SplashActivity">
+        <activity android:name=".EditFieldActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ShowSomeFragmentBeforeAuthActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SelectLogoActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".EditNewsNoteActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

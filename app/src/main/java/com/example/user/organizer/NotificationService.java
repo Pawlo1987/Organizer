@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 //-------------Сервис для проверки и вывода уведомелений о новых событиях----------------------
-public class InfoMessageService extends Service {
+public class NotificationService extends Service {
     private String idAuthUser;
     private NotificationManager nm;
     private Context context;
     DBUtilities dbUtilities;
 
-    public InfoMessageService() {
+    public NotificationService() {
     }
 
     @Override
@@ -68,20 +68,24 @@ public class InfoMessageService extends Service {
     }//someWork
 
     private void sendNotification(com.example.user.organizer.Notification notification) {
-        Notification.Builder nBuilder = new Notification.Builder(this);
-        nBuilder.setContentTitle(notification.getMessage_id())
-                .setSmallIcon(R.drawable.file)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.file));
-        nBuilder.setContentText(String.format("%s%s %s %s %s",
+        String messageText = String.format("%s %s в %s,\n в городе %s на поле %s",
                 notification.getMessage_id(),
                 notification.getDate(),
                 notification.getTime(),
                 notification.getCity_id(),
-                notification.getField_id())
-        );
+                notification.getField_id());
+
+        Notification.Builder nBuilder = new Notification.Builder(this)
+                .setContentText(messageText)
+                .setContentTitle(notification.getMessage_id())
+                .setSmallIcon(R.drawable.file)
+                .setStyle((new Notification.BigTextStyle()
+                        .bigText(messageText)))
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.file));
 
         // 3-я часть  Click on notification
-        Intent intent = new Intent(this, NavigationDrawerLogInActivity.class);
+//        Intent intent = new Intent(this, NavigationDrawerLogInActivity.class);
+                Intent intent = new Intent();
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         nBuilder.setContentIntent(pIntent);
@@ -93,8 +97,6 @@ public class InfoMessageService extends Service {
 
         // отправляем
         nm.notify(Utils.getRandom(1, 100), notif);
-
-
     }//sendNotification
 
     @Override

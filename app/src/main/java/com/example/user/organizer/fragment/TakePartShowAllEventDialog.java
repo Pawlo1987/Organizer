@@ -3,11 +3,14 @@ package com.example.user.organizer.fragment;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
+
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 
@@ -54,7 +57,7 @@ public class TakePartShowAllEventDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         // получить ссылку на активность, вызвавшую диалог
-        FragmentActivity current = getActivity();
+        Activity current = getActivity();
         AlertDialog.Builder builder = new AlertDialog.Builder(current);
 
         // прочитать данные, переданные из активности (из точки вызова)
@@ -79,10 +82,20 @@ public class TakePartShowAllEventDialog extends DialogFragment {
                     .setMessage(message)
 //                .setIcon(R.drawable.exlamation)
                     // лямбда-выражение на клик кнопки "Да"
-                    .setPositiveButton("Подтверждаю",
-                            (dialog, whichButton) -> dbUtilities.insertIntoParticipants(event_id,user_id))
+                    .setPositiveButton("Подтверждаю", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            takeInPart(event_id,user_id);
+                        }
+                    })
                     .setNegativeButton("Не подтверждаю", null) // не назначаем слушателя кликов по кнопке "Нет"
                     .setCancelable(false)           // запрет закрытия диалога кнопкой Назад
                     .create();
     }//onCreateDialog
+
+    private void takeInPart(String event_id, String user_id) {
+        dbUtilities.insertIntoParticipants(event_id,user_id);
+        Intent intent = new Intent();
+        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
+    }//takeInPart
 }//TakePartShowAllEventDialog

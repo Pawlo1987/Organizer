@@ -113,6 +113,8 @@ implements AuthUserEventsInterface {
             switch (requestCode) {
                 case REQUEST_POS:
                     showAuthUserEventsRecyclerAdapter.updateEventList();
+                    //привязываем адаптер к recycler объекту
+                    rvMainShAuUsEvAc.setAdapter(showAuthUserEventsRecyclerAdapter);
                     break;
             }//switch
         }//if

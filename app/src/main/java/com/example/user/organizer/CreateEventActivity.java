@@ -272,7 +272,9 @@ public class CreateEventActivity extends AppCompatActivity {
                 break;
             case R.id.btnConfirmCrEv:            //кнопка создать
                 createEvent();
-                finish();
+                Intent intent = new Intent(this, NavigationDrawerLogInActivity.class);
+                intent.putExtra("idAuthUser", idAuthUser);
+                startActivity(intent);
                 break;
         }//switch
     }//onClick

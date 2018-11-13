@@ -45,7 +45,7 @@
         <activity android:name=".EditEventActivity" />
 
         <service
-            android:name=".InfoMessageService"
+            android:name=".NotificationService"
             android:enabled="true"
             android:exported="true" />
         <!--

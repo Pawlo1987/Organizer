@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -24,6 +25,7 @@ public class ShowAllEventsFragment extends Fragment
         implements AllEventsInterface {
 
     RecyclerView rvMainShAlEvAc;
+    private static final int REQUEST_POS = 1;
 
     // адаптер для отображения recyclerView
     ShowAllEventsRecyclerAdapter showAllEventsRecyclerAdapter;
@@ -95,6 +97,21 @@ public class ShowAllEventsFragment extends Fragment
         return result;
     } // onCreateView
 
+    // точка выхода из DialogFragment при положительных
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_POS:
+                    showAllEventsRecyclerAdapter.updateEventList();
+                    //привязываем адаптер к recycler объекту
+                    rvMainShAlEvAc.setAdapter(showAllEventsRecyclerAdapter);
+                    break;
+            }//switch
+        }//if
+    }//onActivityResult
+
     @Override
     public void callDialogAboutDialog(Context context, String message) {
         Bundle args = new Bundle();    // объект для передачи параметров в диалог
@@ -115,8 +132,11 @@ public class ShowAllEventsFragment extends Fragment
         args.putString("user_id", idAuthUser);
         takePartShowAllEventDialog.setArguments(args);
 
-        // отображение диалогового окна
-        takePartShowAllEventDialog.show(((AppCompatActivity)context).
-                getSupportFragmentManager(), ID_TAKE_PART_DIALOG);
+        // Возврат результата выполнения из DialogFragment во Fragment минуя Activity
+        // ссылка (https://habrahabr.ru/post/259805/)
+        takePartShowAllEventDialog.setTargetFragment(this, REQUEST_POS);
+
+        // Точка вызова отображение диалогового окна
+        takePartShowAllEventDialog.show( getFragmentManager(), ID_TAKE_PART_DIALOG);
     }//callDialogTakePart
 }

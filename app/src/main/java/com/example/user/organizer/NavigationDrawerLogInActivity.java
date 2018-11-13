@@ -15,9 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.user.organizer.fragment.AboutEventShowAllEventDialog;
 import com.example.user.organizer.fragment.AboutUserInfoDialog;
 import com.example.user.organizer.fragment.AdvertisingAndInformationFragment;
 import com.example.user.organizer.fragment.ExitConfirmDialog;
@@ -146,7 +144,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
     }//onCreate
 
     private void startServiceWatchingForDb() {
-        Intent intent = new Intent(this, InfoMessageService.class);
+        Intent intent = new Intent(this, NotificationService.class);
         intent.putExtra("idAuthUser", idAuthUser);
         startService(intent);
     }//startServiceWatchingForDb
@@ -249,7 +247,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
-        stopService(new Intent(this, InfoMessageService.class));
+        stopService(new Intent(this, NotificationService.class));
         super.onDestroy();
     }//onDestroy
 

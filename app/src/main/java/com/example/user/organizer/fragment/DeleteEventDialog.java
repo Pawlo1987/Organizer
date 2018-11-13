@@ -113,7 +113,8 @@ public class DeleteEventDialog extends DialogFragment {
         }//foreach
 
         //удаляем записи уведомлений об организации даного события если ктото не получил
-        dbUtilities.deleteRowByValue("notifications", "event_id", event_id);
+        dbUtilities.deleteRowByTwoValueAndTheyColumnName("notifications",
+                "event_id",event_id,"message_id","1");
 
         //удалить собитие из базы
         dbUtilities.deleteRowById("events", event_id);

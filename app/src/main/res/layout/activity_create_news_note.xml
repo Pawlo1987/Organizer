@@ -103,6 +103,7 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="20dp"
             android:gravity="top|left"
+            android:maxLength="70"
             android:inputType="textMultiLine" />
 
         <LinearLayout

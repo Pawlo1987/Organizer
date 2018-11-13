@@ -44,6 +44,7 @@
             android:id="@+id/etCityNameCrCi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLength="15"
             android:layout_weight="1"
             android:inputType="textPersonName"/>
 

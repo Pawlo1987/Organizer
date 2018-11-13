@@ -143,7 +143,10 @@
     <string name="btnConfirmEdNeNoAc">Принять</string>
     <string name="btnDeleteEdNeNoAc">Удалить пост</string>
     <string name="create_new_event">Создать событие</string>
-    <string name="etPhoneHint">(XXX)XXX-XX-XX</string>
+    <string name="hintEtPhone">(XXX)XXX-XX-XX</string>
     <string name="error_enter_phone">формат (XXX)XXX-XX-XX</string>
+    <string name="hintEtPhoneCrFi">(XXX)XXX-XX-XX</string>
+    <string name="hintEtChangePhoneSeFr">(XXX)XXX-XX-XX</string>
+    <string name="hintEtPhoneCrAcAc">(XXX)XXX-XX-XX</string>
 
 </resources>

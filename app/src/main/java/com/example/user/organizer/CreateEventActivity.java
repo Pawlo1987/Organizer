@@ -14,6 +14,7 @@ import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -77,6 +78,9 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnFoc
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
+        context = getBaseContext();
+        dbUtilities = new DBUtilities(context);
+
         idAuthUser = getIntent().getStringExtra("idAuthUser");
 
         //добавляем actionBar (стрелка сверху слева)
@@ -94,6 +98,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnFoc
         spFieldCrEv = (Spinner) findViewById(R.id.spFieldCrEv);
         spDurationCrEv = (Spinner) findViewById(R.id.spDurationCrEv);
         lvListOfParticipantsCrEv = (ListView) findViewById(R.id.lvListOfParticipantsCrEv);
+        etPhoneLayout = (TextInputLayout) findViewById(R.id.etPhoneCrEvLayout);
 
         //инициализация коллекции для спинера
         spListField = new ArrayList<>();
@@ -104,41 +109,9 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnFoc
 
         setInitialTime();               //начальная установка время
         setInitialDate();               //начальная установка даты
-        context = getBaseContext();
-        dbUtilities = new DBUtilities(context);
 
-        etPhoneLayout = (TextInputLayout) findViewById(R.id.etphonecrevac_layout);
-
-        final String regex = "\\(\\d{3}\\)\\d{3}\\-\\d{2}\\-\\d{2}";
-
-        etPhoneCrEv.setFilters(
-                new InputFilter[] {
-                        new PartialRegexInputFilter(regex)
-                }
-        );
-
-        etPhoneCrEv.addTextChangedListener(
-                new TextWatcher(){
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        String value  = s.toString();
-                        if(value.matches(regex))
-                            etPhoneCrEv.setTextColor(Color.BLACK);
-                        else
-                            etPhoneCrEv.setTextColor(Color.RED);
-                    }
-
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start,
-                                                  int count, int after) {}
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start,
-                                              int before, int count) {}
-
-                }
-        );
+        //применяем регулярное выражения для правельности ввода номера телефона
+        dbUtilities.inputFilterForPhoneNumber(etPhoneCrEv);
 
         etPhoneCrEv.setOnFocusChangeListener(this);
 
@@ -159,7 +132,6 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnFoc
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id){
-
                 //заполнить spListField данные для отображения в Spinner
                 spListField = dbUtilities.getSomeFieldsFromDB(spCityCrEv.getItemAtPosition(position).toString());
 
@@ -199,7 +171,6 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnFoc
 
         // назначение адапетра для списка
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         return spinnerAdapter;
     }//buildCitySpinner
 
@@ -216,7 +187,6 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnFoc
 
         // назначение адапетра для списка
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         return spinnerAdapter;
     }//buildCitySpinner
 
@@ -314,9 +284,6 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnFoc
                 break;
             case R.id.btnConfirmCrEv:            //кнопка создать
                 createEvent();
-                Intent intent = new Intent(this, NavigationDrawerLogInActivity.class);
-                intent.putExtra("idAuthUser", idAuthUser);
-                startActivity(intent);
                 break;
         }//switch
     }//onClick
@@ -374,43 +341,54 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnFoc
     //Создать новое событие
     private void createEvent() {
 
-        //делаем новую запись в таблицу с событиями
-        String city_id = dbUtilities.getIdByValue("cities", "name",
-                spCityCrEv.getSelectedItem().toString()    //Объект спинера(название города)
-        );
-        String field_id = dbUtilities.getIdByValue("fields", "name",
-                spFieldCrEv.getSelectedItem().toString()   //Объект спинера(название поля)
-        );
-        String date = eventDateForDB;
-        String time = eventStartTime;
-        String duration = spDurationCrEv.getSelectedItem().toString();
-        String price = etPriceCrEv.getText().toString();
-        String password = evPasswordCrEv.getText().toString();
-        String phone = etPhoneCrEv.getText().toString();
-        String user_id = idAuthUser;
+        if ( etPriceCrEv.getText().toString().equals("")
+                || etPhoneCrEv.getText().toString().equals("")
+                || evPasswordCrEv.getText().toString().equals("")
+                || spListField.size() == 0) {
+            Toast.makeText(this, "Есть пустые поля!", Toast.LENGTH_SHORT).show();
+        } else {
+            //делаем новую запись в таблицу с событиями
+            String city_id = dbUtilities.getIdByValue("cities", "name",
+                    spCityCrEv.getSelectedItem().toString()    //Объект спинера(название города)
+            );
+            String field_id = dbUtilities.getIdByValue("fields", "name",
+                    spFieldCrEv.getSelectedItem().toString()   //Объект спинера(название поля)
+            );
+            String date = eventDateForDB;
+            String time = eventStartTime;
+            String duration = spDurationCrEv.getSelectedItem().toString();
+            String price = etPriceCrEv.getText().toString();
+            String password = evPasswordCrEv.getText().toString();
+            String phone = etPhoneCrEv.getText().toString();
+            String user_id = idAuthUser;
 
-        //добваить данные через объект ContentValues(cv), в таблицу "event"
-        dbUtilities.insertIntoEvents(field_id, city_id, date, time,
-                duration, price, password, phone, user_id);
+            //добваить данные через объект ContentValues(cv), в таблицу "event"
+            dbUtilities.insertIntoEvents(field_id, city_id, date, time,
+                    duration, price, password, phone, user_id);
 
-        //добавляем участников в таблицу participants
-        for (String loginUser : loginUserList) {
+            //добавляем участников в таблицу participants
+            for (String loginUser : loginUserList) {
 
-            //id нового события будет равен максимальному значению id + 1
-            String event_id = dbUtilities.getMaxValueInHisColumn("events", "id");
+                //id нового события будет равен максимальному значению id + 1
+                String event_id = dbUtilities.getMaxValueInHisColumn("events", "id");
 
-            user_id = dbUtilities.getIdByValue("users",
-                    "login", loginUser);
+                user_id = dbUtilities.getIdByValue("users",
+                        "login", loginUser);
 
-            //добавление новой записи в таблицу participants
-            dbUtilities.insertIntoParticipants(event_id, user_id);
+                //добавление новой записи в таблицу participants
+                dbUtilities.insertIntoParticipants(event_id, user_id);
 
-            //добавление новой записи в таблицу notifications
-            dbUtilities.insertIntoNotifications(event_id, user_id, city_id, field_id, time, date, "1"," ");
-        }//foreach
+                //добавление новой записи в таблицу notifications
+                dbUtilities.insertIntoNotifications(event_id, user_id, city_id, field_id, time, date, "1", " ");
+            }//foreach
 
+            Intent intent = new Intent(this, NavigationDrawerLogInActivity.class);
+            intent.putExtra("idAuthUser", idAuthUser);
+            startActivity(intent);
+        }//
     }//createEvent
 
+    //проверка ввода номера телефона
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if (v != etPhoneCrEv && etPhoneCrEv.getText().toString().isEmpty()) {
@@ -419,5 +397,5 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnFoc
         } else {
             etPhoneLayout.setErrorEnabled(false);
         }
-    }
+    }//onFocusChange
 }//CreateEventActivity

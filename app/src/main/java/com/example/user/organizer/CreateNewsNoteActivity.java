@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.user.organizer.fragment.AdvertisingAndInformationFragment;
 
@@ -206,29 +207,32 @@ public class CreateNewsNoteActivity extends AppCompatActivity {
 
     //сохранить и передать выборанных игроков
     private void confirmSelect() {
+        if (etHeadCrNeNoAc.getText().toString().equals("") || etMessCrNeNoAc.getText().toString().equals("")) {
+            Toast.makeText(this, "Есть пустые поля!", Toast.LENGTH_SHORT).show();
+        } else {
+            // создать для передачи результатов
+            Intent intent = new Intent();
+            //пакуем при помощи Extra - объект
+            intent.putExtra(AdvertisingAndInformationFragment.PAR_LOGO, logo);
+            intent.putExtra(AdvertisingAndInformationFragment.PAR_HEAD, etHeadCrNeNoAc.getText().toString());
+            intent.putExtra(AdvertisingAndInformationFragment.PAR_MESSAGE, etMessCrNeNoAc.getText().toString());
+            intent.putExtra(AdvertisingAndInformationFragment.PAR_DATE, date);
+            intent.putExtra(AdvertisingAndInformationFragment.PAR_CITY,
+                    dbUtilities.getIdByValue(
+                            "cities",              //название таблицы
+                            "name",               //название столбца
+                            spCityCrNeNoAc.getSelectedItem().toString() //значение для поиска
+                    )
+            );
+            intent.putExtra(AdvertisingAndInformationFragment.PAR_TSIZE_MESSAGE,
+                    String.valueOf(spSize.getSelectedItemPosition()));
+            intent.putExtra(AdvertisingAndInformationFragment.PAR_TSTYLE_MESSAGE,
+                    String.valueOf(spStyle.getSelectedItemPosition()));
 
-        // создать для передачи результатов
-        Intent intent = new Intent();
-        //пакуем при помощи Extra - объект
-        intent.putExtra(AdvertisingAndInformationFragment.PAR_LOGO, logo);
-        intent.putExtra(AdvertisingAndInformationFragment.PAR_HEAD, etHeadCrNeNoAc.getText().toString());
-        intent.putExtra(AdvertisingAndInformationFragment.PAR_MESSAGE, etMessCrNeNoAc.getText().toString());
-        intent.putExtra(AdvertisingAndInformationFragment.PAR_DATE, date);
-        intent.putExtra(AdvertisingAndInformationFragment.PAR_CITY,
-                        dbUtilities.getIdByValue(
-                                "cities",              //название таблицы
-                                "name",               //название столбца
-                                spCityCrNeNoAc.getSelectedItem().toString() //значение для поиска
-                                )
-        );
-        intent.putExtra(AdvertisingAndInformationFragment.PAR_TSIZE_MESSAGE,
-                String.valueOf(spSize.getSelectedItemPosition()));
-        intent.putExtra(AdvertisingAndInformationFragment.PAR_TSTYLE_MESSAGE,
-                String.valueOf(spStyle.getSelectedItemPosition()));
-
-        // собственно передача параметров
-        setResult(RESULT_OK, intent);
-        finish();
+            // собственно передача параметров
+            setResult(RESULT_OK, intent);
+            finish();
+        }
     }//confirmSelect
 
     // установка даты записи

@@ -5,11 +5,16 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +22,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.user.organizer.DBUtilities;
 import com.example.user.organizer.DownloadImageTask;
+import com.example.user.organizer.MainActivity;
+import com.example.user.organizer.PartialRegexInputFilter;
 import com.example.user.organizer.R;
 import com.example.user.organizer.SelectLogoActivity;
 import com.example.user.organizer.User;
@@ -32,7 +40,7 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 //-----------Фрагмент вызова настроек--------------------------
-public class SettingsFragment extends Fragment implements SettingsInterface {
+public class SettingsFragment extends Fragment implements SettingsInterface, View.OnFocusChangeListener{
 
     View view;
     // коды для идентификации активностей при получении результата
@@ -57,6 +65,7 @@ public class SettingsFragment extends Fragment implements SettingsInterface {
     EditText etChangeEmailSeFr;     //поле ввода нового имейла
     EditText etChangePhoneSeFr;     //поле ввода нового номера телефона
     Spinner spChangeCitySeFr;      //spinner для нового города пользователя
+    TextInputLayout etChangePhoneSeFrLayout;
 
     List<String> spListCity;             // Данные для спинера выбора города
 
@@ -136,6 +145,27 @@ public class SettingsFragment extends Fragment implements SettingsInterface {
         etChangePhoneSeFr.setText(user.getPhone());
         // привязка поля ввода нового города пользователя
         spChangeCitySeFr = view.findViewById(R.id.spChangeCitySeFr);
+        etChangePhoneSeFrLayout = (TextInputLayout) view.findViewById(R.id.etChangePhoneSeFrLayout);
+
+        //фильтр для пароля
+        etChangePasSeFr.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                dbUtilities.inputFilterForListener(etChangePasSeFr,
+                        10,
+                        MainActivity.FILTER_STR
+                );
+            }//afterTextChanged
+        });
+
+        //применяем регулярное выражения для правельности ввода номера телефона
+        dbUtilities.inputFilterForPhoneNumber(etChangePhoneSeFr);
+
+        etChangePhoneSeFr.setOnFocusChangeListener(this);
 
         //инициализация коллекции для спинера
         spListCity = new ArrayList<>();
@@ -183,70 +213,100 @@ public class SettingsFragment extends Fragment implements SettingsInterface {
         btnChangeNameSeFr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Точка вызова отображение диалогового окна
-                callDialogChangeColumn(
-                        context,
-                        "name",
-                        etChangeNameSeFr.getText().toString(),
-                        etChangeNameSeFr.getText().toString(),
-                        idAuthUser
-                );
+                if (etChangeNameSeFr.getText().toString().equals("") ) {
+                    Toast.makeText(context, "Пустое поле!", Toast.LENGTH_SHORT).show();
+                } else if (etChangeNameSeFr.getText().toString().equals(user.getName()) ) {
+                    Toast.makeText(context, "Данные не изменились!", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Точка вызова отображение диалогового окна
+                    callDialogChangeColumn(
+                            context,
+                            "name",
+                            etChangeNameSeFr.getText().toString(),
+                            etChangeNameSeFr.getText().toString(),
+                            idAuthUser
+                    );
+                }//if-if-else
             }//onClick
         });//setOnClickListener
 
         btnChangeLoginSeFr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Точка вызова отображение диалогового окна
-                callDialogChangeColumn(
-                        context,
-                        "login",
-                        etChangeLoginSeFr.getText().toString(),
-                        etChangeLoginSeFr.getText().toString(),
-                        idAuthUser
-                );
+                if (etChangeLoginSeFr.getText().toString().equals("") ) {
+                    Toast.makeText(context, "Пустое поле!", Toast.LENGTH_SHORT).show();
+                } else if (etChangeLoginSeFr.getText().toString().equals(user.getLogin()) ) {
+                    Toast.makeText(context, "Данные не изменились!", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Точка вызова отображение диалогового окна
+                    callDialogChangeColumn(
+                            context,
+                            "login",
+                            etChangeLoginSeFr.getText().toString(),
+                            etChangeLoginSeFr.getText().toString(),
+                            idAuthUser
+                    );
+                }//if-if-else
             }//onClick
         });//setOnClickListener
 
         btnChangePasSeFr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Точка вызова отображение диалогового окна
-                callDialogChangeColumn(
-                        context,
-                        "password",
-                        etChangePasSeFr.getText().toString(),
-                        etChangePasSeFr.getText().toString(),
-                        idAuthUser
-                );
+                if (etChangePasSeFr.getText().toString().equals("") ) {
+                    Toast.makeText(context, "Пустое поле!", Toast.LENGTH_SHORT).show();
+                } else if (etChangePasSeFr.getText().toString().equals(user.getPassword()) ) {
+                    Toast.makeText(context, "Данные не изменились!", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Точка вызова отображение диалогового окна
+                    callDialogChangeColumn(
+                            context,
+                            "password",
+                            etChangePasSeFr.getText().toString(),
+                            etChangePasSeFr.getText().toString(),
+                            idAuthUser
+                    );
+                }//if-if-else
             }//onClick
         });//setOnClickListener
 
         btnChangeEmailSeFr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Точка вызова отображение диалогового окна
-                callDialogChangeColumn(
-                        context,
-                        "email",
-                        etChangeEmailSeFr.getText().toString(),
-                        etChangeEmailSeFr.getText().toString(),
-                        idAuthUser
-                );
+                if (etChangeEmailSeFr.getText().toString().equals("") ) {
+                    Toast.makeText(context, "Пустое поле!", Toast.LENGTH_SHORT).show();
+                } else if (etChangeEmailSeFr.getText().toString().equals(user.getEmail()) ) {
+                    Toast.makeText(context, "Данные не изменились!", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Точка вызова отображение диалогового окна
+                    callDialogChangeColumn(
+                            context,
+                            "email",
+                            etChangeEmailSeFr.getText().toString(),
+                            etChangeEmailSeFr.getText().toString(),
+                            idAuthUser
+                    );
+                }//if-if-else
             }//onClick
         });//setOnClickListener
 
         btnChangePhoneSeFr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Точка вызова отображение диалогового окна
-                callDialogChangeColumn(
-                        context,
-                        "phone",
-                        etChangePhoneSeFr.getText().toString(),
-                        etChangePhoneSeFr.getText().toString(),
-                        idAuthUser
-                );
+                if (etChangePhoneSeFr.getText().toString().equals("") ) {
+                    Toast.makeText(context, "Пустое поле!", Toast.LENGTH_SHORT).show();
+                } else if (etChangePhoneSeFr.getText().toString().equals(user.getPhone()) ) {
+                    Toast.makeText(context, "Данные не изменились!", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Точка вызова отображение диалогового окна
+                    callDialogChangeColumn(
+                            context,
+                            "phone",
+                            etChangePhoneSeFr.getText().toString(),
+                            etChangePhoneSeFr.getText().toString(),
+                            idAuthUser
+                    );
+                }//if-if-else
             }//onClick
         });//setOnClickListener
 
@@ -257,15 +317,18 @@ public class SettingsFragment extends Fragment implements SettingsInterface {
                 String city_id = dbUtilities.getIdByValue("cities", "name",
                         spChangeCitySeFr.getSelectedItem().toString()    //Объект спинера(название города)
                 );
-
-                // Точка вызова отображение диалогового окна
-                callDialogChangeColumn(
-                        context,
-                        "city_id",
-                        city_id,
-                        spChangeCitySeFr.getSelectedItem().toString(),
-                        idAuthUser
-                );
+                if (city_id.equals(user.getCity_id()) ) {
+                    Toast.makeText(context, "Данные не изменились!", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Точка вызова отображение диалогового окна
+                    callDialogChangeColumn(
+                            context,
+                            "city_id",
+                            city_id,
+                            spChangeCitySeFr.getSelectedItem().toString(),
+                            idAuthUser
+                    );
+                }//if-else
             }//onClick
         });//setOnClickListener
 
@@ -340,4 +403,15 @@ public class SettingsFragment extends Fragment implements SettingsInterface {
         deleteProfileDialog.show( ((AppCompatActivity)context).
                 getSupportFragmentManager(), ID_DELETE_PROFILE_DIALOG);
     }//callDialogDeleteProfile
+
+    //проверка ввода номера телефона
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (v != etChangePhoneSeFr && etChangePhoneSeFr.getText().toString().isEmpty()) {
+            etChangePhoneSeFrLayout.setErrorEnabled(true);
+            etChangePhoneSeFrLayout.setError(getResources().getString(R.string.error_enter_phone));
+        } else {
+            etChangePhoneSeFrLayout.setErrorEnabled(false);
+        }
+    }//onFocusChange
 }//SettingsFragment

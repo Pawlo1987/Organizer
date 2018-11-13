@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,13 +79,17 @@ public class CreateCityActivity extends AppCompatActivity {
 
     //обработчик неажатия клавишы Создать запись пользователя
     public void createNewCity() {
-        String name = etCityNameCrCi.getText().toString();
-        String region_id = String.valueOf(spListRegion.indexOf(spRegionCrCi.getSelectedItem()) + 1);
+        if (etCityNameCrCi.getText().toString().equals("")) {
+            Toast.makeText(this, "Есть пустые поля!", Toast.LENGTH_SHORT).show();
+        } else {
+            String name = etCityNameCrCi.getText().toString();
+            String region_id = String.valueOf(spListRegion.indexOf(spRegionCrCi.getSelectedItem()) + 1);
 
-        //метод для создания новой записи в определоной таблице БД
-        dbUtilities.insertIntoCities(name, region_id);
+            //метод для создания новой записи в определоной таблице БД
+            dbUtilities.insertIntoCities(name, region_id);
 
-        finish();
+            finish();
+        }//if (etCityNameCrCi.getText().toString().equals(""))
     }//CreateNewAccount
 
     //вернутся в активность авторизации
@@ -102,6 +107,5 @@ public class CreateCityActivity extends AppCompatActivity {
                 turnBack();
                 break;
         }//switch
-        finish();
     }//onClick
 }//CreateCityActivity

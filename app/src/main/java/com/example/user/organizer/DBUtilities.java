@@ -1,10 +1,15 @@
 package com.example.user.organizer;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -1222,5 +1227,56 @@ public class DBUtilities {
             editText.setFilters(FilterArray);                //применяем фильтр количества символов
         }//if
     }//inputFilterForListener
+
+    //фильтр вводимых символов для номера телефона
+    public void inputFilterForPhoneNumber(EditText editText){
+        //применяем регулярное выражения для правельности ввода номера телефона
+        final String regex = "\\(\\d{3}\\)\\d{3}\\-\\d{2}\\-\\d{2}";
+        editText.setFilters(
+                new InputFilter[] { new PartialRegexInputFilter(regex)}
+        );
+        editText.setText("(");
+        editText.addTextChangedListener(
+                new TextWatcher() {
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        editText.setOnKeyListener(new View.OnKeyListener() {
+                            @Override
+                            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                                //если нажата кнопка
+                                if (event.getAction() == KeyEvent.ACTION_UP ||
+                                        event.getAction() != KeyEvent.ACTION_DOWN)
+                                    //если это кнопка удалить KEYCODE_DEL
+                                    if ((keyCode != KeyEvent.KEYCODE_DEL)) {
+                                        //вставляем нужные символы взависимости от позиции формата
+                                        if (s.length() == 0)
+                                            editText.getText().insert(editText.getSelectionStart(), "(");
+                                        if (s.length() == 4)
+                                            editText.getText().insert(editText.getSelectionStart(), ")");
+                                        if (s.length() == 8 || s.length() == 11)
+                                            editText.getText().insert(editText.getSelectionStart(), "-");
+                                    } else {
+                                        //если символ последний, то вставить обратно "("
+                                        if (s.length() == 0)
+                                            editText.getText().insert(editText.getSelectionStart(), "(");
+                                    }
+                                return false;
+                            }
+                        });
+                        String value = s.toString();
+                        if (value.matches(regex))
+                            editText.setTextColor(Color.BLACK);
+                        else
+                            editText.setTextColor(Color.RED);
+                    }
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start,
+                                                  int count, int after) {}
+                    @Override
+                    public void onTextChanged(CharSequence s, int start,
+                                              int before, int count) {}
+                }
+        );
+    }//inputFilterForPhoneNumber
 
 }//DBUtilities

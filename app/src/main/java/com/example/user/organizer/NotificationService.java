@@ -63,7 +63,7 @@ public class NotificationService extends Service {
                             }//foreach
                         Log.d("qwe", String.format("работает поток %s       %s", this.hashCode(), idAuthUser));
                         //задержка перед формирование следующего файла
-                        Thread.sleep(2000);
+                        Thread.sleep(8000);
                     }//while
                 } catch (InterruptedException e) {
                     e.printStackTrace();

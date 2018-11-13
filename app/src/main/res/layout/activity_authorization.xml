@@ -7,12 +7,21 @@
     android:orientation="vertical"
     tools:context="com.example.user.organizer.AuthorizationActivity">
 
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tvLogIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         android:padding="20dp"
         android:text="@string/tvLogIn"
         android:textAlignment="center"
@@ -27,9 +36,8 @@
             android:id="@+id/etLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="8dp"
             android:hint="@string/etLogin"
-            android:padding="20dp"
             android:textSize="24sp" />
     </android.support.design.widget.TextInputLayout>
 
@@ -41,10 +49,9 @@
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="8dp"
             android:hint="@string/etPassword"
             android:inputType="textPassword"
-            android:padding="20dp"
             android:textSize="24sp" />
     </android.support.design.widget.TextInputLayout>
 
@@ -52,33 +59,26 @@
         android:id="@+id/btnSignIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:onClick="onClick"
         android:text="@string/btnSignIn" />
-
-    <TextView
-        android:id="@+id/tvOr"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="@string/tvOr"
-        android:textAlignment="center"
-        android:textColor="@android:color/background_dark"
-        android:textSize="24sp" />
 
     <Button
         android:id="@+id/btnSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:onClick="onClick"
         android:text="@string/btnSignUp" />
 
+</LinearLayout>
+
+</ScrollView>
 
 </LinearLayout>

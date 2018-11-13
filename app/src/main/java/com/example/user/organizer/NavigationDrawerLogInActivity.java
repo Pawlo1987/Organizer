@@ -2,6 +2,7 @@ package com.example.user.organizer;
 
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -15,13 +16,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.user.organizer.fragment.AdvertisingAndInformationFragment;
 import com.example.user.organizer.fragment.ExitConfirmDialog;
+import com.example.user.organizer.fragment.SettingsFragment;
 import com.example.user.organizer.fragment.ShowAllEventsFragment;
 import com.example.user.organizer.fragment.ShowAuthUserEventsFragment;
 import com.example.user.organizer.fragment.ShowFieldCatalogFragment;
 import com.example.user.organizer.inteface.CustomInterface;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 //--------Боковое меню и управление им( посути основная активность)
 public class NavigationDrawerLogInActivity extends AppCompatActivity
@@ -37,6 +44,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
     ShowFieldCatalogFragment showFieldCatalogFragment;
     ShowAuthUserEventsFragment showAuthUserEventsFragment;
     AdvertisingAndInformationFragment advertisingAndInformationFragment;
+    SettingsFragment settingsFragment;
     FragmentTransaction fTrans;
 
     @Override
@@ -52,6 +60,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         showFieldCatalogFragment = new ShowFieldCatalogFragment();
         showAuthUserEventsFragment = new ShowAuthUserEventsFragment();
         advertisingAndInformationFragment = new AdvertisingAndInformationFragment();
+        settingsFragment = new SettingsFragment();
 
         Bundle args = new Bundle();    // объект для передачи параметров в диалог
         //передаем данные об  авторизированном пользователе
@@ -59,6 +68,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         showAuthUserEventsFragment.setArguments(args);
         showAllEventsFragment.setArguments(args);
         advertisingAndInformationFragment.setArguments(args);
+        settingsFragment.setArguments(args);
 
         // + фрагмент showFieldCatalogFragment считыват данные с сервера
         args.putBoolean("connection", true);
@@ -84,12 +94,28 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-
+//          Ссылка на вариант как можно достучатся до logo в юоковом меню
+//        http://android-help1.blogspot.com/2016/03/how-to-set-navigation-drawer-header.html
         // Наполняем шапку бокового меню элементами
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_navigation_drawer_log_in);
         TextView tvProfileName = headerLayout.findViewById(R.id.tvProfileName);
         TextView tvProfileRating = headerLayout.findViewById(R.id.tvProfileRating);
         ImageView ivProfileLogo = headerLayout.findViewById(R.id.ivProfileLogo);
+
+        //прочитать данные по авторизированому пользователю
+        User user = dbUtilities.getListUser(idAuthUser).get(0);
+        //логотип пользователя отобразить в боковом меню
+        ivProfileLogo.setImageResource(0);
+        ivProfileLogo.setImageResource(Integer.parseInt(user.getLogo()));
+
+        //нажатие на logo
+        ivProfileLogo.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(getApplicationContext(), "click", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
 
         //имя пользователя отобразить в боковом меню
         tvProfileName.setText(dbUtilities.searchValueInColumn(
@@ -106,8 +132,6 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
                 "login",
                 idAuthUser)
         );
-        //логотип пользователя отобразить в боковом меню
-        ivProfileLogo.setImageResource(R.drawable.football_ball11);
 
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -147,6 +171,8 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
             fTrans.replace(R.id.container, showAllEventsFragment);
         } else if (id == R.id.news_line) {
             fTrans.replace(R.id.container, advertisingAndInformationFragment);
+        } else if (id == R.id.settings) {
+            fTrans.replace(R.id.container, settingsFragment);
         } else if (id == R.id.log_out) {
             Bundle args1 = new Bundle();    // объект для передачи параметров в диалог
             args1.putBoolean("flag", true);      //выйти из аккаунта

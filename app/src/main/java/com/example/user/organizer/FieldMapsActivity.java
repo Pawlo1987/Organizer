@@ -98,7 +98,6 @@ public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCal
         spMapCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
                 //заполнить spListField данные для отображения в Spinner
                 spListField = dbUtilities.getSomeFieldsfromDB(spMapCity.getItemAtPosition(position).toString());
                 spMapField.setAdapter(buildSpinnerStr(spListField));

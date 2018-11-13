@@ -25,6 +25,10 @@
     <item android:title="">
         <menu>
             <item
+                android:id="@+id/settings"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="@string/settings" />
+            <item
                 android:id="@+id/log_out"
                 android:icon="@drawable/icon_logout"
                 android:title="@string/log_out" />

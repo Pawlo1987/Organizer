@@ -8,11 +8,15 @@
     android:orientation="vertical"
     tools:context="com.example.user.organizer.CreateEventActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -172,7 +176,7 @@
             <TextView
                 android:id="@+id/tvListOfParticipantsCrEv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="@string/tvListOfParticipantsCrEv"
                 android:textSize="18sp" />
@@ -184,8 +188,8 @@
                 <ListView
                     android:id="@+id/lvListOfParticipantsCrEv"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
+                    android:layout_height="wrap_content"
+                    />
             </ScrollView>
 
         </LinearLayout>
@@ -252,4 +256,9 @@
         android:layout_height="wrap_content"
         android:onClick="onClick"
         android:text="@string/btnConfirmCrEv" />
+
+</LinearLayout>
+
+    </ScrollView>
+
 </LinearLayout>

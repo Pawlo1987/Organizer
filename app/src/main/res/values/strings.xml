@@ -130,5 +130,14 @@
     <string name="btnPreCreateFieldMaAc">Создание футбольного поля</string>
     <string name="btnExitMaAc">Завершить приложение</string>
     <string name="btnAuthorizationMaAc">Авторизация</string>
+    <string name="settings">Настройки аккаунта</string>
+    <string name="btnChangeLogoSeFr">Выбрать логотип</string>
+    <string name="btnChangeNameSeFr">Изменить имя пользователя</string>
+    <string name="btnChangeLoginSeFr">Изменить логин пользователя</string>
+    <string name="btnChangePasSeFr">Изменить пароль пользователя</string>
+    <string name="btnChangeEmailSeFr">Изменить e-mail пользователя</string>
+    <string name="btnChangePhoneSeFr">Изменить телефон пользователя</string>
+    <string name="btnChangeCitySeFr">Изменить город пользователя</string>
+    <string name="btnDeleteProfileSeFr">Удалить аккаунт</string>
 
 </resources>

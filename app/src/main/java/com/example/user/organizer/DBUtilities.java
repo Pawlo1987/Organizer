@@ -33,16 +33,15 @@ public class DBUtilities{
                 ? false : true;
     }
     //проверка введенных параметров для авторизации
-    public User getUserParam(String login, String password) {
-        User user = new User();
+    public String getAuthUserParam(String login, String password) {
+        String idAuthUser = null;
         try(BackgroundWorker bg = new BackgroundWorker()){
             bg.execute("authorization", login, password);
 
             String resultDB = bg.get();
             JSONObject jResult = new JSONObject(resultDB);
             if(jResult.getString("error").toString().equals("")){
-                user.id = jResult.getJSONObject("user").getString("id");
-                user.name = jResult.getJSONObject("user").getString("name");
+                idAuthUser = jResult.getJSONObject("user").getString("id");
 
             }else{
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
@@ -51,8 +50,8 @@ public class DBUtilities{
         }catch(Exception e){
             e.printStackTrace();
         }//try-catch
-        return user;
-    }//getUserParam
+        return idAuthUser;
+    }//getAuthUserParam
 
     //поиск значения searchValue в определеному стобце searchColumnName
     public String searchValueInColumn( String tableName, String searchColumnName,
@@ -807,13 +806,33 @@ public class DBUtilities{
                 JSONObject jListId = jResult.getJSONObject("id");
                 List<String> listId = getListFromJSON(jListId);
 
+                JSONObject jListLogin = jResult.getJSONObject("login");
+                List<String> listLogin = getListFromJSON(jListLogin);
+
+                JSONObject jListPassword = jResult.getJSONObject("password");
+                List<String> listPassword = getListFromJSON(jListPassword);
+
                 JSONObject jListName = jResult.getJSONObject("name");
                 List<String> listName = getListFromJSON(jListName);
+
+                JSONObject jListPhone = jResult.getJSONObject("phone");
+                List<String> listPhone = getListFromJSON(jListPhone);
+
+                JSONObject jListCityId = jResult.getJSONObject("city_id");
+                List<String> listCityId = getListFromJSON(jListCityId);
+
+                JSONObject jListEmail = jResult.getJSONObject("email");
+                List<String> listEmail = getListFromJSON(jListEmail);
+
+                JSONObject jListLogo = jResult.getJSONObject("logo");
+                List<String> listLogo = getListFromJSON(jListLogo);
 
                 int n = listId.size();
 
                 for (int i = 0; i <n ; i++) {
-                    userList.add(new User(listId.get(i), listName.get(i)));
+                    userList.add(new User(listId.get(i), listLogin.get(i), listPassword.get(i),
+                            listName.get(i), listPhone.get(i), listCityId.get(i), listEmail.get(i),
+                            listLogo.get(i)));
                 }//fori
 
             }else{

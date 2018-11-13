@@ -2,18 +2,14 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.ArrayMap;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
-
-import org.json.JSONObject;
 
 //--------Активность для авторизация пользователя или перехода в актиность создания нового акаунта-
 
@@ -22,6 +18,8 @@ public class AuthorizationActivity extends AppCompatActivity {
 
     DBUtilities dbUtilities;
     Context context;
+    ActionBar actionBar;                //стрелка НАЗАД
+    String idAuthUser;                 //авторизированный пользователь
 
     EditText etLogin;         //поле ввода для логина или email
     EditText etPassword;      //поле ввода для пароля
@@ -30,6 +28,10 @@ public class AuthorizationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authorization);
+        //добавляем actionBar (стрелка сверху слева)
+        actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         etLogin = (EditText) findViewById(R.id.etLogin);
         etPassword = (EditText) findViewById(R.id.etPassword);
@@ -37,16 +39,29 @@ public class AuthorizationActivity extends AppCompatActivity {
         dbUtilities = new DBUtilities(context);
     }//onCreate
 
+    //обработчик actionBar (стрелка сверху слева)
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }//switch
+    }//onOptionsItemSelected
+
     // Обработка нажатия кнопки авторизации
     public void signIn() {
         String login = etLogin.getText().toString();          //введенное значение в поле логин
         String password = etPassword.getText().toString();    //введенное значение в поле пароль
 
-        User user = dbUtilities.getUserParam(login, password);
+        idAuthUser = dbUtilities.getAuthUserParam(login, password);
 
-        if(user.id != null){
+        if(idAuthUser != null){
             Intent intent = new Intent(context, NavigationDrawerLogInActivity.class);
-            intent.putExtra("idAuthUser", user.id);
+            intent.putExtra("idAuthUser", idAuthUser);
             startActivity(intent);
             finish();
         }//if

@@ -1,6 +1,8 @@
 package com.example.user.organizer;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +11,9 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -23,6 +28,16 @@ public class DBUtilities{
 
     } // DBUtilities
 
+    // метод для проверки подключения
+    protected boolean isConnection() {
+        boolean res;
+        String cs = Context.CONNECTIVITY_SERVICE;
+        ConnectivityManager cm = (ConnectivityManager)
+                context.getSystemService(cs);
+        return (cm.getActiveNetworkInfo() == null)          //проверка подключения к интернету
+                ||(getTableSize("cities") == null) //проверка подключения к БД
+                ? false : true;
+    }
     //проверка введенных параметров для авторизации
     public User getUserParam(String login, String password) {
         User user = new User();

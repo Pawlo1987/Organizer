@@ -6,6 +6,8 @@ import android.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,9 +60,16 @@ public class ShowAllEventsFragment extends Fragment {
         View result = inflater.inflate(R.layout.fragment_show_all_event, container, false);
         // RecyclerView для отображения таблицы users БД
         rvMainShAlEvAc = result.findViewById(R.id.rvMainShAlEvAc);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(context, layoutManager.getOrientation());
+        rvMainShAlEvAc.setHasFixedSize(true);
+        rvMainShAlEvAc.setLayoutManager(layoutManager);
+        rvMainShAlEvAc.addItemDecoration(itemDecoration);
+
         //привязываем адаптер к recycler объекту
         rvMainShAlEvAc.setAdapter(showAllEventsRecyclerAdapter);
-
         return result;
     } // onCreateView
 }

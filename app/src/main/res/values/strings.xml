@@ -121,5 +121,6 @@
     <string name="tvThirdLineShFiCaReAd">Телефон</string>
     <string name="item_about_field_catalog_rva">подробная информация</string>
     <string name="show_field_catalog">Каталог полей</string>
+    <string name="btnCheckConMaAc">ПРОВЕРКА СОЕДИНЕНИЯ!</string>
 
 </resources>

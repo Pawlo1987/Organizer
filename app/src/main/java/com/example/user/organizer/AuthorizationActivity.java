@@ -85,7 +85,16 @@ public class AuthorizationActivity extends AppCompatActivity {
             String password = etPassword.getText().toString();    //введенное значение в поле пароль
             idAuthUser = dbUtilities.getAuthUserParam(login, password);
             if (idAuthUser != null) {
-                Intent intent = new Intent(context, NavigationDrawerLogInActivity.class);
+                //прервать поток Service
+                //на всякий случай продублировал
+                stopService(new Intent(this, NotificationService.class));
+                //процедура запуска сервиса отслеживания изменения БД
+                //для получения сообщений
+                Intent intent = new Intent(this, NotificationService.class);
+                intent.putExtra("idAuthUser", idAuthUser);
+                startService(intent);
+
+                intent = new Intent(context, NavigationDrawerLogInActivity.class);
                 intent.putExtra("idAuthUser", idAuthUser);
                 intent.putExtra("notificationServiceFlag", false);
                 startActivity(intent);

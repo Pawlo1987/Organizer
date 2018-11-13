@@ -66,12 +66,12 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer_log_in);
-
         idAuthUser = getIntent().getStringExtra("idAuthUser");
 
         //если активность была вызванна после получения уведомления true
         notificationServiceFlag =
                 getIntent().getBooleanExtra("notificationServiceFlag",false);
+
 
         //проверка флага notificationServiceFlag
         //если активность вызваннна после NotificationService
@@ -166,9 +166,6 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        //Запуск сервиса следящего за обновления информации в БД
-        //для получения уведомлений
-        startServiceWatchingForDb();
     }//onCreate
 
     //строим Spinner
@@ -282,23 +279,14 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         dbUtilities.deleteRowById("participants", id);
     }//leaveEvent
 
-    //процедура запуска сервиса отслеживания изменения БД
-    //для получения сообщений
-    private void startServiceWatchingForDb() {
-        Intent intent = new Intent(this, NotificationService.class);
-        intent.putExtra("idAuthUser", idAuthUser);
-        startService(intent);
-    }//startServiceWatchingForDb
-
+    //Обработка нажатия клавишы "Назад"
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
         }
-    }
+    }//onBackPressed
 
     //работа с боковым меню
     @SuppressWarnings("StatementWithEmptyBody")
@@ -345,10 +333,17 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
 
     //Завершить работу приложение
     public void closeApp() {
-        moveTaskToBack(true);
-        finish();
-        System.runFinalizersOnExit(true);
-        System.exit(0);
+        //прервать поток Service
+        stopService(new Intent(NavigationDrawerLogInActivity.this, NotificationService.class));
+        Intent intent = new Intent(NavigationDrawerLogInActivity.this, MainActivity.class);
+        //флаг отчистки стека активностей
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //флаг для завершения приложения
+        //В MainActivity в onCreate сразу после конструктора суперкласса пишем
+        //if (getIntent().getBooleanExtra("finish", false)) finish();
+        //http://forum.startandroid.ru/viewtopic.php?f=27&t=835
+        intent.putExtra("finish", true);
+        startActivity(intent);
     }//closeApp
 
     //строка с полной информацией о пользователе
@@ -373,10 +368,11 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
     //разавторизироватся
     @Override
     public void signOut() {
-        moveTaskToBack(true);
-        System.runFinalizersOnExit(true);
-        finish();
-        Intent intent = new Intent(this, AuthorizationActivity.class);
+        //прервать поток Service
+        stopService(new Intent(NavigationDrawerLogInActivity.this, NotificationService.class));
+        Intent intent = new Intent(NavigationDrawerLogInActivity.this, MainActivity.class);
+        intent.putExtra("signout", true);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }//signOut
 
@@ -391,10 +387,4 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         // Точка вызова отображение диалогового окна
         aboutUserInfoDialog.show(getSupportFragmentManager(), ID_ABOUT_USER_INFO_DIALOG);
     }//aboutUserInfoDialog
-
-    @Override
-    protected void onDestroy() {
-        stopService(new Intent(this, NotificationService.class));
-        super.onDestroy();
-    }//onDestroy
 }//NavigationDrawerLogInActivity

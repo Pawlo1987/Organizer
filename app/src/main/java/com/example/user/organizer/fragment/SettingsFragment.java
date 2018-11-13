@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -12,6 +13,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 import com.example.user.organizer.DBUtilities;
 import com.example.user.organizer.DownloadImageTask;
 import com.example.user.organizer.MainActivity;
+import com.example.user.organizer.PartialRegexInputFilter;
 import com.example.user.organizer.R;
 import com.example.user.organizer.SelectLogoActivity;
 import com.example.user.organizer.User;
@@ -127,14 +130,19 @@ public class SettingsFragment extends Fragment implements SettingsInterface, Vie
         fabMain.setVisibility(View.GONE);
         // привязка поля ввода нового имени
         etChangeNameSeFr = view.findViewById(R.id.etChangeNameSeFr);
+        etChangeNameSeFr.setText(user.getName());
         // привязка поля ввода нового логина
         etChangeLoginSeFr = view.findViewById(R.id.etChangeLoginSeFr);
+        etChangeLoginSeFr.setText(user.getLogin());
         // привязка поля ввода нового пароля
         etChangePasSeFr = view.findViewById(R.id.etChangePasSeFr);
+        etChangePasSeFr.setText(user.getPassword());
         // привязка поля ввода нового имейла
         etChangeEmailSeFr = view.findViewById(R.id.etChangeEmailSeFr);
+        etChangeEmailSeFr.setText(user.getEmail());
         // привязка поля ввода нового номера телефона
         etChangePhoneSeFr = view.findViewById(R.id.etChangePhoneSeFr);
+        etChangePhoneSeFr.setText(user.getPhone());
         // привязка поля ввода нового города пользователя
         spChangeCitySeFr = view.findViewById(R.id.spChangeCitySeFr);
         etChangePhoneSeFrLayout = (TextInputLayout) view.findViewById(R.id.etChangePhoneSeFrLayout);
@@ -174,14 +182,6 @@ public class SettingsFragment extends Fragment implements SettingsInterface, Vie
         spChangeCitySeFr.setSelection( spListCity.indexOf(
                 dbUtilities.searchValueInColumn("cities", "id", "name",oldUserCity)
         ));//setSelection
-
-        //подготовка данных для редактирования
-        etChangeNameSeFr.setText(user.getName());
-        etChangeLoginSeFr.setText(user.getLogin());
-        etChangePasSeFr.setText(user.getPassword());
-        etChangeEmailSeFr.setText(user.getEmail());
-        etChangeEmailSeFr.setText(user.getEmail());
-        etChangePhoneSeFr.setText(user.getPhone());
 
         //кнопка вызова процедуры смены логотипа пользователя
         Button btnChangeLogoSeFr = view.findViewById(R.id.btnChangeLogoSeFr);

@@ -30,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //если из активности NavigationDrawerLogInActivity
+        //в параметрах было переданно завершение программы
+        if (getIntent().getBooleanExtra("finish", false)) finish();
         setContentView(R.layout.activity_main);
 
         btnCheckConMaAc = (Button) findViewById(R.id.btnCheckConMaAc);
@@ -162,4 +165,8 @@ public class MainActivity extends AppCompatActivity {
             reserveFieldData();
         }//if-else
     }//checkConnection
+
+    //Откючаем кнопку "Назад"(переопределив процедуру вызова)
+    @Override
+    public void onBackPressed(){}
 }//MainActivity

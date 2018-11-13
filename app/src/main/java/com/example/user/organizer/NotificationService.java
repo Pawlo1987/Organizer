@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.IBinder;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ public class NotificationService extends Service {
     private NotificationManager nm;
     private Context context;
     DBUtilities dbUtilities;
+    Thread thread;
 
     public NotificationService() {
     }
@@ -38,33 +40,38 @@ public class NotificationService extends Service {
     }//onStartCommand
 
     private void someWork() {
-        new Thread(new Runnable() {
+        //формируем поток
+        thread = new Thread(new Runnable() {
             @Override
             public void run() {
+                try {
+                    while(true) {
+                        //проверяем наличие сообщение принадлежащие данному учаснику
+                        List<com.example.user.organizer.Notification> listNotification = new ArrayList<>();
+                        listNotification.addAll(dbUtilities.getSomeNotifications(idAuthUser));
 
-                while(true) {
-                    //проверяем наличие сообщение принадлежащие данному учаснику
-                    List<com.example.user.organizer.Notification> listNotification = new ArrayList<>();
-                    listNotification.addAll(dbUtilities.getSomeNotifications(idAuthUser));
+                        if (listNotification.size() > 0)
+                            for (com.example.user.organizer.Notification notification : listNotification) {
+                                sendNotification(notification);
 
-                    if(listNotification.size() > 0 )
-                    for (com.example.user.organizer.Notification notification : listNotification) {
-                        sendNotification(notification);
+                                dbUtilities.deleteRowByValue(
+                                        "notifications",
+                                        "id",
+                                        notification.getId()
+                                );//deleteRowByValue
 
-                        dbUtilities.deleteRowByValue(
-                                "notifications",
-                                "id",
-                                notification.getId()
-                        );//deleteRowByValue
-
-                        Utils.sleep(3000);
-                    }//foreach
-
-                    //задержка перед формирование следующего файла
-                    Utils.sleep(5000);
-                }//while
-            } // run
-        }).start();
+                            }//foreach
+                        Log.d("qwe", String.format("работает поток %s       %s", this.hashCode(), idAuthUser));
+                        //задержка перед формирование следующего файла
+                        Thread.sleep(2000);
+                    }//while
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        //запускаем поток
+        thread.start();
     }//someWork
 
     private void sendNotification(com.example.user.organizer.Notification notification) {
@@ -121,6 +128,7 @@ public class NotificationService extends Service {
         notif.defaults = Notification.DEFAULT_ALL;
 
         // отправляем
+        //Utils.getRandom(1, 100) - чтоб сообщений приходило много, а не одно
         nm.notify(Utils.getRandom(1, 100), notif);
     }//sendNotification
 
@@ -130,9 +138,10 @@ public class NotificationService extends Service {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-//    @Override
-//    public void onDestroy() {
-//        stopSelf();
-//        super.onDestroy();
-//    }
+    @Override
+    public void onDestroy() {
+        thread.interrupt();
+        Log.d("qwe", String.format("Прервать поток %s       %s", this.hashCode(), idAuthUser));
+        super.onDestroy();
+    }
 }

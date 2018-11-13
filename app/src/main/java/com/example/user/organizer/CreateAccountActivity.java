@@ -99,6 +99,9 @@ public class CreateAccountActivity extends AppCompatActivity{
             }//afterTextChanged
         });
 
+        //применяем регулярное выражения для правельности e-mail
+        dbUtilities.inputFilterForEmail(etEmailCrAcAc);
+
         //применяем регулярное выражения для правельности ввода номера телефона
         dbUtilities.inputFilterForPhoneNumber(etPhoneCrAcAc);
         //для появления и исчезновения первой скобки при наборе телефоного номера
@@ -172,17 +175,26 @@ public class CreateAccountActivity extends AppCompatActivity{
 
     //обработчик нажатия клавишы Создать запись пользователя
     public void createNewAccount() {
+        //проверка корректности введенного email
+        boolean testEmailCorrect = dbUtilities.inputCorrectEmail(etEmailCrAcAc);
         //проверка пустых полей
         if (etNameCrAcAc.getText().toString().equals("")
+                || !testEmailCorrect
                 || etLoginCrAcAc.getText().toString().equals("")
                 || etPasswordCrAcAc.getText().toString().equals("")
                 || etConfirmPasswordCrAcAc.getText().toString().equals("")
                 || etEmailCrAcAc.getText().toString().equals("")
                 || etPhoneCrAcAc.length()<14) {
             Toast.makeText(this, "Ошибка или пустые поля!", Toast.LENGTH_SHORT).show();
-        } else if (!etPasswordCrAcAc.getText().toString().equals(etConfirmPasswordCrAcAc.getText().toString())) {
+        }else if (!etPasswordCrAcAc.getText().toString().equals(etConfirmPasswordCrAcAc.getText().toString())) {
             Toast.makeText(this, "Проверьте поля с паролями!", Toast.LENGTH_SHORT).show();
-        } else {
+        } else if(!dbUtilities.getIdByValue("users", "login",
+                etLoginCrAcAc.getText().toString()).equals("")){
+            Toast.makeText(this, "Такой логин существует!", Toast.LENGTH_SHORT).show();
+        }else if(!dbUtilities.getIdByValue("users", "email",
+                etEmailCrAcAc.getText().toString()).equals("")){
+            Toast.makeText(this, "Такой e-mail существует!", Toast.LENGTH_SHORT).show();
+        }else{
             String login = etLoginCrAcAc.getText().toString();
             String password = etPasswordCrAcAc.getText().toString();
             String name = etNameCrAcAc.getText().toString();

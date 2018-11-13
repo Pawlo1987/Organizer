@@ -99,7 +99,7 @@ public class DBUtilities {
 
     //поиск _id по определеному значению
     public String getIdByValue(String tableName, String columnName, String value) {
-        String id = null;
+        String id = "";
         //обращаемся к базе для получения списка имен городов
         try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("getIdByValue", tableName, columnName, value);
@@ -113,7 +113,7 @@ public class DBUtilities {
                 id = jResult.getJSONObject("rez").getString("id").toString();
             } else {
                 //выводим текст с отрецательным ответом о создании нового пользователя
-                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
         } catch (Exception e) {
@@ -1284,10 +1284,54 @@ public class DBUtilities {
         );
     }//inputFilterForPhoneNumber
 
+    //фильтр вводимых символов для e-mail
+    public void inputFilterForEmail(EditText editText){
+        //применяем регулярное выражения для правельности ввода номера телефона
+        final String regex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        editText.setFilters(
+                new InputFilter[] { new PartialRegexInputFilter(regex)}
+        );
+        editText.addTextChangedListener(
+                new TextWatcher() {
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        String value = s.toString();
+                        if (value.matches(regex)) {
+                            editText.setTextColor(Color.BLACK);
+                        }else {
+                            editText.setTextColor(Color.RED);
+                        }
+                    }
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start,
+                                                  int count, int after) {}
+                    @Override
+                    public void onTextChanged(CharSequence s, int start,
+                                              int before, int count) {}
+                }
+        );
+    }//inputFilterForEmail
+
+    //проверка корректности ввода e-mail в edittext
+    public boolean inputCorrectEmail(EditText editText){
+        //применяем регулярное выражения для правельности ввода номера телефона
+        final String regex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        editText.setFilters(
+                new InputFilter[] { new PartialRegexInputFilter(regex)}
+        );
+        if (editText.getText().toString().matches(regex)) return true;
+        else return false;
+    }//inputFilterForEmail
+
     //получение статуса выполнениня события
     //false - событие завершенно
     //true - собыите ожидает игру
     public boolean getEventExecutionStatus(String eventData, String eventTime) {
+
+        //
+        if(eventTime.length() < 5) {String buffer = eventTime; eventTime = "0" + buffer;}
         boolean status = false;
         Calendar c = Calendar.getInstance();
         SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

@@ -408,12 +408,13 @@ public class EditEventActivity extends AppCompatActivity{
     private void updateEvent() {
         //статус создания по времени(создавать минимум за час)
         boolean status = dbUtilities.getEventExecutionStatus(eventDateForDB, eventStartTime);
-        if ( !status
-                ||etPriceCrEv.getText().toString().equals("")
+        if ( etPriceCrEv.getText().toString().equals("")
                 || etPhoneCrEv.length()<14
                 || spListField.size() == 0) {
             Toast.makeText(this, "Ошибка или пустые поля!", Toast.LENGTH_SHORT).show();
-        } else {
+        } else if (!status){
+            Toast.makeText(this, "Некорректная дата или время!", Toast.LENGTH_SHORT).show();
+        } else{
             //делаем новую запись в таблицу с событиями
             String city_id = dbUtilities.getIdByValue("cities", "name",
                     spCityCrEv.getSelectedItem().toString()    //Объект спинера(название города)

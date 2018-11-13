@@ -178,9 +178,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:maxLength="10"
                 android:hint="@string/hintEtChangePhoneSeFr"
-                android:inputType="number|phone" />
+                android:inputType="number|phone"
+                android:maxLength="14" />
 
         </android.support.design.widget.TextInputLayout>
 

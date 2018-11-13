@@ -160,6 +160,9 @@ public class SettingsFragment extends Fragment implements SettingsInterface{
             }//afterTextChanged
         });
 
+        //применяем регулярное выражения для правельности e-mail
+        dbUtilities.inputFilterForEmail(etChangeEmailSeFr);
+
         //применяем регулярное выражения для правельности ввода номера телефона
         dbUtilities.inputFilterForPhoneNumber(etChangePhoneSeFr);
         //для появления и исчезновения первой скобки при наборе телефоного номера
@@ -167,7 +170,7 @@ public class SettingsFragment extends Fragment implements SettingsInterface{
         etChangePhoneSeFr.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus&&(etChangePhoneSeFr.length()<14))etChangePhoneSeFr.setText("");
+                if(!hasFocus&&(etChangePhoneSeFr.length()==0||etChangePhoneSeFr.length()==1))etChangePhoneSeFr.setText("");
                 if(hasFocus&&etChangePhoneSeFr.length()==0)etChangePhoneSeFr.setText("(");
             }
         });
@@ -240,9 +243,12 @@ public class SettingsFragment extends Fragment implements SettingsInterface{
             public void onClick(View v) {
                 if (etChangeLoginSeFr.getText().toString().equals("") ) {
                     Toast.makeText(context, "Пустое поле!", Toast.LENGTH_SHORT).show();
-                } else if (etChangeLoginSeFr.getText().toString().equals(user.getLogin()) ) {
+                } else if(etChangeLoginSeFr.getText().toString().equals(user.getLogin()) ) {
                     Toast.makeText(context, "Данные не изменились!", Toast.LENGTH_SHORT).show();
-                } else {
+                } else if(!dbUtilities.getIdByValue("users", "login",
+                        etChangeLoginSeFr.getText().toString()).equals("")){
+                    Toast.makeText(context, "Такой логин существует!", Toast.LENGTH_SHORT).show();
+                }else{
                     // Точка вызова отображение диалогового окна
                     callDialogChangeColumn(
                             context,
@@ -278,11 +284,18 @@ public class SettingsFragment extends Fragment implements SettingsInterface{
         btnChangeEmailSeFr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (etChangeEmailSeFr.getText().toString().equals("") ) {
-                    Toast.makeText(context, "Пустое поле!", Toast.LENGTH_SHORT).show();
+                //проверка корректности введенного email
+                boolean testEmailCorrect = dbUtilities.inputCorrectEmail(etChangeEmailSeFr);
+
+                if (etChangeEmailSeFr.getText().toString().equals("")
+                        || !testEmailCorrect) {
+                    Toast.makeText(context, "Ошибка или пустое поле!", Toast.LENGTH_SHORT).show();
                 } else if (etChangeEmailSeFr.getText().toString().equals(user.getEmail()) ) {
                     Toast.makeText(context, "Данные не изменились!", Toast.LENGTH_SHORT).show();
-                } else {
+                } else if(!dbUtilities.getIdByValue("users", "email",
+                        etChangeEmailSeFr.getText().toString()).equals("")){
+                    Toast.makeText(context, "Такой e-mail существует!", Toast.LENGTH_SHORT).show();
+                }else{
                     // Точка вызова отображение диалогового окна
                     callDialogChangeColumn(
                             context,
@@ -298,8 +311,8 @@ public class SettingsFragment extends Fragment implements SettingsInterface{
         btnChangePhoneSeFr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (etChangePhoneSeFr.getText().toString().equals("") ) {
-                    Toast.makeText(context, "Пустое поле!", Toast.LENGTH_SHORT).show();
+                if (etChangePhoneSeFr.length()<14) {
+                    Toast.makeText(context, "Ошибка или пустое поле!", Toast.LENGTH_SHORT).show();
                 } else if (etChangePhoneSeFr.getText().toString().equals(user.getPhone()) ) {
                     Toast.makeText(context, "Данные не изменились!", Toast.LENGTH_SHORT).show();
                 } else {

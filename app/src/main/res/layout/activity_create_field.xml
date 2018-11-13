@@ -283,7 +283,7 @@
                 android:layout_weight="1"
                 android:hint="@string/hintEtPhoneCrFi"
                 android:inputType="number|phone"
-                android:maxLength="10" />
+                android:maxLength="14" />
 
         </android.support.design.widget.TextInputLayout>
 

@@ -29,6 +29,7 @@ import com.example.user.organizer.fragment.SettingsFragment;
 import com.example.user.organizer.fragment.ShowAllEventsFragment;
 import com.example.user.organizer.fragment.ShowAuthUserEventsFragment;
 import com.example.user.organizer.fragment.ShowFieldCatalogFragment;
+import com.example.user.organizer.fragment.WebFragment;
 import com.example.user.organizer.inteface.NavigationDrawerInterface;
 
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
     ShowFieldCatalogFragment showFieldCatalogFragment;
     ShowAuthUserEventsFragment showAuthUserEventsFragment;
     AdvertisingAndInformationFragment advertisingAndInformationFragment;
+    WebFragment webFragment;
     SettingsFragment settingsFragment;
     FragmentTransaction fTrans;
 
@@ -84,6 +86,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         showFieldCatalogFragment = new ShowFieldCatalogFragment();
         showAuthUserEventsFragment = new ShowAuthUserEventsFragment();
         advertisingAndInformationFragment = new AdvertisingAndInformationFragment();
+        webFragment = new WebFragment();
         settingsFragment = new SettingsFragment();
 
         Bundle args = new Bundle();    // объект для передачи параметров в диалог
@@ -166,6 +169,10 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
 
         navigationView.setNavigationItemSelectedListener(this);
 
+        fTrans = getFragmentManager().beginTransaction();
+        fTrans.replace(R.id.container, webFragment);
+        fTrans.commit();
+        drawer.closeDrawer(GravityCompat.START);
     }//onCreate
 
     //строим Spinner
@@ -309,6 +316,8 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
             fTrans.replace(R.id.container, showAllEventsFragment);
         } else if (id == R.id.news_line) {
             fTrans.replace(R.id.container, advertisingAndInformationFragment);
+        } else if (id == R.id.web_info) {
+            fTrans.replace(R.id.container, webFragment);
         } else if (id == R.id.settings) {
             fTrans.replace(R.id.container, settingsFragment);
         } else if (id == R.id.log_out) {

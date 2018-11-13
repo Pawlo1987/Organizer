@@ -151,5 +151,7 @@
     <string name="tvCreateEventCrEv">New Game</string>
     <string name="tvHeadShFiCaFr">Fields</string>
     <string name="tvHeadSeFr">Settings</string>
+    <string name="tvHeaderWeFr">Web Info</string>
+    <string name="web_info">Веб инфо</string>
 
 </resources>

@@ -24,6 +24,11 @@
             android:id="@+id/news_line"
             android:icon="@drawable/icon_news"
             android:title="@string/news_line" />
+
+        <item
+            android:id="@+id/web_info"
+            android:icon="@drawable/icon_web"
+            android:title="@string/web_info" />
     </group>
 
     <item android:title="">

@@ -61,9 +61,8 @@ public class AuthorizationActivity extends AppCompatActivity {
         }//fori
     }//fillMap
 
-    // Обработка нажатия кнопки войти
-    public void onClickSignIn(View view) {
-
+    // Обработка нажатия кнопки авторизации
+    public void signIn() {
         int numberLogin;        //_id записи логина в таблице БД
         String login = etLogin.getText().toString();          //введенное значение в поле логин
         String password = etPassword.getText().toString();    //введенное значение в поле пароль
@@ -87,15 +86,30 @@ public class AuthorizationActivity extends AppCompatActivity {
             }//for
         }//if
 
-        if(checkLogin && checkPassword)
-        Log.d("myLog","yes");
-        else
-            Log.d("myLog","no");
+        //проверка существующего Логина или почти и совпадающего пароля
+        if(checkLogin && checkPassword){
+            //переходин в актиность LoginPartActivity
+            Intent intent = new Intent(this, LoginPartActivity.class);
+            startActivity(intent);
+        }
 
-    }//onClickSignIn
+    }//signIn
 
-    public void onClickSignUp(View view) {
+    //обработка нажатия кнопки создать новый аккаунт
+    public void createAccount() {
         Intent intent = new Intent(this, CreateAccountActivity.class);
         startActivity(intent);
-    }//onClickSignUp
+    }//createAccount
+
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btnSignIn:            //кнопка авторизации
+                signIn();
+                break;
+            case R.id.btnSignUp:               //кнопка создакния нового аккаунта
+                createAccount();
+                break;
+        }//switch
+        finish();
+    }//onClick
 }//AuthorizationActivity

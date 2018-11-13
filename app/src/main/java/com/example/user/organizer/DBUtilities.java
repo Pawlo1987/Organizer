@@ -1,5 +1,6 @@
 package com.example.user.organizer;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -19,10 +20,16 @@ public class DBUtilities {
         dbHelper.create_db();
     } // DBUtilities
 
+    //добавить пользователя в активности CreateAccountActivity
+    public void addNewUser(ContentValues cv){
+        db.insert("user", null,  cv);
+    }//addNewUser
+
     public Cursor updCursor(){
         String query = "SELECT * FROM employees";
         return db.rawQuery(query, null);
     }
+
     public SQLiteDatabase getDb() {
         return db;
     }

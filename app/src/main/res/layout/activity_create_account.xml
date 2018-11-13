@@ -23,15 +23,15 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvNameCrAcFr"
+            android:id="@+id/tvNameCrAcAc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/tvNameCrAcFr"
+            android:text="@string/tvNameCrAcAc"
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/etNameCrAcFr"
+            android:id="@+id/etNameCrAcAc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -45,15 +45,15 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvLoginCrAcFr"
+            android:id="@+id/tvLoginCrAcAc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/tvLoginCrAcFr"
+            android:text="@string/tvLoginCrAcAc"
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/etLoginCrAcFr"
+            android:id="@+id/etLoginCrAcAc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -67,15 +67,15 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvPasswordCrAcFr"
+            android:id="@+id/tvPasswordCrAcAc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/tvPasswordCrAcFr"
+            android:text="@string/tvPasswordCrAcAc"
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/etPasswordCrAcFr"
+            android:id="@+id/etPasswordCrAcAc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -89,15 +89,15 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvConfirmPasswordCrAcFr"
+            android:id="@+id/tvConfirmPasswordCrAcAC"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/tvConfirmPasswordCrAcFr"
+            android:text="@string/tvConfirmPasswordCrAcAc"
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/etConfirmPasswordCrAcFr"
+            android:id="@+id/etConfirmPasswordCrAcAc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -111,15 +111,15 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvEmailCrAcFr"
+            android:id="@+id/tvEmailCrAcAc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/tvEmailCrAcFr"
+            android:text="@string/tvEmailCrAcAc"
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/etEmailCrAcFr"
+            android:id="@+id/etEmailCrAcAc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -133,15 +133,15 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvPhoneCrAcFr"
+            android:id="@+id/tvPhoneCrAcAc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/tvPhoneCrAcFr"
+            android:text="@string/tvPhoneCrAcAc"
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/etPhoneCrAcFr"
+            android:id="@+id/etPhoneCrAcAc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -155,26 +155,43 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvDefCityCrAcFr"
+            android:id="@+id/tvDefCityCrAcAc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/tvDefCityCrAcFr"
+            android:text="@string/tvDefCityCrAcAc"
             android:textSize="24sp" />
 
         <Spinner
-            android:id="@+id/spDefCityCrAcFr"
+            android:id="@+id/spDefCityCrAcAc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnCreateCrAcFr"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="20dp"
-        android:text="@string/btnCreateCrAcFr" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnCreateCrAcAc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClick"
+            android:text="@string/btnCreateCrAcAc" />
+
+        <Button
+            android:id="@+id/btnBackCrAcAc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClick"
+            android:text="@string/btnBackCrAcAc" />
+
+    </LinearLayout>
 
 </LinearLayout>

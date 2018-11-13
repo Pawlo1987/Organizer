@@ -56,7 +56,7 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginTop="10dp"
-        android:onClick="onClickSignIn"
+        android:onClick="onClick"
         android:text="@string/btnSignIn" />
 
     <TextView
@@ -77,7 +77,7 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginTop="10dp"
-        android:onClick="onClickSignUp"
+        android:onClick="onClick"
         android:text="@string/btnSignUp" />
 
 

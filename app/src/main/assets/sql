@@ -10,7 +10,11 @@ event INNER JOIN city ON city._id = event.city
       
 -- запрос для авторизации
 SELECT
-login as login, 
-email as email
+user.login as login, 
+user.email as email,
+user.password as password
 FROM
 user;
+
+--запрос для записи нового пользователя
+INSERT INTO user (login, password, name, phone_number, def_city, email) VALUES ("pavel85", "4a45sd", "PAvel", "1564132", 4, "asd@asdf.ru");

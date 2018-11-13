@@ -120,7 +120,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         //проверка завершилось ли событие
         boolean status = dbUtilities.getEventExecutionStatus(eventShow.eventData, eventShow.eventTime);
         if(status) holder.tvExecutionStatusShAuUsEvReAd.setText("Активная");
-        else holder.tvExecutionStatusShAuUsEvReAd.setText("Не активная");
+        else holder.tvExecutionStatusShAuUsEvReAd.setText("Неактивная");
     } // onBindViewHolder
 
     //получаем количество элементов объекта(курсора)

@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.user.organizer.fragment.AdvertisingAndInformationFragment;
 import com.example.user.organizer.fragment.ChangeColumnDialog;
@@ -223,20 +224,24 @@ public class EditNewsNoteActivity extends AppCompatActivity implements Advertisi
 
     //сохранить и передать выборанных игроков
     private void confirmSelect() {
-        //обращяемся к БД на сервер для создания новой записи в таблицу notes
-        dbUtilities.updateNotesTable(noteOld.getNoteId(), logo,
-                etHeadEdNeNoAc.getText().toString(), idAuthUser, date,
-                dbUtilities.getIdByValue(
-                        "cities",              //название таблицы
-                        "name",               //название столбца
-                        spCityEdNeNoAc.getSelectedItem().toString() //значение для поиска
-                ),
-                etMessEdNeNoAc.getText().toString(),
-                String.valueOf(spSize.getSelectedItemPosition()),
-                String.valueOf(spStyle.getSelectedItemPosition())
-        );
+        if (etHeadEdNeNoAc.getText().toString().equals("") || etMessEdNeNoAc.getText().toString().equals("")) {
+            Toast.makeText(this, "Есть пустые поля!", Toast.LENGTH_SHORT).show();
+        } else {
+            //обращяемся к БД на сервер для создания новой записи в таблицу notes
+            dbUtilities.updateNotesTable(noteOld.getNoteId(), logo,
+                    etHeadEdNeNoAc.getText().toString(), idAuthUser, date,
+                    dbUtilities.getIdByValue(
+                            "cities",              //название таблицы
+                            "name",               //название столбца
+                            spCityEdNeNoAc.getSelectedItem().toString() //значение для поиска
+                    ),
+                    etMessEdNeNoAc.getText().toString(),
+                    String.valueOf(spSize.getSelectedItemPosition()),
+                    String.valueOf(spStyle.getSelectedItemPosition())
+            );
 
-        finish();
+            finish();
+        }
     }//confirmSelect
 
     // установка даты записи

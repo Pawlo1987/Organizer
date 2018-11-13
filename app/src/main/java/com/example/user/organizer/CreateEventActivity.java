@@ -100,6 +100,11 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnFoc
         lvListOfParticipantsCrEv = (ListView) findViewById(R.id.lvListOfParticipantsCrEv);
         etPhoneLayout = (TextInputLayout) findViewById(R.id.etPhoneCrEvLayout);
 
+        //применяем регулярное выражения для правельности ввода номера телефона
+        dbUtilities.inputFilterForPhoneNumber(etPhoneCrEv);
+
+        etPhoneCrEv.setOnFocusChangeListener(this);
+
         //инициализация коллекции для спинера
         spListField = new ArrayList<>();
         spListDuration = new ArrayList<>();
@@ -109,11 +114,6 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnFoc
 
         setInitialTime();               //начальная установка время
         setInitialDate();               //начальная установка даты
-
-        //применяем регулярное выражения для правельности ввода номера телефона
-        dbUtilities.inputFilterForPhoneNumber(etPhoneCrEv);
-
-        etPhoneCrEv.setOnFocusChangeListener(this);
 
         //заполнить spListCity данные для отображения в Spinner
         spListCity = dbUtilities.getStrListTableFromDB("cities", "name");

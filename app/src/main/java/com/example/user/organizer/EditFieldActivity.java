@@ -2,6 +2,7 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,7 +18,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditFieldActivity extends AppCompatActivity {
+public class EditFieldActivity extends AppCompatActivity implements View.OnFocusChangeListener{
     // коды для идентификации активностей при получении результата
     public final int REQ_SELECT_LOCATION = 1002;
 
@@ -48,6 +49,7 @@ public class EditFieldActivity extends AppCompatActivity {
     Spinner spShowerCrFi;
     Spinner spRoofCrFi;
     Switch swLocationCrFi;
+    TextInputLayout etPhoneCrFiLayout;
 
     private ArrayAdapter<String> spAdapterCity;    //Адаптер для спинера выбор города
     private ArrayAdapter<String> spAdapterBoolean; //Адаптер для спинера выбор ДУШ, ОСВЕЩЕНИЕ, КРЫША
@@ -57,14 +59,13 @@ public class EditFieldActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_field);
+        context = getBaseContext();
+        dbUtilities = new DBUtilities(context);
 
         //добавляем actionBar (стрелка сверху слева)
         actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-        context = getBaseContext();
-        dbUtilities = new DBUtilities(context);
 
         field_id = getIntent().getStringExtra("field_id");
         idAuthUser = getIntent().getStringExtra("idAuthUser");
@@ -74,21 +75,29 @@ public class EditFieldActivity extends AppCompatActivity {
 
         //привязка ресурсов к объектам
         etNameCrFi = (EditText) findViewById(R.id.etNameCrFi);
-        etNameCrFi.setText(fieldDef.get(0).name);
         etGeolatCrFi = (EditText) findViewById(R.id.etGeolatCrFi);
-        etGeolatCrFi.setText(fieldDef.get(0).geo_lat);
         etGeolongCrFi = (EditText) findViewById(R.id.etGeolongCrFi);
-        etGeolongCrFi.setText(fieldDef.get(0).geo_long);
         etAddressCrFi = (EditText) findViewById(R.id.etAddressCrFi);
-        etAddressCrFi.setText(fieldDef.get(0).address);
         etPhoneCrFi = (EditText) findViewById(R.id.etPhoneCrFi);
-        etPhoneCrFi.setText(fieldDef.get(0).phone);
         spCityCrFi = (Spinner) findViewById(R.id.spCityCrFi);
         spLightCrFi = (Spinner) findViewById(R.id.spLightCrFi);
         spCoatingCrFi = (Spinner) findViewById(R.id.spCoatingCrFi);
         spShowerCrFi = (Spinner) findViewById(R.id.spShowerCrFi);
         spRoofCrFi = (Spinner) findViewById(R.id.spRoofCrFi);
         swLocationCrFi = (Switch) findViewById(R.id.swLocationCrFi);
+        etPhoneCrFiLayout = (TextInputLayout) findViewById(R.id.etPhoneCrFiLayout);
+
+        //применяем регулярное выражения для правельности ввода номера телефона
+        dbUtilities.inputFilterForPhoneNumber(etPhoneCrFi);
+
+        etPhoneCrFi.setOnFocusChangeListener(this);
+
+        //подготовка данных для редактирования
+        etNameCrFi.setText(fieldDef.get(0).name);
+        etGeolatCrFi.setText(fieldDef.get(0).geo_lat);
+        etGeolongCrFi.setText(fieldDef.get(0).geo_long);
+        etAddressCrFi.setText(fieldDef.get(0).address);
+        etPhoneCrFi.setText(fieldDef.get(0).phone);
 
         //setEnabled - параметр для редактирования поля EditText
         etGeolatCrFi.setEnabled(false);
@@ -197,25 +206,31 @@ public class EditFieldActivity extends AppCompatActivity {
 
     //обработчик нажатия клавишы Создать запись пользователя
     public void createNewField() {
+        if (etNameCrFi.getText().toString().equals("")
+                || etPhoneCrFi.getText().toString().equals("")
+                || etGeolongCrFi.getText().toString().equals("")
+                || etGeolatCrFi.getText().toString().equals("")
+                || etAddressCrFi.getText().toString().equals("")) {
+            Toast.makeText(this, "Есть пустые поля!", Toast.LENGTH_SHORT).show();
+        } else {
+            String city_id = String.valueOf(spListCity.indexOf(spCityCrFi.getSelectedItem()) + 1);
+            String name = etNameCrFi.getText().toString();
+            String phone = etPhoneCrFi.getText().toString();
+            String light_status = (spLightCrFi.getSelectedItem().toString() == "Нет") ? "0" : "1";
+            String coating_id = String.valueOf(spListCoating.indexOf(spCoatingCrFi.getSelectedItem()) + 1);
+            String shower_status = (spShowerCrFi.getSelectedItem().toString() == "Нет") ? "0" : "1";
+            String roof_status = (spRoofCrFi.getSelectedItem().toString() == "Нет") ? "0" : "1";
+            String geo_long = etGeolongCrFi.getText().toString();
+            String geo_lat = etGeolatCrFi.getText().toString();
+            String address = etAddressCrFi.getText().toString();
+            String user_id = idAuthUser;
 
-        String city_id = String.valueOf(spListCity.indexOf(spCityCrFi.getSelectedItem()) + 1);
-        String name = etNameCrFi.getText().toString();
-        String phone = etPhoneCrFi.getText().toString();
-        String light_status = (spLightCrFi.getSelectedItem().toString() == "Нет") ? "0" : "1";
-        String coating_id = String.valueOf(spListCoating.indexOf(spCoatingCrFi.getSelectedItem()) + 1);
-        String shower_status = (spShowerCrFi.getSelectedItem().toString() == "Нет") ? "0" : "1";
-        String roof_status = (spRoofCrFi.getSelectedItem().toString() == "Нет") ? "0" : "1";
-        String geo_long = etGeolongCrFi.getText().toString();
-        String geo_lat = etGeolatCrFi.getText().toString();
-        String address = etAddressCrFi.getText().toString();
-        String user_id = idAuthUser;
+            //добваить данные через объект ContentValues(cv), в таблицу "fields"
+            dbUtilities.updateFieldsTable(field_id, city_id, name, phone, light_status, coating_id,
+                    shower_status, roof_status, geo_long, geo_lat, address, user_id);
 
-        //добваить данные через объект ContentValues(cv), в таблицу "fields"
-        dbUtilities.updateFieldsTable( field_id, city_id, name, phone, light_status, coating_id,
-                shower_status, roof_status, geo_long, geo_lat, address, user_id);
-
-        finish();
-
+            finish();
+        }
     }//createNewField
 
     //вернутся в активность авторизации
@@ -253,4 +268,14 @@ public class EditFieldActivity extends AppCompatActivity {
         startActivity(intent);
     }//createNewCity
 
+    //проверка ввода номера телефона
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (v != etPhoneCrFi && etPhoneCrFi.getText().toString().isEmpty()) {
+            etPhoneCrFiLayout.setErrorEnabled(true);
+            etPhoneCrFiLayout.setError(getResources().getString(R.string.error_enter_phone));
+        } else {
+            etPhoneCrFiLayout.setErrorEnabled(false);
+        }
+    }//onFocusChange
 }//EditFieldActivity

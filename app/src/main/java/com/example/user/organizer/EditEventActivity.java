@@ -2,10 +2,9 @@ package com.example.user.organizer;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,7 +29,7 @@ import java.util.List;
 
 //--Активность для редактирования события(переход на активность создание нового поля --------------
 //-- или нового города или активность для добавления нового участника в событие)-------
-public class EditEventActivity extends AppCompatActivity {
+public class EditEventActivity extends AppCompatActivity implements View.OnFocusChangeListener {
 
     // коды для идентификации активностей при получении результата
     public final int REQ_ADD_USER = 1001;
@@ -55,7 +54,7 @@ public class EditEventActivity extends AppCompatActivity {
     List<String> idUserList;             //коллекция id-ов с выбранными игроками
 
     EditText etPriceCrEv;                //Общая стоимость тренеровки
-    EditText evPhoneCrEv;                //телефон организатора
+    EditText etPhoneCrEv;                //телефон организатора
     EditText evPasswordCrEv;             //пароль для приватной тренировки
     TextView tvDateCrEv;                 //Строка для отображения даты
     TextView tvStartTimeCrEv;            //Строка для отображения время
@@ -71,10 +70,14 @@ public class EditEventActivity extends AppCompatActivity {
     String showEventDate;                   // дата события для показа
     String eventDateForDB;                  // дата события для БД
     String eventStartTime;                  // Время начала события
+    TextInputLayout etPhoneLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
+        context = getBaseContext();
+        dbUtilities = new DBUtilities(context);
 
         //добавляем actionBar (стрелка сверху слева)
         actionBar = getSupportActionBar();
@@ -85,12 +88,18 @@ public class EditEventActivity extends AppCompatActivity {
         tvDateCrEv = (TextView) findViewById(R.id.tvDateCrEv);
         tvStartTimeCrEv = (TextView) findViewById(R.id.tvStartTimeCrEv);
         etPriceCrEv = (EditText) findViewById(R.id.etPriceCrEv);
-        evPhoneCrEv = (EditText) findViewById(R.id.etPhoneCrEv);
+        etPhoneCrEv = (EditText) findViewById(R.id.etPhoneCrEv);
         evPasswordCrEv = (EditText) findViewById(R.id.evPasswordCrEv);
         spCityCrEv = (Spinner) findViewById(R.id.spCityCrEv);
         spFieldCrEv = (Spinner) findViewById(R.id.spFieldCrEv);
         spDurationCrEv = (Spinner) findViewById(R.id.spDurationCrEv);
         lvListOfParticipantsCrEv = (ListView) findViewById(R.id.lvListOfParticipantsCrEv);
+        etPhoneLayout = (TextInputLayout) findViewById(R.id.etPhoneCrEvLayout);
+
+        //применяем регулярное выражения для правельности ввода номера телефона
+        dbUtilities.inputFilterForPhoneNumber(etPhoneCrEv);
+
+        etPhoneCrEv.setOnFocusChangeListener(this);
 
         //подготовка данных для редактирования
         intent = getIntent();
@@ -98,7 +107,7 @@ public class EditEventActivity extends AppCompatActivity {
         spDurationCrEv.setSelection(Integer.parseInt(intent.getStringExtra("duration")));
         etPriceCrEv.setText(intent.getStringExtra("price"));
         evPasswordCrEv.setText(intent.getStringExtra("password"));
-        evPhoneCrEv.setText(intent.getStringExtra("phone"));
+        etPhoneCrEv.setText(intent.getStringExtra("phone"));
         idAuthUser = intent.getStringExtra("user_id");
 
 
@@ -111,8 +120,6 @@ public class EditEventActivity extends AppCompatActivity {
 
         setInitialTime();               //начальная установка время
         setInitialDate();               //начальная установка даты
-        context = getBaseContext();
-        dbUtilities = new DBUtilities(context);
 
         //заполнить spListCity данные для отображения в Spinner
         spListCity = dbUtilities.getStrListTableFromDB("cities", "name");
@@ -363,55 +370,70 @@ public class EditEventActivity extends AppCompatActivity {
 
     //обновление событие
     private void updateEvent() {
+        if ( etPriceCrEv.getText().toString().equals("")
+                || etPhoneCrEv.getText().toString().equals("")
+                || evPasswordCrEv.getText().toString().equals("")
+                || spListField.size() == 0) {
+            Toast.makeText(this, "Есть пустые поля!", Toast.LENGTH_SHORT).show();
+        } else {
+            //делаем новую запись в таблицу с событиями
+            String city_id = dbUtilities.getIdByValue("cities", "name",
+                    spCityCrEv.getSelectedItem().toString()    //Объект спинера(название города)
+            );
+            String field_id = dbUtilities.getIdByValue("fields", "name",
+                    spFieldCrEv.getSelectedItem().toString()   //Объект спинера(название поля)
+            );
+            String date = eventDateForDB;
+            String time = eventStartTime;
+            String duration = spDurationCrEv.getSelectedItem().toString();
+            String price = etPriceCrEv.getText().toString();
+            String password = evPasswordCrEv.getText().toString();
+            String phone = etPhoneCrEv.getText().toString();
+            String user_id = idAuthUser;
 
-        //делаем новую запись в таблицу с событиями
-        String city_id = dbUtilities.getIdByValue("cities", "name",
-                spCityCrEv.getSelectedItem().toString()    //Объект спинера(название города)
-        );
-        String field_id = dbUtilities.getIdByValue("fields", "name",
-                spFieldCrEv.getSelectedItem().toString()   //Объект спинера(название поля)
-        );
-        String date = eventDateForDB;
-        String time = eventStartTime;
-        String duration = spDurationCrEv.getSelectedItem().toString();
-        String price = etPriceCrEv.getText().toString();
-        String password = evPasswordCrEv.getText().toString();
-        String phone = evPhoneCrEv.getText().toString();
-        String user_id = idAuthUser;
+            //добваить данные через объект ContentValues(cv), в таблицу "event"
+            dbUtilities.updateEventsTable(eventId, field_id, city_id, date, time,
+                    duration, price, password, phone, user_id);
 
-        //добваить данные через объект ContentValues(cv), в таблицу "event"
-        dbUtilities.updateEventsTable( eventId, field_id, city_id, date, time,
-                duration, price, password, phone, user_id);
+            if (flChangeLoginUserList) {
 
-        if(flChangeLoginUserList){
+                //удаляем старый список учасников из таблицы participants
+                for (String idUser : idUserList) {
+                    dbUtilities.deleteRowByTwoValueAndTheyColumnName(
+                            "participants", "user_id", idUser,
+                            "event_id", eventId
+                    );
 
-            //удаляем старый список учасников из таблицы participants
-            for (String idUser : idUserList) {
-                dbUtilities.deleteRowByTwoValueAndTheyColumnName(
-                        "participants", "user_id", idUser,
-                        "event_id", eventId
-                );
+                    dbUtilities.deleteRowByTwoValueAndTheyColumnName(
+                            "notifications", "user_id", idUser,
+                            "event_id", eventId
+                    );
+                }//foreach
 
-                dbUtilities.deleteRowByTwoValueAndTheyColumnName(
-                        "notifications", "user_id", idUser,
-                        "event_id", eventId
-                );
-            }//foreach
+                //добавляем участников в таблицу participants
+                for (String loginUser : loginUserList) {
 
-            //добавляем участников в таблицу participants
-            for (String loginUser : loginUserList) {
+                    user_id = dbUtilities.getIdByValue("users",
+                            "login", loginUser);
 
-                user_id = dbUtilities.getIdByValue("users",
-                        "login", loginUser);
+                    //добваить данные через объект, в таблицу "participants"
+                    dbUtilities.insertIntoParticipants(eventId, user_id);
 
-                //добваить данные через объект, в таблицу "participants"
-                dbUtilities.insertIntoParticipants(eventId, user_id);
-
-                //добавление новой записи в таблицу notifications
-                dbUtilities.insertIntoNotifications(eventId, user_id, city_id, field_id, time, date, "1"," ");
-            }//foreach
-        }//if
-
+                    //добавление новой записи в таблицу notifications
+                    dbUtilities.insertIntoNotifications(eventId, user_id, city_id, field_id, time, date, "1", " ");
+                }//foreach
+            }//if
+        }
     }//updateEvent
 
+    //проверка ввода номера телефона
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (v != etPhoneCrEv && etPhoneCrEv.getText().toString().isEmpty()) {
+            etPhoneLayout.setErrorEnabled(true);
+            etPhoneLayout.setError(getResources().getString(R.string.error_enter_phone));
+        } else {
+            etPhoneLayout.setErrorEnabled(false);
+        }
+    }//onFocusChange
 }//EditEventActivity

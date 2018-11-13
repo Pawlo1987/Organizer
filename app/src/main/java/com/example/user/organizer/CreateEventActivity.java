@@ -72,7 +72,6 @@ public class CreateEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
 
-
         //привязка ресурсов к объектам
         tvDateCrEv = (TextView) findViewById(R.id.tvDateCrEv);
         tvStartTimeCrEv = (TextView) findViewById(R.id.tvStartTimeCrEv);
@@ -283,8 +282,6 @@ public class CreateEventActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CreateFieldActivity.class);
         startActivity(intent);
     }//createNewField
-
-
 
     //обработка нажатия клавиши создания нового города
     private void createNewCity() {

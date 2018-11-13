@@ -72,5 +72,12 @@
     <string name="btnConfirmSePaAc">Подвердить выбор</string>
     <string name="btnCancelSePaAc">Отменить выбор</string>
     <string name="tvSelectParticipantsSePaAc">Добавить участников</string>
+    <string name="tvHeaderShAuUsEvAc">Ваши активные события</string>
+    <string name="tvFirstLineShAuUsEvReAd">событие назначено на</string>
+    <string name="tvSecondLineShAuUsEvReAd">состоится в</string>
+    <string name="tvThirdLineShAuUsEvReAd">в городе</string>
+    <string name="tvFourthLineShAuUsEvReAd">на поле</string>
+    <string name="tvFifthLineShAuUsEvReAd">ваш статус</string>
+    <string name="tvHeaderAdInAc">Новости и Реклама</string>
 
 </resources>

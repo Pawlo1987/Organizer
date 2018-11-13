@@ -25,8 +25,6 @@ public class CreateFieldActivity extends AppCompatActivity {
     List<String> spListCity;           // Данные для спинера выбора города
     List<String> spListBoolean;    // Данные для спинера выбора освещение
     List<String> spListCoating;        // Данные для спинера выбора покрытие
-//    List<String> spListShower;         // Данные для спинера выбора душ
-//    List<String> spListRoof;           // Данные для спинера выбора крыша
 
     EditText etNameCrFi;
     EditText etGeolocationCrFi;

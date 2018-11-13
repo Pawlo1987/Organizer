@@ -26,6 +26,9 @@
         <activity android:name=".CreateCityActivity" />
         <activity android:name=".CreateFieldActivity" />
         <activity android:name=".SelectParticipantsActivity" />
+        <activity android:name=".ShowAuthUserEventsActivity" />
+        <activity android:name=".ShowAuthUserEventsRecyclerAdapter" />
+        <activity android:name=".AdvertisingAndInformationActivity"></activity>
     </application>
 
 </manifest>

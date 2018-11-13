@@ -39,7 +39,7 @@ public class LoginPartActivity extends TabActivity {
 
         tabSpec = tabHost.newTabSpec("tag3");
         tabSpec.setIndicator("Вкладка 3");
-        tabSpec.setContent(new Intent(this, ShowAllEventActivity.class));
+        tabSpec.setContent(new Intent(this, ShowAuthUserEventsActivity.class));
         tabHost.addTab(tabSpec);
 
         tabSpec = tabHost.newTabSpec("tag4");

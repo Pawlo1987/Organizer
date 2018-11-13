@@ -20,6 +20,7 @@ public class SelectLogoRecyclerAdapter extends
     private LayoutInflater inflater;
     DBUtilities dbUtilities;
     Context context;
+    String table;           //параметр указывающий в какой таблице менять логотип
     String idAuthUser;         //Авторизированный пользователь
     List<Integer> listLogo = new ArrayList<>();
     SelectLogoInterface selectLogoInterface;
@@ -27,17 +28,25 @@ public class SelectLogoRecyclerAdapter extends
 
     //конструктор
     public SelectLogoRecyclerAdapter(SelectLogoInterface selectLogoInterface,
-                                      Context context, String idAuthUser) {
+                                      Context context, String idAuthUser, String table) {
         this.inflater = LayoutInflater.from(context);
         //получение интерфеса из класса Фрагмента
         //для обработки нажатия элементов RecyclerAdapter
         this.context = context;
         this.idAuthUser = idAuthUser;
+        this.table = table;
+
         dbUtilities = new DBUtilities(context);
         this.selectLogoInterface = selectLogoInterface;
 
         //колличество логотипов в базе
-        int n = Integer.parseInt(dbUtilities.getLogoCount());
+        int n = 0;
+
+        if(table.equals("users")) {
+            n = Integer.parseInt(dbUtilities.getLogoCount());
+        }else{
+            n = Integer.parseInt(dbUtilities.getLogoCount());
+        }
         int i = 1;
 
         //заполняем коллекцию логотипов для адаптера
@@ -62,11 +71,19 @@ public class SelectLogoRecyclerAdapter extends
     public void onBindViewHolder(SelectLogoRecyclerAdapter.ViewHolder holder, int position) {
         nextLogo = listLogo.get(position);
 
-        // Показать картинку
-        new DownloadImageTask( holder.ivLeftSeLoReAd)
-                .execute("http://strahovanie.dn.ua/football_db/logo/logo_" + String.valueOf(nextLogo) + ".png");
-        new DownloadImageTask( holder.ivRightSeLoReAd)
-                .execute("http://strahovanie.dn.ua/football_db/logo/logo_" + String.valueOf(nextLogo+1) + ".png");
+        if(table.equals("users")) {
+            // Показать картинку
+            new DownloadImageTask(holder.ivLeftSeLoReAd)
+                    .execute("http://strahovanie.dn.ua/football_db/logo/logo_" + String.valueOf(nextLogo) + ".png");
+            new DownloadImageTask(holder.ivRightSeLoReAd)
+                    .execute("http://strahovanie.dn.ua/football_db/logo/logo_" + String.valueOf(nextLogo + 1) + ".png");
+        }else {
+            // Показать картинку
+            new DownloadImageTask(holder.ivLeftSeLoReAd)
+                    .execute("http://strahovanie.dn.ua/football_db/logo/logo_" + String.valueOf(nextLogo) + ".png");
+            new DownloadImageTask(holder.ivRightSeLoReAd)
+                    .execute("http://strahovanie.dn.ua/football_db/logo/logo_" + String.valueOf(nextLogo + 1) + ".png");
+        }
 
     } // onBindViewHolder
 
@@ -87,10 +104,9 @@ public class SelectLogoRecyclerAdapter extends
             ivLeftSeLoReAd.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-
                     //вызов диалога по выбору логотипа
                     selectLogoInterface.callDialogSelectLogo(
-                            context, String.valueOf(listLogo.get(getAdapterPosition())), idAuthUser);
+                            context, String.valueOf(listLogo.get(getAdapterPosition())), idAuthUser, table);
                     return false;
                 }
             });
@@ -100,7 +116,7 @@ public class SelectLogoRecyclerAdapter extends
                 public boolean onLongClick(View v) {
                     //вызов диалога по выбору логотипа
                     selectLogoInterface.callDialogSelectLogo(
-                            context, String.valueOf(listLogo.get(getAdapterPosition())+1), idAuthUser);
+                            context, String.valueOf(listLogo.get(getAdapterPosition()) + 1), idAuthUser, table);
                     return false;
                 }
             });

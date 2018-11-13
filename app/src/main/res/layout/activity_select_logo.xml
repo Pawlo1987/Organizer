@@ -8,9 +8,19 @@
     tools:context="com.example.user.organizer.SelectLogoActivity">
 
 
+    <TextView
+        android:id="@+id/tvBufferSeLoAc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvUserSeLoAc"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="LinearLayoutManager"/>
+        android:layout_height="wrap_content"
+        app:layoutManager="LinearLayoutManager">
+
+    </android.support.v7.widget.RecyclerView>
+
+
 </LinearLayout>

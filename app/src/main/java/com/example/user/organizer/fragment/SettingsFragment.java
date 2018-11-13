@@ -172,6 +172,7 @@ public class SettingsFragment extends Fragment implements SettingsInterface {
             public void onClick(View v) {
                 Intent intent = new Intent(context, SelectLogoActivity.class);
                 intent.putExtra("idAuthUser", idAuthUser);
+                intent.putExtra("table", "users");    //для указания в какой таблице менять логотип
                 startActivityForResult(intent, REQ_SELECT_LOGO);
             }//onClick
         });//setOnClickListener

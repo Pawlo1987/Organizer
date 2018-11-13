@@ -42,7 +42,6 @@ public class AdvertisingAndInformationFragment extends Fragment {
     public static final String PAR_CITY = "city";
     public static final String PAR_DATE = "date";
     public static final String PAR_MESSAGE = "message";
-    public static final String PAR_TSIZE_HEAD = "tsizehead";
     public static final String PAR_TSIZE_MESSAGE = "tsizemessage";
     public static final String PAR_TSTYLE_MESSAGE = "tstylemessage";
 
@@ -176,17 +175,16 @@ public class AdvertisingAndInformationFragment extends Fragment {
         if (resultCode == RESULT_OK) {
             // читаем из объекта data полученные данные и выводим в поле результата
 
-            String logo = "1";
+            String logo = data.getStringExtra(PAR_LOGO);
             String head = data.getStringExtra(PAR_HEAD);
             String date = data.getStringExtra(PAR_DATE);
             String city_id = data.getStringExtra(PAR_CITY);
             String message = data.getStringExtra(PAR_MESSAGE);
-            String tsizehead = "14";
-            String tsizemessage = "14";
-            String tstylemessage = "14";
+            String tsizemessage = data.getStringExtra(PAR_TSIZE_MESSAGE);
+            String tstylemessage = data.getStringExtra(PAR_TSTYLE_MESSAGE);
 
             //обращяемся к БД на сервер для создания новой записи в таблицу notes
-            dbUtilities.insertIntoNotes(logo, head, date, city_id, message, tsizehead, tsizemessage, tstylemessage);
+            dbUtilities.insertIntoNotes(logo, head, idAuthUser, date, city_id, message, tsizemessage, tstylemessage);
         }//RESULT_OK
 
         //устанавливаем спинер в позицию "ВСЕ ГОРОДА"
@@ -233,7 +231,7 @@ public class AdvertisingAndInformationFragment extends Fragment {
 
         // создаем адаптер, передаем в него курсор
         advertisingAndInformationRecyclerAdapter
-                = new AdvertisingAndInformationRecyclerAdapter(context, notes);
+                = new AdvertisingAndInformationRecyclerAdapter(context, notes, idAuthUser);
 
         // RecycerView для отображения таблицы users БД
         rvNoteLineAdAnInAc.setAdapter(advertisingAndInformationRecyclerAdapter);

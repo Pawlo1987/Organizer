@@ -4,5 +4,5 @@ import android.content.Context;
 
 //-------------------Интерфейс для вызова DialogFragment из SettingsFragment-------------
 public interface SelectLogoInterface {
-    void callDialogSelectLogo(Context context, String logo, String eventId);
+    void callDialogSelectLogo(Context context, String logo, String eventId, String table);
 }//SelectLogoInterface

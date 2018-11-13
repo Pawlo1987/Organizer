@@ -12,9 +12,11 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
+import android.widget.TextView;
 
 import com.example.user.organizer.DBUtilities;
 import com.example.user.organizer.NavigationDrawerLogInActivity;
+import com.example.user.organizer.R;
 
 //---------------------- Фрагмент с диалогом выбрать логотип-------------------
 public class SelectLogoDialog extends DialogFragment {
@@ -63,6 +65,7 @@ public class SelectLogoDialog extends DialogFragment {
         // прочитать данные, переданные из активности (из точки вызова)
         String userId = getArguments().getString("user_id");
         String logo = getArguments().getString("logo");
+        String table = getArguments().getString("table");
 
             return builder
                     .setTitle("Подтверждение выбраного логотипа")
@@ -73,7 +76,7 @@ public class SelectLogoDialog extends DialogFragment {
                     .setPositiveButton("Подтверждаю", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            selectLogo(userId, logo);
+                            selectLogo(userId, logo, table);
                         }
                     })
                     .setNegativeButton("Не подтверждаю", null) // не назначаем слушателя кликов по кнопке "Нет"
@@ -81,13 +84,17 @@ public class SelectLogoDialog extends DialogFragment {
                     .create();
     }//onCreateDialog
 
-    private void selectLogo(String userId, String value) {
-        //Занесем данные в БД
-        dbUtilities.updateOneColumnTable(userId, "logo", value, "users");
+    private void selectLogo(String userId, String value, String table) {
+        if(table.equals("users")) {
+            //Занесем данные в БД
+            dbUtilities.updateOneColumnTable(userId, "logo", value, table);
 
-        //Вернемся в основную активность для обновления данных
-        Intent intent = new Intent(getContext(), NavigationDrawerLogInActivity.class);
-        intent.putExtra("idAuthUser", userId);
-        startActivity(intent);
-}
+            //Вернемся в основную активность для обновления данных
+            Intent intent = new Intent(getContext(), NavigationDrawerLogInActivity.class);
+            intent.putExtra("idAuthUser", userId);
+            startActivity(intent);
+        }else {
+            ((TextView)getActivity().findViewById(R.id.tvBufferSeLoAc)).setText(value);
+        }
+    }//selectLogo
 }//callDialogSelectLogo

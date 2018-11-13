@@ -185,6 +185,9 @@ public class DBUtilities{
                 JSONObject jListHead = jResult.getJSONObject("head");
                 List<String> headList = getListFromJSON(jListHead);
 
+                JSONObject jListUser = jResult.getJSONObject("user_id");
+                List<String> userList = getListFromJSON(jListUser);
+
                 JSONObject jListCity = jResult.getJSONObject("city");
                 List<String> cityList = getListFromJSON(jListCity);
 
@@ -193,9 +196,6 @@ public class DBUtilities{
 
                 JSONObject jListMess = jResult.getJSONObject("message");
                 List<String> messList = getListFromJSON(jListMess);
-
-                JSONObject jListTSizeHead = jResult.getJSONObject("tsizehead");
-                List<String> tSizeHeadList = getListFromJSON(jListTSizeHead);
 
                 JSONObject jListTSizeMessage = jResult.getJSONObject("tsizemessage");
                 List<String> tSizeMessageList = getListFromJSON(jListTSizeMessage);
@@ -206,9 +206,9 @@ public class DBUtilities{
                 int n = headList.size();
 
                 for (int i = 0; i <n ; i++) {
-                    notes.add(new Note(logoList.get(i),headList.get(i),dateList.get(i),
-                            cityList.get(i),messList.get(i),tSizeHeadList.get(i),
-                            tSizeMessageList.get(i),tStyleMessageList.get(i)));
+                    notes.add(new Note(logoList.get(i),headList.get(i),userList.get(i),dateList.get(i),
+                            cityList.get(i),messList.get(i), tSizeMessageList.get(i),
+                            tStyleMessageList.get(i)));
                 }//fori
 
             }else{
@@ -408,10 +408,11 @@ public class DBUtilities{
     }//insertIntoCities
 
     //обращяемся к БД на сервер для создания новой записи в таблицу notes
-    public void insertIntoNotes(String logo, String head, String date, String city_id, String message,
-                                String tsizehead, String tsizemessage, String tstylemessage) {
+    public void insertIntoNotes(String logo, String head, String user_id, String date,
+                                String city_id, String message,
+                                String tsizemessage, String tstylemessage) {
         try(BackgroundWorker bg = new BackgroundWorker()){
-            bg.execute("insertIntoNotes", logo, head, date, city_id, message, tsizehead, tsizemessage, tstylemessage);
+            bg.execute("insertIntoNotes", logo, head, user_id, date, city_id, message, tsizemessage, tstylemessage);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
@@ -451,6 +452,9 @@ public class DBUtilities{
                 JSONObject jListHead = jResult.getJSONObject("head");
                 List<String> headList = getListFromJSON(jListHead);
 
+                JSONObject jListUser = jResult.getJSONObject("user_id");
+                List<String> userList = getListFromJSON(jListUser);
+
                 JSONObject jListCity = jResult.getJSONObject("city");
                 List<String> cityList = getListFromJSON(jListCity);
 
@@ -459,9 +463,6 @@ public class DBUtilities{
 
                 JSONObject jListMess = jResult.getJSONObject("message");
                 List<String> messList = getListFromJSON(jListMess);
-
-                JSONObject jListTSizeHead = jResult.getJSONObject("tsizehead");
-                List<String> tSizeHeadList = getListFromJSON(jListTSizeHead);
 
                 JSONObject jListTSizeMessage = jResult.getJSONObject("tsizemessage");
                 List<String> tSizeMessageList = getListFromJSON(jListTSizeMessage);
@@ -472,9 +473,9 @@ public class DBUtilities{
                 int n = headList.size();
 
                 for (int i = 0; i <n ; i++) {
-                    notes.add(new Note(logoList.get(i),headList.get(i),dateList.get(i),
-                            cityList.get(i),messList.get(i),tSizeHeadList.get(i),
-                            tSizeMessageList.get(i),tStyleMessageList.get(i)));
+                    notes.add(new Note(logoList.get(i),headList.get(i),userList.get(i),dateList.get(i),
+                            cityList.get(i),messList.get(i), tSizeMessageList.get(i),
+                            tStyleMessageList.get(i)));
                 }//fori
 
             }else{

@@ -601,10 +601,10 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
                     // параметры для передачи на сервер (для создания новой записи новостей)
                     String logo = params[1];
                     String head = params[2];
-                    String date = params[3];
-                    String city_id = params[4];
-                    String message = params[5];
-                    String tsizehead = params[6];
+                    String user_id = params[3];
+                    String date = params[4];
+                    String city_id = params[5];
+                    String message = params[6];
                     String tsizemessage = params[7];
                     String tstylemessage = params[8];
 
@@ -612,10 +612,10 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
                     String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8")
                             + "&" + URLEncoder.encode("logo", "utf8") + "=" + URLEncoder.encode(logo, "utf8")
                             + "&" + URLEncoder.encode("head", "utf8") + "=" + URLEncoder.encode(head, "utf8")
+                            + "&" + URLEncoder.encode("user_id", "utf8") + "=" + URLEncoder.encode(user_id, "utf8")
                             + "&" + URLEncoder.encode("date", "utf8") + "=" + URLEncoder.encode(date, "utf8")
                             + "&" + URLEncoder.encode("city_id", "utf8") + "=" + URLEncoder.encode(city_id, "utf8")
                             + "&" + URLEncoder.encode("message", "utf8") + "=" + URLEncoder.encode(message, "utf8")
-                            + "&" + URLEncoder.encode("tsizehead", "utf8") + "=" + URLEncoder.encode(tsizehead, "utf8")
                             + "&" + URLEncoder.encode("tsizemessage", "utf8") + "=" + URLEncoder.encode(tsizemessage, "utf8")
                             + "&" + URLEncoder.encode("tstylemessage", "utf8") + "=" + URLEncoder.encode(tstylemessage, "utf8");
 

@@ -46,24 +46,24 @@ public class ShowAuthUserEventsFragment extends Fragment {
 
         this.context = context;
         dbUtilities = new DBUtilities(context);
-        dbUtilities.open();
+//        dbUtilities.open();
 
         // Объеденный запрос для получения данных об участии пользователя
         // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
         // В запрос последние полученое значение это статус пользователя (1-организатор, 0-учасник)
-        String queryAdapt = "SELECT cities.name, fields.name, events.date, events.time, " +
-                "events._id, events.user_id, 1 FROM events " +
-                "INNER JOIN fields ON fields._id = events.field_id " +
-                "INNER JOIN cities ON cities._id = events.city_id " +
-                "WHERE events.user_id = \"" +
-                 idAuthUser + "\" UNION SELECT cities.name, fields.name, events.date, events.time, " +
-                "events._id, events.user_id, 0 FROM participants " +
-                "INNER JOIN events ON events._id = participants.event_id " +
-                "INNER JOIN fields ON fields._id = events.field_id " +
-                "INNER JOIN cities ON cities._id = events.city_id " +
+        String queryAdapt = "SELECT cities.name, fields.name, eventsList.date, eventsList.time, " +
+                "eventsList._id, eventsList.user_id, 1 FROM eventsList " +
+                "INNER JOIN fields ON fields._id = eventsList.field_id " +
+                "INNER JOIN cities ON cities._id = eventsList.city_id " +
+                "WHERE eventsList.user_id = \"" +
+                 idAuthUser + "\" UNION SELECT cities.name, fields.name, eventsList.date, eventsList.time, " +
+                "eventsList._id, eventsList.user_id, 0 FROM participants " +
+                "INNER JOIN eventsList ON eventsList._id = participants.event_id " +
+                "INNER JOIN fields ON fields._id = eventsList.field_id " +
+                "INNER JOIN cities ON cities._id = eventsList.city_id " +
                 "WHERE participants.user_id = \"" + idAuthUser + "\";";
 
-        eventsCursor =  dbUtilities.getDb().rawQuery(queryAdapt, null);
+        eventsCursor = null;// dbUtilities.getDb().rawQuery(queryAdapt, null);
 
         // создаем адаптер, передаем в него курсор
         showAuthUserEventsRecyclerAdapter

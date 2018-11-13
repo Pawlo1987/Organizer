@@ -54,7 +54,6 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         context = getBaseContext();
         dbUtilities = new DBUtilities(context);
-        dbUtilities.open();
 
         //обращаемся к базе для получения списка имен городов
         try(BackgroundWorker bg = new BackgroundWorker()){
@@ -104,7 +103,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         String email = etEmailCrAcAc.getText().toString();
 
         //обращяемся к базе данных на сервер для создания новой записи в таблицу user
-        dbUtilities.addNewUser( login, password, name, phone, city_id, email);
+        dbUtilities.insertIntoUsers( login, password, name, phone, city_id, email);
 
         //вернутся в активность авторизации
         turnBack();

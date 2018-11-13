@@ -18,15 +18,18 @@ public class SelectParticipantsRecyclerAdapter extends RecyclerView.Adapter<Sele
     //поля класса SelectParticipantsRecyclerAdapter
     private LayoutInflater inflater;
     private Cursor selectUserCursor;
+    private List<Participant> ShowUserList;     //коллекция учасников выбранными игроками
     private String filter;
     DBUtilities dbUtilities;
+    private Participant participant = new Participant();
     List<String> loginUserList;     //коллекция логинов участников для добавления в событие
 
     //конструктор
-    SelectParticipantsRecyclerAdapter(Context context, Cursor selectUserCursor, String filter, List<String> loginUserList) {
+    SelectParticipantsRecyclerAdapter(Context context, String filter, List<Participant> ShowUserList, List<String> loginUserList) {
         this.inflater = LayoutInflater.from(context);
         this.selectUserCursor = selectUserCursor;
         this.filter = filter;
+        this.ShowUserList = ShowUserList;
         dbUtilities = new DBUtilities(context);
         this.loginUserList = loginUserList;
     } // SelectParticipantsRecyclerAdapter
@@ -42,9 +45,10 @@ public class SelectParticipantsRecyclerAdapter extends RecyclerView.Adapter<Sele
     //привязываем элементы разметки к переменным объекта(в данном случае к курсору)
     @Override
     public void onBindViewHolder(SelectParticipantsRecyclerAdapter.ViewHolder holder, int position) {
-        selectUserCursor.moveToPosition(position); // переходим в курсоре на текущую позицию
-        String name = selectUserCursor.getString(0);
-        String login = selectUserCursor.getString(1);
+        participant = ShowUserList.get(position);
+        String name = participant.getName();
+        String login = participant.getLogin();
+        String city_id = participant.getCity_id();
 
         // получение данных
         //фильтрация элементов для бинарного поиска
@@ -52,13 +56,13 @@ public class SelectParticipantsRecyclerAdapter extends RecyclerView.Adapter<Sele
             holder.cbSePaReAd.setChecked(false);        // CheckBox выбор
             holder.tvNameSePaReAd.setText(name);        // имя user
             holder.tvLoginSePaReAd.setText(login);      // логин user
-            holder.tvDefCitySePaReAd.setText(selectUserCursor.getString(2));     // город user
+            holder.tvCitySePaReAd.setText(city_id);  // город user
         }else {
             //setVisibility(GONE) отключаем ненужные элементы для просмотра
             holder.cbSePaReAd.setVisibility(GONE);
             holder.tvNameSePaReAd.setVisibility(GONE);
             holder.tvLoginSePaReAd.setVisibility(GONE);
-            holder.tvDefCitySePaReAd.setVisibility(GONE);
+            holder.tvCitySePaReAd.setVisibility(GONE);
         }//if-else
 
         //слушатель событий при нажатии на CheckBox
@@ -78,13 +82,13 @@ public class SelectParticipantsRecyclerAdapter extends RecyclerView.Adapter<Sele
 
     //получаем количество элементов объекта(курсора)
     @Override
-    public int getItemCount() { return selectUserCursor.getCount(); }
+    public int getItemCount() { return ShowUserList.size(); }
 
     //Создаем класс ViewHolder с помощью которого мы получаем ссылку на каждый элемент
     //отдельного пункта списка
     public class ViewHolder extends RecyclerView.ViewHolder {
         final CheckBox cbSePaReAd;
-        final TextView tvNameSePaReAd, tvLoginSePaReAd, tvDefCitySePaReAd;
+        final TextView tvNameSePaReAd, tvLoginSePaReAd, tvCitySePaReAd;
 
         ViewHolder(View view){
             super(view);
@@ -92,7 +96,7 @@ public class SelectParticipantsRecyclerAdapter extends RecyclerView.Adapter<Sele
             cbSePaReAd = (CheckBox) view.findViewById(R.id.cbSePaReAd);
             tvNameSePaReAd = (TextView) view.findViewById(R.id.tvNameSePaReAd);
             tvLoginSePaReAd = (TextView) view.findViewById(R.id.tvLoginSePaReAd);
-            tvDefCitySePaReAd = (TextView) view.findViewById(R.id.tvDefCitySePaReAd);
+            tvCitySePaReAd = (TextView) view.findViewById(R.id.tvCitySePaReAd);
         } // ViewHolder
     } // class ViewHolder
 }//SelectParticipantsRecyclerAdapter

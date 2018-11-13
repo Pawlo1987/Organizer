@@ -63,7 +63,7 @@
     <string name="tvCoatingCrFi">Покрытие</string>
     <string name="tvShowerCrFi">Душ</string>
     <string name="tvRoofCrFi">Крыша</string>
-    <string name="tvGeolocationCrFi">Геолокация</string>
+    <string name="tvGeolatCrFi">Геолок. широта</string>
     <string name="tvAddressCrFi">Адрес</string>
     <string name="btnCreateCrFi">Создать</string>
     <string name="btnBackCrFi">Отмена</string>
@@ -115,5 +115,6 @@
     <string name="tvPasswordEdEv">Пароль</string>
     <string name="btnConfirmEdEv">Подтвердить</string>
     <string name="tvPhoneCrFi">Телефон</string>
+    <string name="tvGeolongCrFi">Геолок. долгота</string>
 
 </resources>

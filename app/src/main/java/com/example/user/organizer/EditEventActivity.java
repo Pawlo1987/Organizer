@@ -101,13 +101,13 @@ public class EditEventActivity extends AppCompatActivity {
         setInitialDate();               //начальная установка даты
         context = getBaseContext();
         dbUtilities = new DBUtilities(context);
-        dbUtilities.open();
+//        dbUtilities.open();
 
         //запрос для получения курсор с данными
         query = "SELECT name FROM cities;";
 
         //заполнить spListCity данные для отображения в Spinner
-        spListCity = dbUtilities.fillListStr(query);
+//        spListCity = dbUtilities.fillListStr(query);
 
         spCityEdEv.setAdapter(buildSpinnerStr(spListCity));
         spCityEdEv.setSelection(spListCity.indexOf(intent.getStringExtra("city_name")));
@@ -125,7 +125,7 @@ public class EditEventActivity extends AppCompatActivity {
         query = "SELECT users.name FROM participants " +
                 "INNER JOIN users ON users._id = participants.user_id " +
                 "WHERE participants.event_id = " + event_id + ";";
-        loginUserList = dbUtilities.fillListStr(query);
+//        loginUserList = dbUtilities.fillListStr(query);
         fillLV();
 
         spCityEdEv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -137,7 +137,7 @@ public class EditEventActivity extends AppCompatActivity {
                         " WHERE cities.name = \"" + spCityEdEv.getItemAtPosition(position) +"\";";
 
                 //заполнить spListField данные для отображения в Spinner
-                spListField = dbUtilities.fillListStr(query);
+//                spListField = dbUtilities.fillListStr(query);
 
                 spFieldEdEv.setAdapter(buildSpinnerStr(spListField));
                 spFieldEdEv.setSelection(spListField.indexOf(intent.getStringExtra("field_name")));

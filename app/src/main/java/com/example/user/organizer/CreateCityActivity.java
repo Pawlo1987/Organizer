@@ -3,9 +3,9 @@ package com.example.user.organizer;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.ArrayMap;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -19,7 +19,6 @@ import java.util.List;
 public class CreateCityActivity extends AppCompatActivity {
 
     DBUtilities dbUtilities;
-    Cursor creCityCursor;                // курсор для чтения данных из БД
     Context context;
     List<String> spListRegion;            // Данные для спинера выбора региона
 
@@ -41,13 +40,14 @@ public class CreateCityActivity extends AppCompatActivity {
 
         context = getBaseContext();
         dbUtilities = new DBUtilities(context);
-        dbUtilities.open();
+//        dbUtilities.open();
 
-        //запрос для получения курсор с данными
-        String query = "SELECT name FROM regions;";
+
+//        //запрос для получения курсор с данными
+//        String query = "SELECT name FROM regions;";
 
         //заполнить spListCity данные для отображения в Spinner
-        spListRegion = dbUtilities.fillListStr(query);
+        spListRegion = dbUtilities.getStrListTableFromDB("regions", "name");
 
         //создание адаптера для спинера
         spAdapterRegion = new ArrayAdapter<String>(
@@ -64,17 +64,16 @@ public class CreateCityActivity extends AppCompatActivity {
 
     //обработчик неажатия клавишы Создать запись пользователя
     public void createNewCity() {
+        String name = etCityNameCrCi.getText().toString();
+        String region_id = String.valueOf(spListRegion.indexOf(spRegionCrCi.getSelectedItem()) + 1);
 
-        ContentValues cv = new ContentValues();
-        cv.put("name", etCityNameCrCi.getText().toString());
-        cv.put("region_id", spListRegion.indexOf(spRegionCrCi.getSelectedItem()) + 1);
+        //метод для создания новой записи в определоной таблице БД
+        dbUtilities.insertIntoCities(name, region_id);
 
-        //добваить данные через объект ContentValues(cv), в таблицу "cities"
-        dbUtilities.insertInto(cv, "cities");
-
-        //переходин в актиность CreateEventActivity
-        Intent intent = new Intent(this, CreateEventActivity.class);
-        startActivity(intent);
+        finish();
+//        //переходин в актиность CreateEventActivity
+//        Intent intent = new Intent(this, CreateEventActivity.class);
+//        startActivity(intent);
     }//CreateNewAccount
 
     //вернутся в активность авторизации

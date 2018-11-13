@@ -21,14 +21,15 @@ import java.util.List;
 public class CreateFieldActivity extends AppCompatActivity {
 
     DBUtilities dbUtilities;
-    Cursor creFiCursor;                // курсор для чтения данных из БД
     Context context;
-    List<String> spListCity;           // Данные для спинера выбора города
-    List<String> spListBoolean;    // Данные для спинера выбора освещение
-    List<String> spListCoating;        // Данные для спинера выбора покрытие
+    List<String> spListCity;            // Данные для спинера выбора города
+    List<String> spListBoolean;         // Данные для спинера выбора освещение
+    List<String> spListCoating;         // Данные для спинера выбора покрытие
 
     EditText etNameCrFi;
-    EditText etGeolocationCrFi;
+    EditText etGeolatCrFi;
+    EditText etGeolongCrFi;
+
     EditText etAddressCrFi;
     EditText etPhoneCrFi;
 
@@ -49,7 +50,8 @@ public class CreateFieldActivity extends AppCompatActivity {
 
         //привязка ресурсов к объектам
         etNameCrFi = (EditText) findViewById(R.id.etNameCrFi);
-        etGeolocationCrFi = (EditText) findViewById(R.id.etGeolocationCrFi);
+        etGeolatCrFi = (EditText) findViewById(R.id.etGeolatCrFi);
+        etGeolongCrFi = (EditText) findViewById(R.id.etGeolongCrFi);
         etAddressCrFi = (EditText) findViewById(R.id.etAddressCrFi);
         etPhoneCrFi = (EditText) findViewById(R.id.etPhoneCrFi);
         spCityCrFi = (Spinner) findViewById(R.id.spCityCrFi);
@@ -65,23 +67,16 @@ public class CreateFieldActivity extends AppCompatActivity {
 
         context = getBaseContext();
         dbUtilities = new DBUtilities(context);
-        dbUtilities.open();
-
-        //запрос для получения курсор с данными
-        String query = "SELECT name FROM cities;";
 
         //заполнить spListCity данные для отображения в Spinner
-        spListCity = dbUtilities.fillListStr(query);
+        spListCity = dbUtilities.getStrListTableFromDB("cities", "name");
 
         //заполнить spListBooleanInt данные для отображения в Spinner
         spListBoolean.add("Нет");
         spListBoolean.add("Есть");
 
-        //запрос для получения курсор с данными
-        query = "SELECT type FROM coatings;";
-
         //заполнить spListCoating данные для отображения в Spinner
-        spListCoating = dbUtilities.fillListStr(query);
+        spListCoating = dbUtilities.getStrListTableFromDB("coatings", "type");
 
         //создание адаптера для спинера
         spAdapterCity = new ArrayAdapter<String>(
@@ -126,22 +121,25 @@ public class CreateFieldActivity extends AppCompatActivity {
     public void createNewField() {
 
         ContentValues cv = new ContentValues();
-        cv.put("city_id", spListCity.indexOf(spCityCrFi.getSelectedItem()) + 1);
-        cv.put("name", etNameCrFi.getText().toString());
-        cv.put("light_id", (spLightCrFi.getSelectedItem().toString() == "Нет") ? 1 : 2);
-        cv.put("coating_id", spListCoating.indexOf(spCoatingCrFi.getSelectedItem()) + 1);
-        cv.put("shower_id", (spShowerCrFi.getSelectedItem().toString() == "Нет") ? 1 : 2);
-        cv.put("roof_id", (spRoofCrFi.getSelectedItem().toString() == "Нет") ? 1 : 2);
-        cv.put("geo_long", etGeolocationCrFi.getText().toString());
-        cv.put("geo_lat", etGeolocationCrFi.getText().toString());
-        cv.put("address", etAddressCrFi.getText().toString());
-        cv.put("phone", etPhoneCrFi.getText().toString());
-        //добваить данные через объект ContentValues(cv), в таблицу "field"
-        dbUtilities.insertInto(cv, "fields");
+        String city_id = String.valueOf(spListCity.indexOf(spCityCrFi.getSelectedItem()) + 1);
+        String name = etNameCrFi.getText().toString();
+        String phone = etPhoneCrFi.getText().toString();
+        String light_status = (spLightCrFi.getSelectedItem().toString() == "Нет") ? "0" : "1";
+        String coating_id = String.valueOf(spListCoating.indexOf(spCoatingCrFi.getSelectedItem()) + 1);
+        String shower_status = (spShowerCrFi.getSelectedItem().toString() == "Нет") ? "0" : "1";
+        String roof_status = (spRoofCrFi.getSelectedItem().toString() == "Нет") ? "0" : "1";
+        String geo_long = etGeolongCrFi.getText().toString();
+        String geo_lat = etGeolatCrFi.getText().toString();
+        String address = etAddressCrFi.getText().toString();
 
-        //переходин в актиность CreateEventActivity
-        Intent intent = new Intent(this, CreateEventActivity.class);
-        startActivity(intent);
+        //добваить данные через объект ContentValues(cv), в таблицу "field"
+        dbUtilities.insertIntoFields( city_id, name, phone, light_status, coating_id,
+                shower_status, roof_status, geo_long, geo_lat, address);
+
+        finish();
+//        //переходин в актиность CreateEventActivity
+//        Intent intent = new Intent(this, CreateEventActivity.class);
+//        startActivity(intent);
     }//createNewField
 
     //вернутся в активность авторизации

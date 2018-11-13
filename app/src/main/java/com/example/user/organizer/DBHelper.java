@@ -17,13 +17,6 @@ public class DBHelper extends SQLiteOpenHelper {
     private static String DB_PATH;                  // полный путь к базе данных
     private static String DB_NAME = "football_org.db";
     private static final int DB_VERSION = 1;        // версия базы данных
-//    static final String TABLE = "employees"; // название таблицы в бд
-
-//    // названия столбцов
-//    static final String COLUMN_SNAME = "surname";
-//    static final String COLUMN_NAME = "name";
-//    static final String COLUMN_AGE = "age";
-//    static final String COLUMN_SAL = "salary";
 
     private Context myContext;
 

@@ -2,7 +2,6 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -25,7 +24,8 @@ public class SelectParticipantsActivity extends AppCompatActivity {
     String filter = "";             //фильтрующее слово для бинарного поиска
     RecyclerView rvUserSePaAc;      //RecyclerView для учасников
     int spPos;                      //позиция спинера
-    List<String> loginUserList;     //коллекция логинов с выбранными игроками
+    List<Participant> showUserList; // отображаемая коллекция игроками
+    List<String> loginUserList;         //коллекция учасников выбранными игроками
 
     EditText edBinarySePaAc;        //Строка для бинарного поиска
 
@@ -33,8 +33,6 @@ public class SelectParticipantsActivity extends AppCompatActivity {
     SelectParticipantsRecyclerAdapter selectParticipantsRecyclerAdapter;
     DBUtilities dbUtilities;
 
-    // поля для доступа к записям БД
-    Cursor selectUserCursor;                // прочитанные данные
     Context context;
 
     List<String> spListCity;            // Данные для спинера выбора города
@@ -49,7 +47,6 @@ public class SelectParticipantsActivity extends AppCompatActivity {
 
         context = getBaseContext();
         dbUtilities = new DBUtilities(context);
-        dbUtilities.open();
 
         //инициализация коллекции для выбора участников
         loginUserList = new ArrayList<>();
@@ -60,10 +57,7 @@ public class SelectParticipantsActivity extends AppCompatActivity {
         //инициализация коллекции для спинера
         spListCity = new ArrayList<>();
 
-        //запрос для получения курсор с данными
-        query = "SELECT name FROM cities;";
-
-        buildCitySpinner(query);     //строим Spinner City
+        buildCitySpinner();     //строим Spinner City
 
         //размер коллецкии спинера
         spListCitySize = spListCity.size();
@@ -78,21 +72,14 @@ public class SelectParticipantsActivity extends AppCompatActivity {
         spCitySePaAc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String query;
                 spPos = position;
-                //если выбран элемент "ВСЕ ГОРОДА"
-                if (spCitySePaAc.getItemAtPosition(position).equals("ВСЕ ГОРОДА")){
-                    // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
-                    query = "SELECT users.name, users.login, cities.name FROM users INNER JOIN " +
-                            "cities ON cities._id = users.city_id;";
-                }else {
-                    // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
-                    query = "SELECT users.name, users.login, cities.name FROM users INNER JOIN " +
-                            "cities ON cities._id = users.city_id WHERE cities.name = \"" +
-                            spCitySePaAc.getItemAtPosition(position) + "\";";
-                }//if-else
 
-                buildUserRecyclerView(query, filter);     //Строим RecyclerView
+                //Строим RecyclerView
+                buildUserRecyclerView(
+                        spCitySePaAc.getItemAtPosition(spPos).toString(),
+                        filter
+                );
+
             }//onItemSelected
 
             @Override
@@ -106,20 +93,15 @@ public class SelectParticipantsActivity extends AppCompatActivity {
         edBinarySePaAc.addTextChangedListener(new TextWatcher() {
             // при изменении текста выполняем фильтрацию
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
-                //если выбран элемент "ВСЕ ГОРОДА"
-                if (spCitySePaAc.getItemAtPosition(spPos).equals("ВСЕ ГОРОДА")){
-                    // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
-                    query = "SELECT users.name, users.login, cities.name FROM users INNER JOIN " +
-                            "cities ON cities._id = users.city_id;";
-                }else {
-                    // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
-                    query = "SELECT users.name, users.login, cities.name FROM users INNER JOIN " +
-                            "cities ON cities._id = users.city_id WHERE cities.name = \"" +
-                            spCitySePaAc.getItemAtPosition(spPos) + "\";";
-                }//if-else
+
+                //получаем фильтрующие слово
                 filter = edBinarySePaAc.getText().toString();
-                buildUserRecyclerView(query, filter);     //Строим RecyclerView
+
+                //Строим RecyclerView
+                buildUserRecyclerView(
+                        spCitySePaAc.getItemAtPosition(spPos).toString(),
+                        filter
+                );
             }//onTextChanged
 
             public void afterTextChanged(Editable s) { }
@@ -128,12 +110,13 @@ public class SelectParticipantsActivity extends AppCompatActivity {
     }//onCreate
 
     //Строим RecyclerView
-    private void buildUserRecyclerView(String query, String filter) {
-        selectUserCursor =  dbUtilities.getDb().rawQuery(query, null);
+    private void buildUserRecyclerView(String cityName, String filter) {
+
+        showUserList = dbUtilities.getListParticipantsUser(cityName);
 
         // создаем адаптер, передаем в него курсор
         selectParticipantsRecyclerAdapter
-                = new SelectParticipantsRecyclerAdapter(context, selectUserCursor, filter, loginUserList);
+                = new SelectParticipantsRecyclerAdapter(context, filter, showUserList, loginUserList);
         // RecycerView для отображения таблицы users БД
         rvUserSePaAc = (RecyclerView) findViewById(R.id.rvUserSePaAc);
 
@@ -142,14 +125,14 @@ public class SelectParticipantsActivity extends AppCompatActivity {
         // для сохранения отмеченных checkbox при скролинге пропишем доп. функции для recyclerView
         rvUserSePaAc.setDrawingCacheEnabled(true);
         rvUserSePaAc.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-        rvUserSePaAc.setItemViewCacheSize(dbUtilities.tableSize("users"));
+        rvUserSePaAc.setItemViewCacheSize(Integer.parseInt(dbUtilities.getTableSize("users")));
 
     }//buildUserRecyclerView
 
     //строим Spinner City
-    private void buildCitySpinner(String query) {
+    private void buildCitySpinner() {
         //заполнить spListCity данные для отображения в Spinner
-        spListCity = dbUtilities.fillListStr(query);
+        spListCity = dbUtilities.getStrListTableFromDB("cities", "name");
         spListCity.add("ВСЕ ГОРОДА");
 
         //создание адаптера для спинера

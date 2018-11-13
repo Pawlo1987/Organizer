@@ -53,8 +53,8 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         this.context = context;
         this.idAuthUser = idAuthUser;
         dbUtilities = new DBUtilities(context);
-        dbUtilities.open();
-        eventsCursor =  dbUtilities.getDb().rawQuery(queryAdapt, null);
+//        dbUtilities.open();
+        eventsCursor =  null;//dbUtilities.getDb().rawQuery(queryAdapt, null);
     } // advertisingAndInformationRecyclerAdapter
 
     //создаем новую разметку(View) путем указания разметки
@@ -119,7 +119,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
                     popup.show();
 
                     //TODO -- надо доделать обновление адаптера
-                    eventsCursor =  dbUtilities.getDb().rawQuery(queryAdapt, null);
+                    eventsCursor =  null;//dbUtilities.getDb().rawQuery(queryAdapt, null);
                     notifyDataSetChanged();
                 }
             });
@@ -168,7 +168,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
                     "INNER JOIN fields ON fields._id = events.field_id " +
                     "INNER JOIN cities ON cities._id = events.city_id " +
                     "WHERE events._id = " + idEvent + ";";
-            cursor = dbUtilities.getDb().rawQuery(query, null);
+            cursor = null;//dbUtilities.getDb().rawQuery(query, null);
             cursor.moveToPosition(0); // переходим в курсоре в нулевую позицию
             Intent intent = new Intent(context, EditEventActivity.class);
             intent.putExtra("_id", idEvent);
@@ -221,7 +221,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
                     "INNER JOIN cities ON cities._id = events.city_id \n" +
                     "INNER JOIN fields ON fields._id = events.field_id \n" +
                     "WHERE events._id = " + idEvent + ";";
-            cursor = dbUtilities.getDb().rawQuery(query, null);
+            cursor = null;//dbUtilities.getDb().rawQuery(query, null);
             cursor.moveToPosition(0); // переходим в курсоре в нулевую позицию
             return String.format("Собитие в городе %s\n" +
                             "На поле %s \n" +

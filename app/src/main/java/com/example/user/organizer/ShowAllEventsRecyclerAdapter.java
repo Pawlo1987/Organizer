@@ -16,6 +16,9 @@ import android.widget.TextView;
 import com.example.user.organizer.fragment.AboutEventShowAllEventDialog;
 import com.example.user.organizer.fragment.TakePartShowAllEventDialog;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 //-------Активность адаптера для вывода(просмотра) всех событий--------------
 public class ShowAllEventsRecyclerAdapter extends
@@ -23,10 +26,21 @@ public class ShowAllEventsRecyclerAdapter extends
 
     //поля класса ShowAllEventsRecyclerAdapter
     private LayoutInflater inflater;
-    private Cursor eventsCursor;
+    Event event = new Event();
+    List<Event> eventsList = new ArrayList<>(); //коллекция событий
     DBUtilities dbUtilities;
     Context context;
-    int idAuthUser;         //Авторизированный пользователь
+    String idAuthUser;         //Авторизированный пользователь
+
+    String eventId;
+    String eventCityName;
+    String eventFieldName;
+    String eventData;
+    String eventTime;
+    String eventDuration;
+    String eventPrice;
+    String eventPhone;
+    String eventUserId;
 
     AboutEventShowAllEventDialog aboutEventShowAllEventDialog =
             new AboutEventShowAllEventDialog(); // диалог подтверждения выхода из приложения
@@ -38,13 +52,12 @@ public class ShowAllEventsRecyclerAdapter extends
     final String ID_TAKEPART_DIALOG = "takePartShowAllEventDialog";  //параметр для вызова диалога "takePart"
 
     //конструктор
-    public ShowAllEventsRecyclerAdapter(Context context, Cursor eventsCursor, int idAuthUser) {
+    public ShowAllEventsRecyclerAdapter(Context context, List<Event> eventsList, String idAuthUser) {
         this.inflater = LayoutInflater.from(context);
-        this.eventsCursor = eventsCursor;
+        this.eventsList = eventsList;
         this.context = context;
         this.idAuthUser = idAuthUser;
         dbUtilities = new DBUtilities(context);
-        dbUtilities.open();
     } // ShowAllEventsRecyclerAdapter
 
     //создаем новую разметку(View) путем указания разметки
@@ -58,28 +71,24 @@ public class ShowAllEventsRecyclerAdapter extends
     //привязываем элементы разметки к переменным объекта(в данном случае к курсору)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        eventsCursor.moveToPosition(position); // переходим в курсоре на текущую позицию
+        Event eventShow = eventsList.get(position);
 
         // получение данных
-        holder.tvCityShAlEvReAd.setText(eventsCursor.getString(0)); //город
-        holder.tvFieldShAlEvReAd.setText(eventsCursor.getString(1));//поле
-        holder.tvDateShAlEvReAd.setText(eventsCursor.getString(2)); // Дата
-        holder.tvTimeShAlEvReAd.setText(eventsCursor.getString(3)); //Время
-        holder.idEvent = eventsCursor.getInt(4);                    //idСобытия
-        holder.idOrganizer = eventsCursor.getInt(5);                //idОрганизатора
+        holder.tvCityShAlEvReAd.setText(eventShow.cityName); //город
+        holder.tvFieldShAlEvReAd.setText(eventShow.fieldName);//поле
+        holder.tvDateShAlEvReAd.setText(eventShow.eventData); // Дата
+        holder.tvTimeShAlEvReAd.setText(eventShow.eventTime); //Время
     } // onBindViewHolder
 
     //получаем количество элементов объекта(курсора)
     @Override
-    public int getItemCount() { return eventsCursor.getCount(); }
+    public int getItemCount() { return eventsList.size(); }
 
     //Создаем класс ViewHolder с помощью которого мы получаем ссылку на каждый элемент
     //отдельного пункта списка и подключаем слушателя события нажатия меню
     public class ViewHolder extends RecyclerView.ViewHolder
             implements PopupMenu.OnMenuItemClickListener{
         final TextView tvDateShAlEvReAd, tvTimeShAlEvReAd, tvCityShAlEvReAd, tvFieldShAlEvReAd;
-        public int idEvent;
-        public int idOrganizer;
 
         ViewHolder(View view){
             super(view);
@@ -97,7 +106,19 @@ public class ShowAllEventsRecyclerAdapter extends
                     popup.inflate(R.menu.rva_show_all_event_popup_menu);
                     popup.setOnMenuItemClickListener(ViewHolder.this);
                     popup.show();
-                }
+
+                    //получаем данные о нажатом событии
+                    event = eventsList.get(getAdapterPosition());
+                    eventId = event.eventId;
+                    eventCityName = event.cityName;
+                    eventFieldName = event.fieldName;
+                    eventData = event.eventData;
+                    eventTime = event.eventTime;
+                    eventDuration = event.eventDuration;
+                    eventPrice = event.eventPrice;
+                    eventPhone = event.eventPhone;
+                    eventUserId = event.eventUserId;
+                }//onClick
             });
         } // ViewHolder
 
@@ -117,28 +138,15 @@ public class ShowAllEventsRecyclerAdapter extends
 
         //Вызов диалога для принятия участия в событии
         private void takePart() {
-            Cursor cursor;
+
             String message;     //строка которую передаем в диалог в поле сообщения
-            // Запрос на поиск данного пользователя в данном собитии
-            String query = "SELECT events._id FROM events WHERE events._id = "
-                            + idEvent +
-                            " AND events.user_id = "
-                            + idAuthUser +
-                            " UNION SELECT participants._id FROM participants " +
-                            "WHERE participants.event_id = "
-                            + idEvent +
-                            " AND participants.user_id = "
-                            + idAuthUser +
-                            ";";
-            cursor = dbUtilities.getDb().rawQuery(query, null);
-            cursor.moveToPosition(0); // переходим в курсоре в нулевую позицию
-            // если курсор пустой значит по запросу не найдено участие авторизированного
-            // пользователя в данном событии (userTakeInPart = false),
-            // иначе принимает участие (userTakeInPart = true)
-            boolean userTakeInPart = (cursor.getCount() == 0 ? false : true);
+
+            //принимает ли авторизированный пользователь участие в данном событии
+            boolean userTakeInPart = dbUtilities.isTakingPart(eventId, idAuthUser);
+
             if(userTakeInPart){
                 //если данный пользователь уже является участником события
-                message = "Вы уже участвуете в данном событии";
+                message = "Вы уже участвуете в данном событии!";
             }else{
                 message = fullInfoAboutEvent();
             }//if-else
@@ -146,8 +154,8 @@ public class ShowAllEventsRecyclerAdapter extends
             Bundle args = new Bundle();    // объект для передачи параметров в диалог
             args.putString("message", message);
             args.putBoolean("userTakeInPart", userTakeInPart);
-            args.putInt("event_id", idEvent);
-            args.putInt("user_id", idAuthUser);
+            args.putString("event_id", eventId);
+            args.putString("user_id", idAuthUser);
             takePartShowAllEventDialog.setArguments(args);
 
             // отображение диалогового окна
@@ -158,7 +166,6 @@ public class ShowAllEventsRecyclerAdapter extends
         //Вызов диалога для подробной информации о событии
         private void aboutEvent() {
             String message = fullInfoAboutEvent();
-            Log.d("MyLog", message);
             Bundle args = new Bundle();    // объект для передачи параметров в диалог
             args.putString("message", message);
             aboutEventShowAllEventDialog.setArguments(args);
@@ -170,28 +177,20 @@ public class ShowAllEventsRecyclerAdapter extends
 
         //строка с полной информацией о событии
         private String fullInfoAboutEvent() {
-            Cursor cursor;
-            // Запрос на полную информацию о собитии
-            String query = "SELECT cities.name, fields.name, date, time, duration, price, events.phone FROM events " +
-                    "INNER JOIN cities ON cities._id = events.city_id \n" +
-                    "INNER JOIN fields ON fields._id = events.field_id \n" +
-                    "WHERE events._id = " + idEvent + ";";
-            cursor = dbUtilities.getDb().rawQuery(query, null);
-            cursor.moveToPosition(0); // переходим в курсоре в нулевую позицию
             return String.format("Собитие в городе %s\n" +
                             "На поле %s \n" +
                             "Назначено на %s\n" +
                             "Cостоится в %s\n" +
-                            "Продолжитльность %d мин\n" +
-                            "Стоимость %d руб\n" +
+                            "Продолжитльность %s мин\n" +
+                            "Стоимость %s руб\n" +
                             "Телефон %s",
-                    cursor.getString(0),
-                    cursor.getString(1),
-                    cursor.getString(2),
-                    cursor.getString(3),
-                    cursor.getInt(4),
-                    cursor.getInt(5),
-                    cursor.getString(6));
+                    eventCityName,
+                    eventFieldName,
+                    eventData,
+                    eventTime,
+                    eventDuration,
+                    eventPrice,
+                    eventPhone);
         }//fullInfoAboutEvent
     } // class ViewHolder
 

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.format.DateFormat;
-import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -17,7 +15,6 @@ import com.example.user.organizer.fragment.AdvertisingAndInformationFragment;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 //-------Активность для создания новой записи в новостной и рекламной ленте-----------------
@@ -44,7 +41,7 @@ public class CreateNewsNoteActivity extends AppCompatActivity {
 
         context = getBaseContext();
         dbUtilities = new DBUtilities(context);
-        dbUtilities.open();
+//        dbUtilities.open();
 
         tvDateCrNeNoAc = (TextView) findViewById(R.id.tvDateCrNeNoAc);
         etHeadCrNeNoAc = (EditText) findViewById(R.id.etHeadCrNeNoAc);
@@ -63,10 +60,7 @@ public class CreateNewsNoteActivity extends AppCompatActivity {
 
         //заполнить spListCity данные для отображения в Spinner
         //обращаемся к базе для получения списка имен городов
-        spListCity = dbUtilities.getStringListFromDB("getAllCities", "cities");
-
-        //добавляем вариант "Все города"
-        spListCity.add("ВСЕ ГОРОДА");
+        spListCity = dbUtilities.getStrListTableFromDB("cities", "name");
 
         ArrayAdapter<String> spinnerAdapter;
         //создание адаптера для спинера
@@ -123,7 +117,6 @@ public class CreateNewsNoteActivity extends AppCompatActivity {
 
     // установка даты записи
     private void setInitialDate() {
-
         //задаем дату в нужном формате для БД
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd");
         date = simpleDateFormat.format(calendar.getTimeInMillis());

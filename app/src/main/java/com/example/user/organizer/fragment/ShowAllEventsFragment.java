@@ -13,22 +13,24 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.user.organizer.DBUtilities;
+import com.example.user.organizer.Event;
 import com.example.user.organizer.R;
 import com.example.user.organizer.ShowAllEventsRecyclerAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ShowAllEventsFragment extends Fragment {
 
     RecyclerView rvMainShAlEvAc;
-    ShowAllEventsRecyclerAdapter showAllEventsRecyclerAdapter;  // адаптер для отображения recyclerView
+    // адаптер для отображения recyclerView
+    ShowAllEventsRecyclerAdapter showAllEventsRecyclerAdapter;
     DBUtilities dbUtilities;
 
-    // поля для доступа к записям БД
-    Cursor eventsCursor;                // прочитанные данные
-
-    TextView tvallevents;
+    List<Event> eventsList = new ArrayList<>(); //коллекция событий
     Context context;
 
-    int idAuthUser = 6;                 //авторизированный пользователь
+    String idAuthUser = "7";                 //авторизированный пользователь
 
     public ShowAllEventsFragment newInstance() {
 
@@ -43,16 +45,12 @@ public class ShowAllEventsFragment extends Fragment {
     public void onAttach(Context context) {
         this.context = context;
         dbUtilities = new DBUtilities(context);
-        dbUtilities.open();
-        // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
-        String query = "SELECT cities.name, fields.name, events.date, " +
-                "events.time, events._id, events.user_id FROM events " +
-                "INNER JOIN cities ON cities._id = events.city_id " +
-                "INNER JOIN fields ON fields._id = events.field_id;";
-        eventsCursor =  dbUtilities.getDb().rawQuery(query, null);
+
+        //получаем коллекцию событий
+        eventsList = dbUtilities.getListEvents("");
 
         // создаем адаптер, передаем в него курсор
-        showAllEventsRecyclerAdapter = new ShowAllEventsRecyclerAdapter(context, eventsCursor, idAuthUser);
+        showAllEventsRecyclerAdapter = new ShowAllEventsRecyclerAdapter(context, eventsList, idAuthUser);
         super.onAttach(context);
     } // onAttach
 
@@ -66,9 +64,6 @@ public class ShowAllEventsFragment extends Fragment {
         //привязываем адаптер к recycler объекту
         rvMainShAlEvAc.setAdapter(showAllEventsRecyclerAdapter);
 
-        //количество созданных событий
-        tvallevents = result.findViewById(R.id.tvallevents);
-        tvallevents.setText(String.valueOf(eventsCursor.getCount()));
         return result;
     } // onCreateView
 }

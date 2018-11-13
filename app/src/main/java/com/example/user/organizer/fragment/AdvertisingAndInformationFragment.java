@@ -1,10 +1,8 @@
 package com.example.user.organizer.fragment;
 
 import android.app.Fragment;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.example.user.organizer.AdvertisingAndInformationRecyclerAdapter;
 import com.example.user.organizer.CreateNewsNoteActivity;
@@ -101,7 +98,7 @@ public class AdvertisingAndInformationFragment extends Fragment {
         spListCity = new ArrayList<>();
 
         //обращаемся к базе для получения списка имен городов
-        spListCity = dbUtilities.getStringListFromDB("getAllCities", "cities");
+        spListCity = dbUtilities.getStrListTableFromDB("cities", "name");
 
         //добавляем вариант "Все города"
         spListCity.add("ВСЕ ГОРОДА");
@@ -151,7 +148,7 @@ public class AdvertisingAndInformationFragment extends Fragment {
             String city_id = data.getStringExtra(PAR_CITY);
 
             //обращяемся к БД на сервер для создания новой записи в таблицу notes
-            dbUtilities.addNewNote(head, message, date, city_id);
+            dbUtilities.insertIntoNotes(head, message, date, city_id);
         }//RESULT_OK
 
         //устанавливаем спинер в позицию "ВСЕ ГОРОДА"

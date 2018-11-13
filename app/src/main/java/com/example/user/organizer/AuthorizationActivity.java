@@ -72,27 +72,12 @@ public class AuthorizationActivity extends AppCompatActivity {
         String login = etLogin.getText().toString();          //введенное значение в поле логин
         String password = etPassword.getText().toString();    //введенное значение в поле пароль
 
-        try(BackgroundWorker bg = new BackgroundWorker()){
-            bg.execute("authorization", login, password);
-
-            result = bg.get();
-            JSONObject jResult = new JSONObject(result);
-            if(jResult.getString("error").toString().equals("")){
-                User user = new User();
-                user.id = jResult.getJSONObject("user").getString("id");
-                user.name = jResult.getJSONObject("user").getString("name");
-
-                Intent intent = new Intent(this, NavigationDrawerLogInActivity.class);
-                intent.putExtra("User", user);
-                startActivity(intent);
-            }else{
-                Toast.makeText(this, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
-            }
-
-        }catch(Exception e){
-            e.printStackTrace();
+        User user = dbUtilities.getUserParam(login, password);
+        if(user != null){
+            Intent intent = new Intent(context, NavigationDrawerLogInActivity.class);
+            intent.putExtra("User", user);
+            startActivity(intent);
         }
-
         /*boolean checkLogin = false, checkPassword = false;    //флаги проверки пароля и логина
 
         //если коллекция loginMap содержит введеное значение

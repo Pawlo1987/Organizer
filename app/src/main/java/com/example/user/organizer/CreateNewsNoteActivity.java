@@ -2,9 +2,9 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -12,10 +12,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.user.organizer.activity.AdvertisingAndInformationActivity;
+import com.example.user.organizer.fragment.AdvertisingAndInformationFragment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 //-------Активность для создания новой записи в новостной и рекламной ленте-----------------
@@ -25,15 +27,12 @@ public class CreateNewsNoteActivity extends AppCompatActivity {
     DBUtilities dbUtilities;
     Spinner spCityCrNeNoAc;
 
-    // поля для доступа к записям БД
-    Cursor noteCursor;                   // прочитанные данные
-
     Calendar calendar = Calendar.getInstance();      // объект для работы с датой и временем
-    String noteDate;                                 // назначения дата записи
+    String date;                                 // назначения дата записи
 
     TextView tvDateCrNeNoAc;            // TextView для вывода даты
     EditText etHeadCrNeNoAc;            // EditText для заголовока
-    EditText etNoteCrNeNoAc;            // EditText для новой записи
+    EditText etMessCrNeNoAc;            // EditText для новой записи
 
     Context context;
     int idAuthUser = 6;
@@ -49,23 +48,25 @@ public class CreateNewsNoteActivity extends AppCompatActivity {
 
         tvDateCrNeNoAc = (TextView) findViewById(R.id.tvDateCrNeNoAc);
         etHeadCrNeNoAc = (EditText) findViewById(R.id.etHeadCrNeNoAc);
-        etNoteCrNeNoAc = (EditText) findViewById(R.id.etNoteCrNeNoAc);
+        etMessCrNeNoAc = (EditText) findViewById(R.id.etMessCrNeNoAc);
         spCityCrNeNoAc = (Spinner) findViewById(R.id.spCityCrNeNoAc);
 
         setInitialDate();           //формирование даты для записи
 
-        //запрос для получения курсор с данными
-        String query = "SELECT name FROM cities;";
-
-        buildCitySpinner(query);     //строим Spinner City
+        buildCitySpinner();     //строим Spinner City
 
     }//onCreate
 
     //строим Spinner City
-    private void buildCitySpinner(String query) {
+    private void buildCitySpinner() {
         List<String> spListCity = new ArrayList<>();    // Данные для спинера выбора города
+
         //заполнить spListCity данные для отображения в Spinner
-        spListCity = dbUtilities.fillListStr(query);
+        //обращаемся к базе для получения списка имен городов
+        spListCity = dbUtilities.getStringListFromDB("getAllCities", "cities");
+
+        //добавляем вариант "Все города"
+        spListCity.add("ВСЕ ГОРОДА");
 
         ArrayAdapter<String> spinnerAdapter;
         //создание адаптера для спинера
@@ -104,14 +105,14 @@ public class CreateNewsNoteActivity extends AppCompatActivity {
         // создать для передачи результатов
         Intent intent = new Intent();
         //пакуем при помощи Extra - объект
-        intent.putExtra(AdvertisingAndInformationActivity.PAR_HEAD, etHeadCrNeNoAc.getText().toString());
-        intent.putExtra(AdvertisingAndInformationActivity.PAR_NOTE, etNoteCrNeNoAc.getText().toString());
-        intent.putExtra(AdvertisingAndInformationActivity.PAR_DATE, noteDate);
-        intent.putExtra(AdvertisingAndInformationActivity.PAR_CITY,
-                        dbUtilities.findIdbySPObject(
-                                spCityCrNeNoAc.getSelectedItem().toString(),    //объект спинера
-                                "cities",                              //название таблицы
-                                "name"                                //название столбца
+        intent.putExtra(AdvertisingAndInformationFragment.PAR_HEAD, etHeadCrNeNoAc.getText().toString());
+        intent.putExtra(AdvertisingAndInformationFragment.PAR_MESS, etMessCrNeNoAc.getText().toString());
+        intent.putExtra(AdvertisingAndInformationFragment.PAR_DATE, date);
+        intent.putExtra(AdvertisingAndInformationFragment.PAR_CITY,
+                        dbUtilities.getIdbyValue(
+                                "cities",              //название таблицы
+                                "name",               //название столбца
+                                spCityCrNeNoAc.getSelectedItem().toString() //значение для поиска
                                 )
         );
 
@@ -122,15 +123,13 @@ public class CreateNewsNoteActivity extends AppCompatActivity {
 
     // установка даты записи
     private void setInitialDate() {
-        //формирование даты
-        noteDate = DateUtils.formatDateTime(
-                this,
-                calendar.getTimeInMillis(),  // текущее время в миллисекундах
-                // выводим это время в привычном представлении - дата и время
-                DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR);
+
+        //задаем дату в нужном формате для БД
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd");
+        date = simpleDateFormat.format(calendar.getTimeInMillis());
 
         //установка текста в TextView
-        tvDateCrNeNoAc.setText(noteDate);
+        tvDateCrNeNoAc.setText(date);
     } // setInitialDateTim
 
 }//CreateNewsNoteActivity

@@ -81,7 +81,7 @@
     <string name="tvHeadAdAnInAc">Новости и реклама</string>
     <string name="btnNewNoteAdAnInAc">Создать новость</string>
     <string name="tvHeadCrNeNoAc">Новая запись</string>
-    <string name="etNoteCrNeNoAc">текст записи</string>
+    <string name="etMessCrNeNoAc">текст записи</string>
     <string name="etHeadCrNeNoAc">загаловок записи</string>
     <string name="btnConfirmCrNeNoAc">Создать</string>
     <string name="btnCancelCrNeNoAc">Отмена</string>

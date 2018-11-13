@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.List;
+
 //-------Активность адаптера для вывода(просмотра) новости и реклама --------------
 
 public class AdvertisingAndInformationRecyclerAdapter extends RecyclerView.Adapter<AdvertisingAndInformationRecyclerAdapter.ViewHolder> {
@@ -16,37 +18,38 @@ public class AdvertisingAndInformationRecyclerAdapter extends RecyclerView.Adapt
     private LayoutInflater inflater;
     private Cursor infoCursor;
     DBUtilities dbUtilities;
-
+    Note note;
+    List<Note> notes;
 
     //конструктор
-    public AdvertisingAndInformationRecyclerAdapter(Context context, Cursor infoCursor) {
+    public AdvertisingAndInformationRecyclerAdapter(Context context, List<Note> notes) {
         this.inflater = LayoutInflater.from(context);
-        this.infoCursor = infoCursor;
+        this.notes = notes;
         dbUtilities = new DBUtilities(context);
     } // advertisingAndInformationRecyclerAdapter
 
     //создаем новую разметку(View) путем указания разметки
     @Override
-    public AdvertisingAndInformationRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = inflater.inflate(R.layout.recycler_adapter_advertising_and_informationa, parent, false);
-        return new AdvertisingAndInformationRecyclerAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     //привязываем элементы разметки к переменным объекта(в данном случае к курсору)
     @Override
-    public void onBindViewHolder(AdvertisingAndInformationRecyclerAdapter.ViewHolder holder, int position) {
-        infoCursor.moveToPosition(position); // переходим в курсоре на текущую позицию
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        note = notes.get(position); // переходим в курсоре на текущую позицию
 
-        holder.tvHeadAdAvInReAd.setText(infoCursor.getString(0));     //заголовок
-        holder.tvDateAdAvInReAd.setText(infoCursor.getString(1));     //дата
-        holder.tvCityAdAvInReAd.setText(infoCursor.getString(2));     //город
+        holder.tvHeadAdAvInReAd.setText(note.getNoteHead());     //заголовок
+        holder.tvDateAdAvInReAd.setText(note.getNoteDate());     //дата
+        holder.tvCityAdAvInReAd.setText(note.getNoteCityName()); //город
 
     } // onBindViewHolder
 
     //получаем количество элементов объекта(курсора)
     @Override
-    public int getItemCount() { return infoCursor.getCount(); }
+    public int getItemCount() { return notes.size(); }
 
     //Создаем класс ViewHolder с помощью которого мы получаем ссылку на каждый элемент
     //отдельного пункта списка
@@ -56,9 +59,9 @@ public class AdvertisingAndInformationRecyclerAdapter extends RecyclerView.Adapt
         ViewHolder(View view){
             super(view);
 
-            tvHeadAdAvInReAd = (TextView) view.findViewById(R.id.tvHeadAdAvInReAd);
-            tvDateAdAvInReAd = (TextView) view.findViewById(R.id.tvDateAdAvInReAd);
-            tvCityAdAvInReAd = (TextView) view.findViewById(R.id.tvCityAdAvInReAd);
+            tvHeadAdAvInReAd = view.findViewById(R.id.tvHeadAdAvInReAd);
+            tvDateAdAvInReAd = view.findViewById(R.id.tvDateAdAvInReAd);
+            tvCityAdAvInReAd = view.findViewById(R.id.tvCityAdAvInReAd);
         } // ViewHolder
     } // class ViewHolder
 }//advertisingAndInformationRecyclerAdapter

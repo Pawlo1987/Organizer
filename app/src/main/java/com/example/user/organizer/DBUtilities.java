@@ -53,14 +53,29 @@ public class DBUtilities{
     }//insertInto
 
     //поиск _id по определеному значению
-    public int findIdbySPObject(String obj, String tableName, String tableColumn){
-//        String query = "SELECT \"" + tableName + "\"._id FROM \"" + tableName + "\" " +
-//                       "WHERE \"" + tableName + "\".\"" + tableColumn + "\" = \"" + obj + "\"";
-//        Cursor cursor = db.rawQuery(query, null);
-//        cursor.moveToPosition(0); // переходим в курсоре в нулевую позицию
-//        return cursor.getInt(0);
-        return 0;
-    }//insertInto
+    public String getIdbyValue( String tableName, String columnName, String value){
+        String id = null;
+        //обращаемся к базе для получения списка имен городов
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("getIdbyValue", tableName, columnName, value);
+
+            String resultdb = bg.get();
+            Log.d("FOOTBALL", resultdb);
+            JSONObject jResult = new JSONObject(resultdb);
+
+            if(jResult.getString("error").toString().equals("")){
+                //получаем результат
+                id = jResult.getJSONObject("rez").getString("id").toString();
+            }else{
+                //выводим текст с отрецательным ответом о создании нового пользователя
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }//if-else
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
+        return id;
+    }//getIdbyValue
 
     //заполнить коллекцию(List) данные для отображения в Spinner
     public List<String> fillListStr(String query) {
@@ -140,8 +155,8 @@ public class DBUtilities{
         return list;
     }//getStringListFromDB
 
-    // получение списка новостей из базы
-    public List<Note> getNotesfromDB() {
+    // получение списка всех имеющихся новостей из базы
+    public List<Note> getAllNotesfromDB() {
         List<Note> notes = new ArrayList<>();
 
         //обращаемся к базе для получения списка имен городов
@@ -172,9 +187,8 @@ public class DBUtilities{
                     notes.add(new Note(headList.get(i),dateList.get(i),nameList.get(i),messList.get(i)));
                 }//fori
 
-                Log.d("FOOTBALL", messList.get(1) );
             }else{
-                Toast.makeText(context, "ERROR", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
         }catch(Exception e){
@@ -201,6 +215,88 @@ public class DBUtilities{
         return list;
     }//getListFromJSON
 
+    //обращяемся к БД на сервер для создания новой записи в таблицу user
+    public void addNewUser( String login, String password, String name, String phone, String city_id, String email) {
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("addNewUser", login, password, name, phone, city_id, email);
 
+            String resultdb = bg.get();
+            JSONObject jResult = new JSONObject(resultdb);
+            if(jResult.getString("error").toString().equals("")){
+                //выводим текст с положительным ответом о создании нового пользователя
+                Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
+            }else{
+                //выводим текст с отрецательным ответом о создании нового пользователя
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }//if-else
 
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
+    }//addNewUser
+
+    //обращяемся к БД на сервер для создания новой записи в таблицу notes
+    public void addNewNote(String head, String message, String date, String city_id) {
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("addNewNote", head, message, date, city_id);
+
+            String resultdb = bg.get();
+            JSONObject jResult = new JSONObject(resultdb);
+            if(jResult.getString("error").toString().equals("")){
+                //выводим текст с положительным ответом о создании новой записи в таблицу
+                Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
+            }else{
+                //выводим текст с отрецательным ответом о создании новой записи в таблицу
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }//if-else
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
+    }//addNewNote
+
+    // получение списка новостей из определенного города из базы
+    public List<Note> getSomeNotesfromDB(String cityName) {
+        List<Note> notes = new ArrayList<>();
+
+        //получаем id города
+        String city_id = getIdbyValue("cities", "name", cityName);
+
+        //обращаемся к базе для получения списка имен городов
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("getSomeNotes", city_id);
+
+            String resultdb = bg.get();
+            Log.d("FOOTBALL", resultdb);
+            JSONObject jResult = new JSONObject(resultdb);
+
+            if(jResult.getString("error").toString().equals("")){
+
+                JSONObject jListHead = jResult.getJSONObject("head");
+                List<String> headList = getListFromJSON(jListHead);
+
+                JSONObject jListName = jResult.getJSONObject("name");
+                List<String> nameList = getListFromJSON(jListName);
+
+                JSONObject jListDate = jResult.getJSONObject("date");
+                List<String> dateList = getListFromJSON(jListDate);
+
+                JSONObject jListMess = jResult.getJSONObject("message");
+                List<String> messList = getListFromJSON(jListMess);
+
+                int n = headList.size();
+
+                for (int i = 0; i <n ; i++) {
+                    notes.add(new Note(headList.get(i),dateList.get(i),nameList.get(i),messList.get(i)));
+                }//fori
+
+            }else{
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }//if-else
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
+        return notes;
+    }//getSomeNotesfromDB
 }//DBUtilities

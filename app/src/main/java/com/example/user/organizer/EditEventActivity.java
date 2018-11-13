@@ -335,58 +335,58 @@ public class EditEventActivity extends AppCompatActivity {
 
     //обновление событие
     private void updateEvent() {
-        //делаем новую запись в таблицу с событиями
-        ContentValues cv = new ContentValues();
-        cv.put("city_id", dbUtilities.findIdbySPObject(
-                spCityEdEv.getSelectedItem().toString(),    //Объект спинера(название города)
-                "cities",                                   //название таблицы
-                "name")                                     //название столбца
-        );
-        cv.put("field_id", dbUtilities.findIdbySPObject(
-                spFieldEdEv.getSelectedItem().toString(),   //Объект спинера(название поля)
-                "fields",                                   //название таблицы
-                "name")                                     //название столбца
-        );
-        cv.put("date", eventDate);
-        cv.put("time", eventStartTime);
-        cv.put("duration", spDurationEdEv.getSelectedItem().toString());
-        cv.put("price", etPriceEdEv.getText().toString());
-        cv.put("password", evPasswordEdEv.getText().toString());
-        cv.put("phone", evPhoneEdEv.getText().toString());
-        cv.put("user_id", intent.getIntExtra("user_id", 0));
-
-        //добваить данные через объект ContentValues(cv), в таблицу "event"
-        dbUtilities.updateTable(cv, "events", String.valueOf(event_id));
-
-        if(flChangeLoginUserList){
-
-            //заполняем список учасников(_id)
-            List<Integer> idUsersList = new ArrayList<>();
-            query = "SELECT participants._id FROM participants " +
-                    "WHERE participants.event_id = " + event_id + ";";
-            idUsersList = dbUtilities.fillListInt(query);
-
-            //удаляем старый список учасников из таблицы participants
-            for (Integer idUser : idUsersList) {
-                dbUtilities.deleteRowById("participants", idUser);
-            }//foreach
-
-            //добавляем участников в таблицу participants
-            for (String loginUser : loginUserList) {
-
-                cv = new ContentValues();
-                cv.put("event_id", event_id);
-                cv.put("user_id", dbUtilities.findIdbySPObject(
-                        loginUser,
-                        "users",
-                        "login")
-                );
-
-                //добваить данные через объект ContentValues(cv), в таблицу "participants"
-                dbUtilities.insertInto(cv, "participants");
-
-            }//for
-        }//if
+//        //делаем новую запись в таблицу с событиями
+//        ContentValues cv = new ContentValues();
+//        cv.put("city_id", dbUtilities.findIdbySPObject(
+//                spCityEdEv.getSelectedItem().toString(),    //Объект спинера(название города)
+//                "cities",                                   //название таблицы
+//                "name")                                     //название столбца
+//        );
+//        cv.put("field_id", dbUtilities.findIdbySPObject(
+//                spFieldEdEv.getSelectedItem().toString(),   //Объект спинера(название поля)
+//                "fields",                                   //название таблицы
+//                "name")                                     //название столбца
+//        );
+//        cv.put("date", eventDate);
+//        cv.put("time", eventStartTime);
+//        cv.put("duration", spDurationEdEv.getSelectedItem().toString());
+//        cv.put("price", etPriceEdEv.getText().toString());
+//        cv.put("password", evPasswordEdEv.getText().toString());
+//        cv.put("phone", evPhoneEdEv.getText().toString());
+//        cv.put("user_id", intent.getIntExtra("user_id", 0));
+//
+//        //добваить данные через объект ContentValues(cv), в таблицу "event"
+//        dbUtilities.updateTable(cv, "events", String.valueOf(event_id));
+//
+//        if(flChangeLoginUserList){
+//
+//            //заполняем список учасников(_id)
+//            List<Integer> idUsersList = new ArrayList<>();
+//            query = "SELECT participants._id FROM participants " +
+//                    "WHERE participants.event_id = " + event_id + ";";
+//            idUsersList = dbUtilities.fillListInt(query);
+//
+//            //удаляем старый список учасников из таблицы participants
+//            for (Integer idUser : idUsersList) {
+//                dbUtilities.deleteRowById("participants", idUser);
+//            }//foreach
+//
+//            //добавляем участников в таблицу participants
+//            for (String loginUser : loginUserList) {
+//
+//                cv = new ContentValues();
+//                cv.put("event_id", event_id);
+//                cv.put("user_id", dbUtilities.findIdbySPObject(
+//                        loginUser,
+//                        "users",
+//                        "login")
+//                );
+//
+//                //добваить данные через объект ContentValues(cv), в таблицу "participants"
+//                dbUtilities.insertInto(cv, "participants");
+//
+//            }//for
+//        }//if
 //        //переходин в актиность LoginActivity
 //        Intent intent = new Intent(this, LoginActivity.class);
 //        startActivity(intent);

@@ -103,23 +103,8 @@ public class CreateAccountActivity extends AppCompatActivity {
         String city_id = String.valueOf(spListCity.indexOf(spDefCityCrAcAc.getSelectedItem()) + 1);
         String email = etEmailCrAcAc.getText().toString();
 
-        //обращяемся к базе данных на сервер для создания новой записи в таблицу пользователей
-        try(BackgroundWorker bg = new BackgroundWorker()){
-            bg.execute("addNewUser", login, password, name, phone, city_id, email);
-
-            String resultdb = bg.get();
-            JSONObject jResult = new JSONObject(resultdb);
-            if(jResult.getString("error").toString().equals("")){
-                //выводим текст с положительным ответом о создании нового пользователя
-                Toast.makeText(this, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
-            }else{
-                //выводим текст с отрецательным ответом о создании нового пользователя
-                Toast.makeText(this, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
-            }
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }//try-catch
+        //обращяемся к базе данных на сервер для создания новой записи в таблицу user
+        dbUtilities.addNewUser( login, password, name, phone, city_id, email);
 
         //вернутся в активность авторизации
         turnBack();

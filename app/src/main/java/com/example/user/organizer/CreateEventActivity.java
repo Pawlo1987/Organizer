@@ -310,48 +310,48 @@ public class CreateEventActivity extends AppCompatActivity {
     //Создать новое событие
     private void createEvent() {
 
-        //делаем новую запись в таблицу с событиями
-        ContentValues cv = new ContentValues();
-        cv.put("city_id", dbUtilities.findIdbySPObject(
-                spCityCrEv.getSelectedItem().toString(),    //Объект спинера(название города)
-                "cities",                                   //название таблицы
-                "name")                                     //название столбца
-        );
-        cv.put("field_id", dbUtilities.findIdbySPObject(
-                spFieldCrEv.getSelectedItem().toString(),   //Объект спинера(название поля)
-                "fields",                                   //название таблицы
-                "name")                                     //название столбца
-        );
-        cv.put("date", eventDate);
-        cv.put("time", eventStartTime);
-        cv.put("duration", spDurationCrEv.getSelectedItem().toString());
-        cv.put("price", etPriceCrEv.getText().toString());
-        cv.put("password", evPasswordCrEv.getText().toString());
-        cv.put("phone", evPhoneCrEv.getText().toString());
-        cv.put("user_id", dbUtilities.findIdbySPObject(
-                authorizLogin,   //Объект (название поля)
-                "users",                                   //название таблицы
-                "login")
-        );
+//        //делаем новую запись в таблицу с событиями
+//        ContentValues cv = new ContentValues();
+//        cv.put("city_id", dbUtilities.findIdbySPObject(
+//                spCityCrEv.getSelectedItem().toString(),    //Объект спинера(название города)
+//                "cities",                                   //название таблицы
+//                "name")                                     //название столбца
+//        );
+//        cv.put("field_id", dbUtilities.findIdbySPObject(
+//                spFieldCrEv.getSelectedItem().toString(),   //Объект спинера(название поля)
+//                "fields",                                   //название таблицы
+//                "name")                                     //название столбца
+//        );
+//        cv.put("date", eventDate);
+//        cv.put("time", eventStartTime);
+//        cv.put("duration", spDurationCrEv.getSelectedItem().toString());
+//        cv.put("price", etPriceCrEv.getText().toString());
+//        cv.put("password", evPasswordCrEv.getText().toString());
+//        cv.put("phone", evPhoneCrEv.getText().toString());
+//        cv.put("user_id", dbUtilities.findIdbySPObject(
+//                authorizLogin,   //Объект (название поля)
+//                "users",                                   //название таблицы
+//                "login")
+//        );
 
-        //добваить данные через объект ContentValues(cv), в таблицу "event"
-        dbUtilities.insertInto(cv, "events");
-
-        //добавляем участников в таблицу participants
-        for (String loginUser : loginUserList) {
-
-            cv = new ContentValues();
-            cv.put("event_id", dbUtilities.tableSize("events"));
-            cv.put("user_id", dbUtilities.findIdbySPObject(
-                    loginUser,
-                    "users",
-                    "login")
-            );
-
-            //добваить данные через объект ContentValues(cv), в таблицу "participants"
-            dbUtilities.insertInto(cv, "participants");
-
-        }
+//        //добваить данные через объект ContentValues(cv), в таблицу "event"
+//        dbUtilities.insertInto(cv, "events");
+//
+//        //добавляем участников в таблицу participants
+//        for (String loginUser : loginUserList) {
+//
+//            cv = new ContentValues();
+//            cv.put("event_id", dbUtilities.tableSize("events"));
+//            cv.put("user_id", dbUtilities.findIdbySPObject(
+//                    loginUser,
+//                    "users",
+//                    "login")
+//            );
+//
+//            //добваить данные через объект ContentValues(cv), в таблицу "participants"
+//            dbUtilities.insertInto(cv, "participants");
+//
+//        }
 //        //переходин в актиность LoginActivity
 //        Intent intent = new Intent(this, LoginActivity.class);
 //        startActivity(intent);

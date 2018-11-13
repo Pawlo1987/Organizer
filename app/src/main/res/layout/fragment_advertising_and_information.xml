@@ -8,12 +8,6 @@
     tools:context="com.example.user.organizer.activity.AdvertisingAndInformationActivity">
 
     <TextView
-        android:id="@+id/tvAdAnInAc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-
-    <TextView
         android:id="@+id/tvHeadAdAnInAc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

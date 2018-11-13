@@ -71,5 +71,6 @@
     <string name="edBinarySePaAc">Бинарный поиск</string>
     <string name="btnConfirmSePaAc">Подвердить выбор</string>
     <string name="btnCancelSePaAc">Отменить выбор</string>
+    <string name="tvSelectParticipantsSePaAc">Добавить участников</string>
 
 </resources>

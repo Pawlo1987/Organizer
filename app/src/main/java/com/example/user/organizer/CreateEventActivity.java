@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -45,12 +46,9 @@ public class CreateEventActivity extends AppCompatActivity {
     Spinner spDurationCrEv;                  //объект спинер выбора длительности события
     Spinner spCityCrEv;                      //объект спинер выбора города
 
-    private ArrayAdapter<String> spAdapterCity;         //Адаптер для спинера выбора города
-    private ArrayAdapter<String> spAdapterField;        //Адаптер для спинера выбора поля
-    private ArrayAdapter<String> spAdapterDuration;     //Адаптер для спинера выбора длительности события
-    private ArrayAdapter<String> spAdapter12Time24CrEv; //Адаптер для спинера выбора Время 12 или 24 часа
-
     Calendar calendar = Calendar.getInstance();      // объект для работы с датой и временем
+
+    String query; //переменная для запроса
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,57 +78,66 @@ public class CreateEventActivity extends AppCompatActivity {
         dbUtilities.open();
 
         //запрос для получения курсор с данными
-        String query = "SELECT name FROM city;";
+        query = "SELECT name FROM city;";
 
         //заполнить spListCity данные для отображения в Spinner
         spListCity = dbUtilities.fillList(query);
 
-        //создание адаптера для спинера
-        spAdapterCity = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_spinner_item,
-                spListCity
-        );
+        spCityCrEv.setAdapter(buildSpinner(spListCity));
 
-        // назначение адапетра для списка
-        spAdapterCity.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        spCityCrEv.setAdapter(spAdapterCity);
-
-        //запрос для получения курсор с данными
-        query = "SELECT field.name FROM field WHERE city = " +
-                spListCity.indexOf(spCityCrEv.getSelectedItem()) + 1 +";";
-
-        //заполнить spListField данные для отображения в Spinner
-        spListField = dbUtilities.fillList(query);
-
-        //создание адаптера для спинера
-        spAdapterField = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_spinner_item,
-                spListField
-        );
-
-        // назначение адапетра для списка
-        spAdapterField.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spFieldCrEv.setAdapter(spAdapterField);
+//        //запрос для получения курсор с данными
+//        query = "SELECT field.name FROM field WHERE city = " +
+//                spListCity.indexOf(spCityCrEv.getSelectedItem()) + 1 +";";
+//
+//        //заполнить spListField данные для отображения в Spinner
+//        spListField = dbUtilities.fillList(query);
+//
+//        spFieldCrEv.setAdapter(buildSpinner(spListField));
 
         //заполнить spListField данные для отображения в Spinner
         spListDuration = Arrays.asList(new String[]{ "30", "45", "60", "90", "120", "150", "180"});
 
+        spDurationCrEv.setAdapter(buildSpinner(spListDuration));
+
+        spCityCrEv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id){
+                //запрос для получения курсор с данными
+                query = "SELECT field.name FROM field INNER JOIN city ON city._id = field.city" +
+                        " WHERE city.name = \"" + spCityCrEv.getItemAtPosition(position) +"\";";
+
+                //заполнить spListField данные для отображения в Spinner
+                spListField = dbUtilities.fillList(query);
+
+                spFieldCrEv.setAdapter(buildSpinner(spListField));
+            }//onItemSelected
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }//onNothingSelected
+        });
+    }//onCreate
+
+    //строим Spinner
+    private ArrayAdapter buildSpinner(List<String> list) {
+
+        ArrayAdapter<String> spinnerAdapter;
+
         //создание адаптера для спинера
-        spAdapterDuration = new ArrayAdapter<String>(
+        spinnerAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_spinner_item,
-                spListDuration
+                list
         );
 
         // назначение адапетра для списка
-        spAdapterDuration.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        spDurationCrEv.setAdapter(spAdapterDuration);
-    }//onCreate
+        return spinnerAdapter;
+    }//buildCitySpinner
 
     // установка обработчика изменения/выбора времени
     TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {

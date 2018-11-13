@@ -11,17 +11,21 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import static android.view.View.GONE;
+
 public class SelectParticipantsRecyclerAdapter extends RecyclerView.Adapter<SelectParticipantsRecyclerAdapter.ViewHolder> {
 
     //поля класса SelectParticipantsRecyclerAdapter
     private LayoutInflater inflater;
     private Cursor selectUserCursor;
+    private String filter;
     DBUtilities dbUtilities;
 
     //конструктор
-    SelectParticipantsRecyclerAdapter(Context context, Cursor selectUserCursor) {
+    SelectParticipantsRecyclerAdapter(Context context, Cursor selectUserCursor, String filter) {
         this.inflater = LayoutInflater.from(context);
         this.selectUserCursor = selectUserCursor;
+        this.filter = filter;
         dbUtilities = new DBUtilities(context);
     } // SelectParticipantsRecyclerAdapter
 
@@ -37,16 +41,23 @@ public class SelectParticipantsRecyclerAdapter extends RecyclerView.Adapter<Sele
     @Override
     public void onBindViewHolder(SelectParticipantsRecyclerAdapter.ViewHolder holder, int position) {
         selectUserCursor.moveToPosition(position); // переходим в курсоре на текущую позицию
+        String name = selectUserCursor.getString(0);
+        String login = selectUserCursor.getString(1);
 
         // получение данных
-        holder.cbSePaReAd.setChecked(false);                            // CheckBox выбор
-        holder.tvNameSePaReAd.setText(selectUserCursor.getString(0));       // имя user
-        holder.tvLoginSePaReAd.setText(selectUserCursor.getString(1));      // логин user
-        holder.tvDefCitySePaReAd.setText(selectUserCursor.getString(2));    // город user
-
-//        получаем нажатую позицию адаптера
-        int posnow = selectUserCursor.getPosition();
-
+        //фильтрация элементов для бинарного поиска
+        if((filter == "")||(name.contains(filter)||login.contains(filter))){
+            holder.cbSePaReAd.setChecked(false);        // CheckBox выбор
+            holder.tvNameSePaReAd.setText(name);        // имя user
+            holder.tvLoginSePaReAd.setText(login);      // логин user
+            holder.tvDefCitySePaReAd.setText(selectUserCursor.getString(2));     // город user
+        }else {
+            //setVisibility(GONE) отключаем ненужные элементы для просмотра
+            holder.cbSePaReAd.setVisibility(GONE);
+            holder.tvNameSePaReAd.setVisibility(GONE);
+            holder.tvLoginSePaReAd.setVisibility(GONE);
+            holder.tvDefCitySePaReAd.setVisibility(GONE);
+        }//if-else
     } // onBindViewHolder
 
     //получаем количество элементов объекта(курсора)

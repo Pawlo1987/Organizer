@@ -2,12 +2,17 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.preference.EditTextPreference;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.FilterQueryProvider;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -16,7 +21,12 @@ import java.util.List;
 
 public class SelectParticipantsActivity extends AppCompatActivity {
 
+    String query;   //запрос
+    String filter = "";  //фильтрующее слово для бинарного поиска
     RecyclerView rvUserSePaAc;
+    int spPos;      //позиция спинера
+
+    EditText edBinarySePaAc; //Строка для бинарного поиска
 
     // адаптер для отображения recyclerView
     SelectParticipantsRecyclerAdapter SelectParticipantsRecyclerAdapter;
@@ -40,20 +50,32 @@ public class SelectParticipantsActivity extends AppCompatActivity {
         dbUtilities = new DBUtilities(context);
         dbUtilities.open();
 
+        edBinarySePaAc = (EditText) findViewById(R.id.edBinarySePaAc);
         spCitySePaAc = (Spinner) findViewById(R.id.spCitySePaAc);
+
         //инициализация коллекции для спинера
         spListCity = new ArrayList<>();
 
         //запрос для получения курсор с данными
-        String query = "SELECT name FROM city;";
+        query = "SELECT name FROM city;";
 
         buildCitySpinner(query);     //строим Spinner City
 
+        //размер коллецкии спинера
         spListCitySize = spListCity.size();
+
+        //получаем позицию спинера все города
+        spPos = spListCitySize-1;
+
+        //Установка позиции спинера поумолчанию "ВСЕ ГОРОДА"
+        spCitySePaAc.setSelection(spPos);
+
+        //Слушатель для позиции спинера и фильтрации RecyclerView по изменению позиции
         spCitySePaAc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String query;
+                spPos = position;
                 //если выбран элемент "ВСЕ ГОРОДА"
                 if (spCitySePaAc.getItemAtPosition(position).equals("ВСЕ ГОРОДА")){
                     // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
@@ -66,8 +88,7 @@ public class SelectParticipantsActivity extends AppCompatActivity {
                             spCitySePaAc.getItemAtPosition(position) + "\";";
                 }//if-else
 
-
-                buildUserView(query);     //Строим RecyclerView
+                buildUserRecyclerView(query, filter);     //Строим RecyclerView
             }//onItemSelected
 
             @Override
@@ -75,26 +96,44 @@ public class SelectParticipantsActivity extends AppCompatActivity {
 
             }//onNothingSelected
         });
-        // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
-        query = "SELECT user.name, user.login, city.name " +
-                       "FROM user INNER JOIN city ON city._id = user.def_city;";
 
-        buildUserView(query);     //Строим RecyclerView
+        // установка слушателя изменения текста в EditText для бинарного поиска
+        // и фильтрации RecyclerView по изменению текста в EditText
+        edBinarySePaAc.addTextChangedListener(new TextWatcher() {
+            // при изменении текста выполняем фильтрацию
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
+                //если выбран элемент "ВСЕ ГОРОДА"
+                if (spCitySePaAc.getItemAtPosition(spPos).equals("ВСЕ ГОРОДА")){
+                    // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
+                    query = "SELECT user.name, user.login, city.name FROM user INNER JOIN " +
+                            "city ON city._id = user.def_city;";
+                }else {
+                    // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
+                    query = "SELECT user.name, user.login, city.name FROM user INNER JOIN " +
+                            "city ON city._id = user.def_city WHERE city.name = \"" +
+                            spCitySePaAc.getItemAtPosition(spPos) + "\";";
+                }//if-else
+                filter = edBinarySePaAc.getText().toString();
+                buildUserRecyclerView(query, filter);     //Строим RecyclerView
+            }//onTextChanged
 
+            public void afterTextChanged(Editable s) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+        });
     }//onCreate
 
-
     //Строим RecyclerView
-    private void buildUserView(String query) {
+    private void buildUserRecyclerView(String query, String filter) {
         selectUserCursor =  dbUtilities.getDb().rawQuery(query, null);
 
         // создаем адаптер, передаем в него курсор
-        SelectParticipantsRecyclerAdapter = new SelectParticipantsRecyclerAdapter(context, selectUserCursor);
+        SelectParticipantsRecyclerAdapter = new SelectParticipantsRecyclerAdapter(context, selectUserCursor, filter);
         // RecycerView для отображения таблицы users БД
         rvUserSePaAc = (RecyclerView) findViewById(R.id.rvUserSePaAc);
 
         rvUserSePaAc.setAdapter(SelectParticipantsRecyclerAdapter);
-    }//buildUserView
+    }//buildUserRecyclerView
 
     //строим Spinner City
     private void buildCitySpinner(String query) {

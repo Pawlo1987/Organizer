@@ -28,9 +28,17 @@ public class DBUtilities {
         db.insert(table, null,  cv);
     }//insertInto
 
-    //поиск user._id по user.login
-    public int findIdbyLogin(String login){
-        String query = "SELECT user._id FROM user WHERE user.login = \"" + login + "\"";
+    //длина определенного столбца
+    public int tableSize(String table){
+        String query = "SELECT _id FROM \"" + table + "\"";
+        Cursor cursor = db.rawQuery(query, null);
+        return cursor.getCount();
+    }//insertInto
+
+    //поиск _id по определеному значению
+    public int findIdbySPObject(String obj, String tableName, String tableColumn){
+        String query = "SELECT \"" + tableName + "\"._id FROM \"" + tableName + "\" " +
+                       "WHERE \"" + tableName + "\".\"" + tableColumn + "\" = \"" + obj + "\"";
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToPosition(0); // переходим в курсоре в нулевую позицию
         return cursor.getInt(0);
@@ -51,11 +59,6 @@ public class DBUtilities {
         return list;
     }//fillList
 
-    public Cursor updCursor(){
-        String query = "SELECT * FROM employees";
-        return db.rawQuery(query, null);
-    }
-
     public SQLiteDatabase getDb() {
         return db;
     }
@@ -64,13 +67,6 @@ public class DBUtilities {
     public void open(){
         db = dbHelper.open();
     } // open
-
-    // открытие подключения к БД
-    public void remove(int _id){
-
-        //удаляем элемент
-        db.delete("employees","_id = " + _id, null);
-    } // remove
 
     // закрытие подключения к БД
     public void close(){

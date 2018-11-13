@@ -84,7 +84,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         cv.put("email", etEmailCrAcAc.getText().toString());
 
         //добваить данные через объект ContentValues(cv), в таблицу "user"
-        dbUtilities.insertInto(cv, "user");
+        dbUtilities.insertInto(cv, "users");
 
         //переходин в актиность LoginPartActivity
         Intent intent = new Intent(this, LoginPartActivity.class);

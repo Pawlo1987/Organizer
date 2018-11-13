@@ -70,6 +70,7 @@ public class SelectParticipantsRecyclerAdapter extends RecyclerView.Adapter<Sele
                 }else{
                     loginUserList.remove(login);
                 }//if-else
+
             }//onClick
         });//setOnClickListener
 

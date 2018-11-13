@@ -26,10 +26,9 @@ public class SelectParticipantsActivity extends AppCompatActivity {
     String filter = "";             //фильтрующее слово для бинарного поиска
     RecyclerView rvUserSePaAc;      //RecyclerView для учасников
     int spPos;                      //позиция спинера
-    List<String> loginUserList;       //коллекция логинов с выбранными игроками
-    List<Integer> idUserList;       //коллекция id-ов с выбранными игроками
+    List<String> loginUserList;     //коллекция логинов с выбранными игроками
 
-    EditText edBinarySePaAc; //Строка для бинарного поиска
+    EditText edBinarySePaAc;        //Строка для бинарного поиска
 
     // адаптер для отображения recyclerView
     com.example.user.organizer.SelectParticipantsRecyclerAdapter SelectParticipantsRecyclerAdapter;
@@ -55,7 +54,6 @@ public class SelectParticipantsActivity extends AppCompatActivity {
 
         //инициализация коллекции для выбора участников
         loginUserList = new ArrayList<>();
-        idUserList = new ArrayList<>();
 
         edBinarySePaAc = (EditText) findViewById(R.id.edBinarySePaAc);
         spCitySePaAc = (Spinner) findViewById(R.id.spCitySePaAc);
@@ -64,7 +62,7 @@ public class SelectParticipantsActivity extends AppCompatActivity {
         spListCity = new ArrayList<>();
 
         //запрос для получения курсор с данными
-        query = "SELECT name FROM city;";
+        query = "SELECT name FROM cities;";
 
         buildCitySpinner(query);     //строим Spinner City
 
@@ -86,12 +84,12 @@ public class SelectParticipantsActivity extends AppCompatActivity {
                 //если выбран элемент "ВСЕ ГОРОДА"
                 if (spCitySePaAc.getItemAtPosition(position).equals("ВСЕ ГОРОДА")){
                     // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
-                    query = "SELECT user.name, user.login, city.name FROM user INNER JOIN " +
-                            "city ON city._id = user.def_city;";
+                    query = "SELECT users.name, users.login, cities.name FROM users INNER JOIN " +
+                            "cities ON cities._id = users.def_city;";
                 }else {
                     // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
-                    query = "SELECT user.name, user.login, city.name FROM user INNER JOIN " +
-                            "city ON city._id = user.def_city WHERE city.name = \"" +
+                    query = "SELECT users.name, users.login, cities.name FROM users INNER JOIN " +
+                            "cities ON cities._id = users.def_city WHERE cities.name = \"" +
                             spCitySePaAc.getItemAtPosition(position) + "\";";
                 }//if-else
 
@@ -113,12 +111,12 @@ public class SelectParticipantsActivity extends AppCompatActivity {
                 //если выбран элемент "ВСЕ ГОРОДА"
                 if (spCitySePaAc.getItemAtPosition(spPos).equals("ВСЕ ГОРОДА")){
                     // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
-                    query = "SELECT user.name, user.login, city.name FROM user INNER JOIN " +
-                            "city ON city._id = user.def_city;";
+                    query = "SELECT users.name, users.login, cities.name FROM users INNER JOIN " +
+                            "cities ON cities._id = users.def_city;";
                 }else {
                     // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
-                    query = "SELECT user.name, user.login, city.name FROM user INNER JOIN " +
-                            "city ON city._id = user.def_city WHERE city.name = \"" +
+                    query = "SELECT users.name, users.login, cities.name FROM users INNER JOIN " +
+                            "cities ON cities._id = users.def_city WHERE cities.name = \"" +
                             spCitySePaAc.getItemAtPosition(spPos) + "\";";
                 }//if-else
                 filter = edBinarySePaAc.getText().toString();
@@ -141,6 +139,12 @@ public class SelectParticipantsActivity extends AppCompatActivity {
         rvUserSePaAc = (RecyclerView) findViewById(R.id.rvUserSePaAc);
 
         rvUserSePaAc.setAdapter(SelectParticipantsRecyclerAdapter);
+
+        // для сохранения отмеченных checkbox при скролинге пропишем доп. функции для recyclerView
+        rvUserSePaAc.setDrawingCacheEnabled(true);
+        rvUserSePaAc.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        rvUserSePaAc.setItemViewCacheSize(dbUtilities.tableSize("users"));
+
     }//buildUserRecyclerView
 
     //строим Spinner City
@@ -175,15 +179,46 @@ public class SelectParticipantsActivity extends AppCompatActivity {
 
     //возврат к предедыщему меню
     private void cancelSelect() {
-
+        setResult(RESULT_CANCELED);
+        finish();
     }//cancelSelect
 
     //сохранить и передать выборанных игроков
     private void confirmSelect() {
-        for (String s : loginUserList) {
-            idUserList.add(dbUtilities.findIdbyLogin(s));
-        }
-        Log.d("myLog", idUserList.toString());
+
+        // создать для передачи результатов
+        Intent intent = new Intent();
+        //пакуем при помощи Extra Parcelable - объект
+        intent.putStringArrayListExtra(CreateEventActivity.PAR_USERS, (ArrayList<String>) loginUserList);
+
+        // собственно передача параметров
+        setResult(RESULT_OK, intent);
+        finish();
     }//confirmSelect
+
+//    //-----------------сохрание данных при смене ориентации устройства----------------------------
+//    // сохранение состояния при повороте устройства
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        // необходимо сохранить поле tvShow
+//        outState.putBinder("rv",rvUserSePaAc);
+//        // необходимо сохранить коллекцию
+//        outState.putParcelableArrayList(KEY_LIST, (ArrayList<? extends Parcelable>) tempAirplanes);
+//        super.onSaveInstanceState(outState);
+//    }//onSaveInstanceState
+//
+//    // Восстановление значений, сохраненных при повороте устройства
+//    @Override
+//    public void onRestoreInstanceState(Bundle savedInstanceState) {
+//        super.onRestoreInstanceState(savedInstanceState);
+//
+//        // получение ранее сохраненных параметров
+//        tvMainAc.setText(savedInstanceState.getString("tv"));
+//        tempAirplanes.clear();
+//        tempAirplanes.addAll(savedInstanceState.<Airplane>getParcelableArrayList(KEY_LIST));
+//
+//        airplanesAdapter.notifyDataSetChanged(); //обновить, перерисовать адаптер
+//        lvAirplanes.setAdapter(airplanesAdapter);//показать listview
+//    }//onRestoreInstanceState
 
 }//SelectParticipantsActivity

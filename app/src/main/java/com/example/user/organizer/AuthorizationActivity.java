@@ -37,8 +37,8 @@ public class AuthorizationActivity extends AppCompatActivity {
         dbUtilities = new DBUtilities(context);
         dbUtilities.open();
         // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
-        String query = "SELECT user.login as login, user.email as email, " +
-                       "user.password as password FROM user;";
+        String query = "SELECT users.login as login, users.email as email, " +
+                       "users.password as password FROM users;";
         authorCursor =  dbUtilities.getDb().rawQuery(query, null);
 
         //заполнить коллекции для поиска сущестующего логина или email для авторизации

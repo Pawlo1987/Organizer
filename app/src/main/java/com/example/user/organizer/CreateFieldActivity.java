@@ -67,7 +67,7 @@ public class CreateFieldActivity extends AppCompatActivity {
         dbUtilities.open();
 
         //запрос для получения курсор с данными
-        String query = "SELECT name FROM city;";
+        String query = "SELECT name FROM cities;";
 
         //заполнить spListCity данные для отображения в Spinner
         spListCity = dbUtilities.fillList(query);
@@ -77,7 +77,7 @@ public class CreateFieldActivity extends AppCompatActivity {
         spListBoolean.add("Есть");
 
         //запрос для получения курсор с данными
-        query = "SELECT type FROM coating;";
+        query = "SELECT type FROM coatings;";
 
         //заполнить spListCoating данные для отображения в Spinner
         spListCoating = dbUtilities.fillList(query);
@@ -134,7 +134,7 @@ public class CreateFieldActivity extends AppCompatActivity {
         cv.put("geolocation", etGeolocationCrFi.getText().toString());
         cv.put("address", etAddressCrFi.getText().toString());
         //добваить данные через объект ContentValues(cv), в таблицу "field"
-        dbUtilities.insertInto(cv, "field");
+        dbUtilities.insertInto(cv, "fields");
 
         //переходин в актиность CreateEventActivity
         Intent intent = new Intent(this, CreateEventActivity.class);

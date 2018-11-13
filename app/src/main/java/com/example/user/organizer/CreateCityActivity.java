@@ -44,7 +44,7 @@ public class CreateCityActivity extends AppCompatActivity {
         dbUtilities.open();
 
         //запрос для получения курсор с данными
-        String query = "SELECT name FROM region;";
+        String query = "SELECT name FROM regions;";
 
         //заполнить spListCity данные для отображения в Spinner
         spListRegion = dbUtilities.fillList(query);
@@ -69,8 +69,8 @@ public class CreateCityActivity extends AppCompatActivity {
         cv.put("name", etCityNameCrCi.getText().toString());
         cv.put("region", spListRegion.indexOf(spRegionCrCi.getSelectedItem()) + 1);
 
-        //добваить данные через объект ContentValues(cv), в таблицу "city"
-        dbUtilities.insertInto(cv, "city");
+        //добваить данные через объект ContentValues(cv), в таблицу "cities"
+        dbUtilities.insertInto(cv, "cities");
 
         //переходин в актиность CreateEventActivity
         Intent intent = new Intent(this, CreateEventActivity.class);

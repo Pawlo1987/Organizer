@@ -8,6 +8,12 @@
     tools:context="com.example.user.organizer.ShowAllEventActivity">
 
     <TextView
+        android:id="@+id/tvallevents"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <TextView
         android:id="@+id/tvHeaderShAlEvAc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

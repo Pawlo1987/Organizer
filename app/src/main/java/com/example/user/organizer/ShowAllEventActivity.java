@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.widget.TextView;
 
 //-------Активность для вывода(просмотра) всех событий--------------
 
@@ -16,6 +17,7 @@ public class ShowAllEventActivity extends AppCompatActivity {
     // поля для доступа к записям БД
     Cursor eventsCursor;                // прочитанные данные
 
+    TextView tvallevents;
     Context context;
 
     @Override
@@ -27,9 +29,9 @@ public class ShowAllEventActivity extends AppCompatActivity {
         dbUtilities = new DBUtilities(context);
         dbUtilities.open();
         // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
-        String query = "SELECT city.name as city, field.name as field, event.date as date, " +
-                "event.starttime as time FROM event INNER JOIN city ON city._id = event.city " +
-                "INNER JOIN field ON field._id = event.field;";
+        String query = "SELECT cities.name as cities, fields.name as fields, events.date as date, " +
+                "events.starttime as time FROM events INNER JOIN cities ON cities._id = events.city " +
+                "INNER JOIN fields ON fields._id = events.field;";
         eventsCursor =  dbUtilities.getDb().rawQuery(query, null);
 
         // создаем адаптер, передаем в него курсор
@@ -38,6 +40,8 @@ public class ShowAllEventActivity extends AppCompatActivity {
         rvMainShAlEvAc = (RecyclerView) findViewById(R.id.rvMainShAlEvAc);
 
         rvMainShAlEvAc.setAdapter(showAllEventsRecyclerAdapter);
+        tvallevents = (TextView) findViewById(R.id.tvallevents);
+        tvallevents.setText(String.valueOf(eventsCursor.getCount()));
     }//onCreate
 
 }//ShowAllEventActivity

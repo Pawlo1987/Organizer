@@ -39,10 +39,10 @@ public class ShowAllEventsRecyclerAdapter extends RecyclerView.Adapter<ShowAllEv
         eventsCursor.moveToPosition(position); // переходим в курсоре на текущую позицию
 
         // получение данных
-        holder.tvCityShAlEvReAd.setText(eventsCursor.getString(0));//String.format("%d", eventsCursor.getInt(1)));//город
-        holder.tvFieldShAlEvReAd.setText(eventsCursor.getString(1));//(String.format("%d", eventsCursor.getInt(2)));//поле
-        holder.tvDateShAlEvReAd.setText(eventsCursor.getString(2));// Дата
-        holder.tvTimeShAlEvReAd.setText(eventsCursor.getString(3));//Время
+        holder.tvCityShAlEvReAd.setText(eventsCursor.getString(0)); //город
+        holder.tvFieldShAlEvReAd.setText(eventsCursor.getString(1));//поле
+        holder.tvDateShAlEvReAd.setText(eventsCursor.getString(2)); // Дата
+        holder.tvTimeShAlEvReAd.setText(eventsCursor.getString(3)); //Время
 
 //        получаем нажатую позицию адаптера
         int posnow = eventsCursor.getPosition();

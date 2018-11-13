@@ -64,9 +64,7 @@
         <activity android:name=".ShowFieldCatalogBeforeAuthActivity" />
         <activity android:name=".SelectLogoActivity" />
         <activity android:name=".EditNewsNoteActivity" />
-        <activity
-            android:name=".SplashActivity"
-            android:theme="@style/SplashTheme">
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

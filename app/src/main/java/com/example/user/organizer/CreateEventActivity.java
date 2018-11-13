@@ -396,7 +396,6 @@ public class CreateEventActivity extends AppCompatActivity{
         if ( !status
                 ||etPriceCrEv.getText().toString().equals("")
                 || etPhoneCrEv.length()<14
-                || evPasswordCrEv.getText().toString().equals("")
                 || spListField.size() == 0) {
             Toast.makeText(this, "Ошибка или пустые поля!", Toast.LENGTH_SHORT).show();
         } else {

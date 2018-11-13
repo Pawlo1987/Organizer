@@ -2,10 +2,8 @@ package com.example.user.organizer;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateUtils;
@@ -40,7 +38,7 @@ public class CreateEventActivity extends AppCompatActivity {
     DBUtilities dbUtilities;
     Context context;
 
-    String authorizLogin = "user1";      // Логин авторизированого пользователя
+    String authorizLogin = "user7";      // Логин авторизированого пользователя
 
     ListView lvListOfParticipantsCrEv;   // ListView для выбранных выбранных участников
     List<String> spListField;            // Данные для спинера выбора поля
@@ -309,10 +307,10 @@ public class CreateEventActivity extends AppCompatActivity {
     private void createEvent() {
 
         //делаем новую запись в таблицу с событиями
-        String city_id = dbUtilities.getIdbyValue("cities", "name",
+        String city_id = dbUtilities.getIdByValue("cities", "name",
                 spCityCrEv.getSelectedItem().toString()    //Объект спинера(название города)
         );
-        String field_id = dbUtilities.getIdbyValue("fields", "name",
+        String field_id = dbUtilities.getIdByValue("fields", "name",
                 spFieldCrEv.getSelectedItem().toString()   //Объект спинера(название поля)
         );
         String date = eventDateForDB;
@@ -321,7 +319,7 @@ public class CreateEventActivity extends AppCompatActivity {
         String price = etPriceCrEv.getText().toString();
         String password = evPasswordCrEv.getText().toString();
         String phone = evPhoneCrEv.getText().toString();
-        String user_id = dbUtilities.getIdbyValue("users", "login",
+        String user_id = dbUtilities.getIdByValue("users", "login",
                 authorizLogin   //Объект (название поля)
         );
 
@@ -332,14 +330,16 @@ public class CreateEventActivity extends AppCompatActivity {
         //добавляем участников в таблицу participants
         for (String loginUser : loginUserList) {
 
-            String event_id = dbUtilities.getTableSize("events");
-            user_id = dbUtilities.getIdbyValue("users",
+            //id нового события будет равен максимальному значению id + 1
+            String event_id = dbUtilities.getMaxValueInHisColumn("events", "id");
+
+            user_id = dbUtilities.getIdByValue("users",
                     "login", loginUser);
 
-            //добваить данные через объект ContentValues(cv), в таблицу "participants"
             dbUtilities.insertIntoParticipants(event_id, user_id);
         }//foreach
 
-        finish();
+        Intent intent= new Intent(this, NavigationDrawerLogInActivity.class);
+        startActivity(intent);
     }//createEvent
 }//CreateEventActivity

@@ -103,7 +103,7 @@ public class CreateNewsNoteActivity extends AppCompatActivity {
         intent.putExtra(AdvertisingAndInformationFragment.PAR_MESS, etMessCrNeNoAc.getText().toString());
         intent.putExtra(AdvertisingAndInformationFragment.PAR_DATE, date);
         intent.putExtra(AdvertisingAndInformationFragment.PAR_CITY,
-                        dbUtilities.getIdbyValue(
+                        dbUtilities.getIdByValue(
                                 "cities",              //название таблицы
                                 "name",               //название столбца
                                 spCityCrNeNoAc.getSelectedItem().toString() //значение для поиска

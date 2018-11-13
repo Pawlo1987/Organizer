@@ -13,15 +13,12 @@ import com.example.user.organizer.inteface.CustomInterface;
 
 //---------------------- Фрагмент с диалогом принять участие -------------------
 public class TakePartShowAllEventDialog extends DialogFragment {
-    //интерфейс для Принятия участия
-    CustomInterface takePart;
     DBUtilities dbUtilities;
 
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
         dbUtilities = new DBUtilities(context);
-        takePart = (CustomInterface) context;
     } // onAttach
 
     @NonNull // создание диалога

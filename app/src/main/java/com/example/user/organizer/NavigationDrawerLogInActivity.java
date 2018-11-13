@@ -43,7 +43,6 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         //Toast.makeText(this, user.name, Toast.LENGTH_LONG).show();
 
         dbUtilities = new DBUtilities(getBaseContext());
-//        dbUtilities.open();
 
         exitConfirmDialog = new ExitConfirmDialog();
         showAllEventsFragment = new ShowAllEventsFragment();
@@ -117,23 +116,4 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         System.exit(0);
     }//closeApp
 
-    //Удаление записи из таб.participants для того чтоб не участвовать в событии
-    @Override
-    public void leaveFromEvent(int event_id, int user_id) {
-        Cursor cursor;
-        String query = "SELECT participants._id FROM participants " +
-                "WHERE participants.event_id = "
-                + event_id + " AND participants.user_id = "
-                + user_id + ";";
-        cursor = null;//dbUtilities.getDb().rawQuery(query, null);
-        cursor.moveToPosition(0); // переходим в курсоре в нулевую позицию
-        //добваить данные через объект ContentValues(cv), в таблицу "participants"
-//        dbUtilities.deleteRowById("participants", cursor.getInt(0));
-    }//leaveFromEvent
-
-    //Удаление записи из таб.events для удаления событии
-    @Override
-    public void deleteEvent(int event_id) {
-//        dbUtilities.deleteRowById("events", event_id);
-    }//deleteEvent
-}
+}//NavigationDrawerLogInActivity

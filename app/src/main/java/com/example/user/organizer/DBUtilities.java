@@ -1,11 +1,6 @@
 package com.example.user.organizer;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.ArrayMap;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -59,10 +54,9 @@ public class DBUtilities{
         //resultColumnName -- столбец в котором находится результат
         //обращаемся к базе для получения списка имен городов
         try(BackgroundWorker bg = new BackgroundWorker()){
-            bg.execute("getSomeValue1byValue2", tableName, searchColumnName, searchValue);
+            bg.execute("searchValueInColumn", tableName, searchColumnName, searchValue, resultColumnName);
 
             String resultdb = bg.get();
-            Log.d("FOOTBALL", resultdb);
             JSONObject jResult = new JSONObject(resultdb);
 
             if(jResult.getString("error").toString().equals("")){
@@ -80,11 +74,11 @@ public class DBUtilities{
     }//searchValueInColumn
 
     //поиск _id по определеному значению
-    public String getIdbyValue( String tableName, String columnName, String value){
+    public String getIdByValue(String tableName, String columnName, String value){
         String id = null;
         //обращаемся к базе для получения списка имен городов
         try(BackgroundWorker bg = new BackgroundWorker()){
-            bg.execute("getIdbyValue", tableName, columnName, value);
+            bg.execute("getIdByValue", tableName, columnName, value);
 
             String resultdb = bg.get();
             Log.d("FOOTBALL", resultdb);
@@ -102,7 +96,34 @@ public class DBUtilities{
             e.printStackTrace();
         }//try-catch
         return id;
-    }//getIdbyValue
+    }//getIdByValue
+
+    //поиск _id по двум определеным значениям
+    public String getIdByTwoValues(String tableName, String firstColumnName, String firstValue,
+                                   String secondColumnName, String secondValue){
+        String id = null;
+        //обращаемся к базе для получения списка имен городов
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("getIdByValue", tableName, firstColumnName, firstValue,
+                    secondColumnName, secondValue);
+
+            String resultdb = bg.get();
+            Log.d("FOOTBALL", resultdb);
+            JSONObject jResult = new JSONObject(resultdb);
+
+            if(jResult.getString("error").toString().equals("")){
+                //получаем результат
+                id = jResult.getJSONObject("rez").getString("id").toString();
+            }else{
+                //выводим текст с отрецательным ответом о создании нового пользователя
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }//if-else
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
+        return id;
+    }//getIdByValue
 
     //получаем данные из БД
     public List<String> getStrListTableFromDB( String tableName, String columnName) {
@@ -367,7 +388,7 @@ public class DBUtilities{
         List<Note> notes = new ArrayList<>();
 
         //получаем id города
-        String city_id = getIdbyValue("cities", "name", cityName);
+        String city_id = getIdByValue("cities", "name", cityName);
 
         //обращаемся к базе для получения списка имен городов
         try(BackgroundWorker bg = new BackgroundWorker()){
@@ -412,7 +433,7 @@ public class DBUtilities{
         List<String> list = new ArrayList<>();
 
         //получаем id по имени
-        String city_id = getIdbyValue("cities", "name", cityName);
+        String city_id = getIdByValue("cities", "name", cityName);
         //обращаемся к базе для получения списка имен городов
         try(BackgroundWorker bg = new BackgroundWorker()){
             bg.execute("getSomeFields", city_id);
@@ -466,12 +487,39 @@ public class DBUtilities{
         return size;
     }//getTableSize
 
+    //получение максимального элемента в столбце
+    public String getMaxValueInHisColumn(String tableName, String searchColumnName) {
+        String size = null;
+        //обращаемся к базе для получения списка имен городов
+        try (BackgroundWorker bg = new BackgroundWorker()) {
+            bg.execute("getMaxValueInHisColumn", tableName, searchColumnName);
+
+            String resultdb = bg.get();
+            Log.d("FOOTBALL", resultdb);
+            JSONObject jResult = new JSONObject(resultdb);
+
+            if (jResult.getString("error").toString().equals("")) {
+                //получаем результат
+                size = jResult.getJSONObject("rez")
+                        .getString(String.format("MAX(%s)",searchColumnName))
+                        .toString();
+            } else {
+                //выводим текст с отрецательным ответом о создании нового пользователя
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }//if-else
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }//try-catch
+        return size;
+    }//getMaxValueInHisColumn
+
     //получение коллекции пользователей для списка учасников
     public List<Participant> getListParticipantsUser(String cityName) {
         List<Participant> participantList = new ArrayList<>();
 
         //получаем id города
-        String city_id = cityName.equals("ВСЕ ГОРОДА") ? "" : getIdbyValue(
+        String city_id = cityName.equals("ВСЕ ГОРОДА") ? "" : getIdByValue(
                 "cities", "name", cityName);
 
         //обращаемся к базе для получения списка имен городов
@@ -528,39 +576,109 @@ public class DBUtilities{
             if(jResult.getString("error").toString().equals("")){
 
                 JSONObject jListEventId = jResult.getJSONObject("id");
-                List<String> ListEventId = getListFromJSON(jListEventId);
+                List<String> listEventId = getListFromJSON(jListEventId);
 
                 JSONObject jListCityName = jResult.getJSONObject("city");
-                List<String> ListCityName = getListFromJSON(jListCityName);
+                List<String> listCityName = getListFromJSON(jListCityName);
 
                 JSONObject jListFieldName = jResult.getJSONObject("field");
-                List<String> ListFieldName = getListFromJSON(jListFieldName);
+                List<String> listFieldName = getListFromJSON(jListFieldName);
 
                 JSONObject jListEventData = jResult.getJSONObject("date");
-                List<String> ListEventData = getListFromJSON(jListEventData);
+                List<String> listEventData = getListFromJSON(jListEventData);
 
                 JSONObject jListEventTime = jResult.getJSONObject("time");
-                List<String> ListEventTime = getListFromJSON(jListEventTime);
+                List<String> listEventTime = getListFromJSON(jListEventTime);
 
                 JSONObject jListEventDuration = jResult.getJSONObject("duration");
-                List<String> ListEventDuration = getListFromJSON(jListEventDuration);
+                List<String> listEventDuration = getListFromJSON(jListEventDuration);
 
                 JSONObject jListEventPrice = jResult.getJSONObject("price");
-                List<String> ListEventPrice = getListFromJSON(jListEventPrice);
+                List<String> listEventPrice = getListFromJSON(jListEventPrice);
+
+                JSONObject jListEventPassword = jResult.getJSONObject("password");
+                List<String> listEventPassword = getListFromJSON(jListEventPassword);
 
                 JSONObject jListEventPhone = jResult.getJSONObject("phone");
-                List<String> ListEventPhone = getListFromJSON(jListEventPhone);
+                List<String> listEventPhone = getListFromJSON(jListEventPhone);
 
                 JSONObject jListEventUser = jResult.getJSONObject("user");
-                List<String> ListEventUser = getListFromJSON(jListEventUser);
+                List<String> listEventUser = getListFromJSON(jListEventUser);
 
-                int n = ListCityName.size();
+                int n = listCityName.size();
 
                 for (int i = 0; i <n ; i++) {
-                    eventsList.add(new Event(ListEventId.get(i), ListCityName.get(i),
-                            ListFieldName.get(i), ListEventData.get(i), ListEventTime.get(i),
-                            ListEventDuration.get(i), ListEventPrice.get(i), ListEventPhone.get(i),
-                            ListEventUser.get(i)));
+                    eventsList.add(new Event(listEventId.get(i), listCityName.get(i),
+                            listFieldName.get(i), listEventData.get(i), listEventTime.get(i),
+                            listEventDuration.get(i), listEventPrice.get(i), listEventPassword.get(i),
+                            listEventPhone.get(i), listEventUser.get(i), "0"));
+                }//fori
+
+            }else{
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }//if-else
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
+
+        return eventsList;
+    }//getListEvents
+
+    //получение коллекции событий для авторизированого пользователя
+    public List<Event> getListEventsForAuthUser(String eventId, String idAuthUser) {
+        List<Event> eventsList = new ArrayList<>();
+
+        //обращаемся к базе для получения списка имен городов
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("getListEventsForAuthUser", eventId, idAuthUser);
+
+            String resultdb = bg.get();
+            Log.d("FOOTBALL", resultdb);
+            JSONObject jResult = new JSONObject(resultdb);
+
+            if(jResult.getString("error").toString().equals("")){
+
+                JSONObject jListEventId = jResult.getJSONObject("id");
+                List<String> listEventId = getListFromJSON(jListEventId);
+
+                JSONObject jListCityName = jResult.getJSONObject("city");
+                List<String> listCityName = getListFromJSON(jListCityName);
+
+                JSONObject jListFieldName = jResult.getJSONObject("field");
+                List<String> listFieldName = getListFromJSON(jListFieldName);
+
+                JSONObject jListEventData = jResult.getJSONObject("date");
+                List<String> listEventData = getListFromJSON(jListEventData);
+
+                JSONObject jListEventTime = jResult.getJSONObject("time");
+                List<String> listEventTime = getListFromJSON(jListEventTime);
+
+                JSONObject jListEventDuration = jResult.getJSONObject("duration");
+                List<String> listEventDuration = getListFromJSON(jListEventDuration);
+
+                JSONObject jListEventPrice = jResult.getJSONObject("price");
+                List<String> listEventPrice = getListFromJSON(jListEventPrice);
+
+                JSONObject jListEventPassword = jResult.getJSONObject("password");
+                List<String> listEventPassword = getListFromJSON(jListEventPassword);
+
+                JSONObject jListEventPhone = jResult.getJSONObject("phone");
+                List<String> listEventPhone = getListFromJSON(jListEventPhone);
+
+                JSONObject jListEventUser = jResult.getJSONObject("user");
+                List<String> listEventUser = getListFromJSON(jListEventUser);
+
+                JSONObject jListEventUserStatus = jResult.getJSONObject("status");
+                List<String> listEventUserStatus = getListFromJSON(jListEventUserStatus);
+
+                int n = listCityName.size();
+
+                for (int i = 0; i <n ; i++) {
+                    eventsList.add(new Event(listEventId.get(i), listCityName.get(i),
+                            listFieldName.get(i), listEventData.get(i), listEventTime.get(i),
+                            listEventDuration.get(i), listEventPrice.get(i), listEventPassword.get(i),
+                            listEventPhone.get(i), listEventUser.get(i), listEventUserStatus.get(i)));
                 }//fori
 
             }else{
@@ -591,4 +709,99 @@ public class DBUtilities{
         return result;
     }//isTakingPart
 
+    //удалить запись по id
+    public void deleteRowById(String tableName, String id) {
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("deleteRowById", tableName, id);
+
+            String resultdb = bg.get();
+            JSONObject jResult = new JSONObject(resultdb);
+            if(jResult.getString("error").toString().equals("")){
+                //выводим текст с положительным ответом о создании нового пользователя
+                Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
+            }else{
+                //выводим текст с отрецательным ответом о создании нового пользователя
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }//if-else
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
+    }//deleteRowById
+
+    //получить коллекцию значений по задоному значению и его столбцу
+    public List<String> getListValuesByValueAndHisColumn(String tableName, String searchColumnName,
+                                                          String searchValue, String resultColumnName) {
+        List<String> list = new ArrayList<>();
+
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("getListValuesByValueAndHisColumn", tableName, searchColumnName, searchValue, resultColumnName);
+
+            String resultdb = bg.get();
+            Log.d("FOOTBALL", resultdb);
+            JSONObject jResult = new JSONObject(resultdb);
+
+            if(jResult.getString("error").toString().equals("")){
+
+                JSONObject jListRes = jResult.getJSONObject(
+                        String.format("%s",resultColumnName));
+                list = getListFromJSON(jListRes);
+
+                Log.d("FOOTBALL", list.toString());
+            }else{
+                Toast.makeText(context, "Учасников нет!", Toast.LENGTH_LONG).show();
+            }//if-else
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
+
+        return list;
+    }//getListValuesByValueAndHisColumn
+
+    //удаление записи по двум значениям и их стобцам
+    public void deleteRowByTwoValueAndTheyColumnName(String tableName, String firstColumnName,
+                                                     String firstValue, String secondColumnName,
+                                                     String secondValue) {
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("deleteRowByTwoValueAndTheyColumnName", tableName, firstColumnName,
+                    firstValue, secondColumnName, secondValue);
+
+            String resultdb = bg.get();
+            JSONObject jResult = new JSONObject(resultdb);
+            if(jResult.getString("error").toString().equals("")){
+                //выводим текст с положительным ответом о создании нового пользователя
+                Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
+            }else{
+                //выводим текст с отрецательным ответом о создании нового пользователя
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }//if-else
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
+    }//deleteRowByTwoValueAndTheyColumnName
+
+    //обновляем запись в таблице "events" по id
+    public void updateEventsTable(String id, String field_id, String city_id,
+                                  String date, String time, String duration,
+                                  String price, String password, String phone, String user_id) {
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("updateEventsTable", id, field_id, city_id, date, time, duration, price,
+                    password, phone, user_id);
+
+            String resultdb = bg.get();
+            JSONObject jResult = new JSONObject(resultdb);
+            if(jResult.getString("error").toString().equals("")){
+                //выводим текст с положительным ответом о создании нового пользователя
+                Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
+            }else{
+                //выводим текст с отрецательным ответом о создании нового пользователя
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }//if-else
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
+    }//updateEventsTable
 }//DBUtilities

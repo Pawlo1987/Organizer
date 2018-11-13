@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -39,7 +40,7 @@ public class EditEventActivity extends AppCompatActivity {
     Cursor edEvCursor;                  // курсор для чтения данных из БД
     Context context;
 
-    String authorizLogin = "user1";      // Логин авторизированого пользователя
+    String idAuthUser = "7";      // id авторизированого пользователя
 
     boolean flChangeLoginUserList = false;      //  Поменялся список учасников
 
@@ -63,9 +64,10 @@ public class EditEventActivity extends AppCompatActivity {
     Calendar calendar = Calendar.getInstance();      // объект для работы с датой и временем
 
     Intent intent;                          // для получения результатов из активности
-    int event_id;
+    String eventId;
     String query;                           //переменная для запроса
-    String eventDate;                       // назначения дата события
+    String showEventDate;                   // дата события для показа
+    String eventDateForDB;                  // дата события для БД
     String eventStartTime;                  // Время начала события
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +86,9 @@ public class EditEventActivity extends AppCompatActivity {
 
         //подготовка данных для редактирования
         intent = getIntent();
-        event_id = intent.getIntExtra("_id", 0);
-        spDurationEdEv.setSelection(intent.getIntExtra("duration", 0));
-        etPriceEdEv.setText(String.valueOf(intent.getIntExtra("price", 0)));
+        eventId = intent.getStringExtra("id");
+        spDurationEdEv.setSelection(Integer.parseInt(intent.getStringExtra("duration")));
+        etPriceEdEv.setText(intent.getStringExtra("price"));
         evPasswordEdEv.setText(intent.getStringExtra("password"));
         evPhoneEdEv.setText(intent.getStringExtra("phone"));
 
@@ -101,14 +103,9 @@ public class EditEventActivity extends AppCompatActivity {
         setInitialDate();               //начальная установка даты
         context = getBaseContext();
         dbUtilities = new DBUtilities(context);
-//        dbUtilities.open();
-
-        //запрос для получения курсор с данными
-        query = "SELECT name FROM cities;";
 
         //заполнить spListCity данные для отображения в Spinner
-//        spListCity = dbUtilities.fillListStr(query);
-
+        spListCity = dbUtilities.getStrListTableFromDB("cities", "name");
         spCityEdEv.setAdapter(buildSpinnerStr(spListCity));
         spCityEdEv.setSelection(spListCity.indexOf(intent.getStringExtra("city_name")));
 
@@ -119,25 +116,28 @@ public class EditEventActivity extends AppCompatActivity {
         }//foreach
 
         spDurationEdEv.setAdapter(buildSpinnerInt(spListDuration));
-        spDurationEdEv.setSelection(spListDuration.indexOf(intent.getIntExtra("duration", 0)));
+        spDurationEdEv.setSelection(spListDuration.indexOf(intent.getStringExtra("duration")));
 
         //заполняем список учасников
-        query = "SELECT users.name FROM participants " +
-                "INNER JOIN users ON users._id = participants.user_id " +
-                "WHERE participants.event_id = " + event_id + ";";
-//        loginUserList = dbUtilities.fillListStr(query);
+        //первое - получаем id учасников
+        List<String> idUserList = dbUtilities.getListValuesByValueAndHisColumn("participants","event_id",
+                eventId, "user_id");
+
+        for (String id : idUserList) {
+        //второе - получаем логины всех учасников заданнного события
+        loginUserList.add(dbUtilities.searchValueInColumn("users", "id","login", id));
+        }//foreach
+
         fillLV();
 
         spCityEdEv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id){
-                //запрос для получения курсор с данными
-                query = "SELECT fields.name FROM fields INNER JOIN cities ON cities._id = fields.city_id" +
-                        " WHERE cities.name = \"" + spCityEdEv.getItemAtPosition(position) +"\";";
+
 
                 //заполнить spListField данные для отображения в Spinner
-//                spListField = dbUtilities.fillListStr(query);
+                spListField = dbUtilities.getStrListTableFromDB("fields", "name");
 
                 spFieldEdEv.setAdapter(buildSpinnerStr(spListField));
                 spFieldEdEv.setSelection(spListField.indexOf(intent.getStringExtra("field_name")));
@@ -215,14 +215,19 @@ public class EditEventActivity extends AppCompatActivity {
     // установка начальных даты
     private void setInitialDate() {
         //формирование даты
-        eventDate = DateUtils.formatDateTime(
+        showEventDate = DateUtils.formatDateTime(
                 this,
                 calendar.getTimeInMillis(),  // текущее время в миллисекундах
                 // выводим это время в привычном представлении - дата и время
                 DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR);
 
         //установка текста в TextView
-        tvDateEdEv.setText("Дата " + eventDate);
+        //задаем дату в нужном формате для БД
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd");
+        eventDateForDB = simpleDateFormat.format(calendar.getTimeInMillis());
+
+        //установка текста в TextView
+        tvDateEdEv.setText(showEventDate);
     } // setInitialDateTime
 
     // установка начальных времени
@@ -280,6 +285,7 @@ public class EditEventActivity extends AppCompatActivity {
                 break;
             case R.id.btnConfirmEdEv:            //кнопка обновить
                 updateEvent();
+                finish();
                 break;
         }//switch
     }//onClick
@@ -306,7 +312,6 @@ public class EditEventActivity extends AppCompatActivity {
 
     //заполнение ListView
     private void fillLV() {
-
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, loginUserList);
 
@@ -318,7 +323,6 @@ public class EditEventActivity extends AppCompatActivity {
     private void addUser() {
         Intent intent = new Intent(this, SelectParticipantsActivity.class);
         startActivityForResult(intent, REQ_ADD_USER);
-
     }//addUser
 
     //обработка нажатия клавиши создания нового поля
@@ -335,61 +339,53 @@ public class EditEventActivity extends AppCompatActivity {
 
     //обновление событие
     private void updateEvent() {
-//        //делаем новую запись в таблицу с событиями
-//        ContentValues cv = new ContentValues();
-//        cv.put("city_id", dbUtilities.findIdbySPObject(
-//                spCityEdEv.getSelectedItem().toString(),    //Объект спинера(название города)
-//                "cities",                                   //название таблицы
-//                "name")                                     //название столбца
-//        );
-//        cv.put("field_id", dbUtilities.findIdbySPObject(
-//                spFieldEdEv.getSelectedItem().toString(),   //Объект спинера(название поля)
-//                "fields",                                   //название таблицы
-//                "name")                                     //название столбца
-//        );
-//        cv.put("date", eventDate);
-//        cv.put("time", eventStartTime);
-//        cv.put("duration", spDurationEdEv.getSelectedItem().toString());
-//        cv.put("price", etPriceEdEv.getText().toString());
-//        cv.put("password", evPasswordEdEv.getText().toString());
-//        cv.put("phone", evPhoneEdEv.getText().toString());
-//        cv.put("user_id", intent.getIntExtra("user_id", 0));
-//
-//        //добваить данные через объект ContentValues(cv), в таблицу "event"
-//        dbUtilities.updateTable(cv, "events", String.valueOf(event_id));
-//
-//        if(flChangeLoginUserList){
-//
-//            //заполняем список учасников(_id)
-//            List<Integer> idUsersList = new ArrayList<>();
-//            query = "SELECT participants._id FROM participants " +
-//                    "WHERE participants.event_id = " + event_id + ";";
-//            idUsersList = dbUtilities.fillListInt(query);
-//
-//            //удаляем старый список учасников из таблицы participants
-//            for (Integer idUser : idUsersList) {
-//                dbUtilities.deleteRowById("participants", idUser);
-//            }//foreach
-//
-//            //добавляем участников в таблицу participants
-//            for (String loginUser : loginUserList) {
-//
-//                cv = new ContentValues();
-//                cv.put("event_id", event_id);
-//                cv.put("user_id", dbUtilities.findIdbySPObject(
-//                        loginUser,
-//                        "users",
-//                        "login")
-//                );
-//
-//                //добваить данные через объект ContentValues(cv), в таблицу "participants"
-//                dbUtilities.insertInto(cv, "participants");
-//
-//            }//for
-//        }//if
-//        //переходин в актиность LoginActivity
-//        Intent intent = new Intent(this, LoginActivity.class);
-//        startActivity(intent);
-        finish();
+
+        //делаем новую запись в таблицу с событиями
+        String city_id = dbUtilities.getIdByValue("cities", "name",
+                spCityEdEv.getSelectedItem().toString()    //Объект спинера(название города)
+        );
+        String field_id = dbUtilities.getIdByValue("fields", "name",
+                spFieldEdEv.getSelectedItem().toString()   //Объект спинера(название поля)
+        );
+        String date = eventDateForDB;
+        String time = eventStartTime;
+        String duration = spDurationEdEv.getSelectedItem().toString();
+        String price = etPriceEdEv.getText().toString();
+        String password = evPasswordEdEv.getText().toString();
+        String phone = evPhoneEdEv.getText().toString();
+        String user_id = idAuthUser;
+
+        //добваить данные через объект ContentValues(cv), в таблицу "event"
+        dbUtilities.updateEventsTable( eventId, field_id, city_id, date, time,
+                duration, price, password, phone, user_id);
+
+        if(flChangeLoginUserList){
+
+            //заполняем список учасников(_id)
+            List<String> idUsersList = dbUtilities.getListValuesByValueAndHisColumn(
+                    "participants", "participants.event_id",
+                    eventId, "participants.id"
+            );
+
+            //удаляем старый список учасников из таблицы participants
+            for (String idUser : idUsersList) {
+                dbUtilities.deleteRowByTwoValueAndTheyColumnName(
+                        "participants", "user_id", idUser,
+                        "event_id", eventId
+                );
+            }//foreach
+
+            //добавляем участников в таблицу participants
+            for (String loginUser : loginUserList) {
+
+                user_id = dbUtilities.getIdByValue("users",
+                        "login", loginUser);
+
+                //добваить данные через объект ContentValues(cv), в таблицу "participants"
+                dbUtilities.insertIntoParticipants(eventId, user_id);
+            }//foreach
+        }//if
+
     }//updateEvent
+
 }//EditEventActivity

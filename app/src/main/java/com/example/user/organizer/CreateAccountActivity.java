@@ -105,14 +105,10 @@ public class CreateAccountActivity extends AppCompatActivity {
         //обращяемся к базе данных на сервер для создания новой записи в таблицу user
         dbUtilities.insertIntoUsers( login, password, name, phone, city_id, email);
 
-        //вернутся в активность авторизации
-        turnBack();
     }//CreateNewAccount
 
     //вернутся в активность авторизации
     private void turnBack() {
-        Intent intent = new Intent(this, AuthorizationActivity.class);
-        startActivity(intent);
     }//turnBack
 
     public void onClick(View view) {

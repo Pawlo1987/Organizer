@@ -2,7 +2,6 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -17,18 +16,32 @@ import android.widget.TextView;
 import com.example.user.organizer.fragment.AboutEventShowAllEventDialog;
 import com.example.user.organizer.fragment.DeleteEventDialog;
 import com.example.user.organizer.fragment.LeaveEventDialog;
-import com.example.user.organizer.fragment.ShowAuthUserEventsFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 //-------Активность адаптера для вывода(просмотра) событий авторизированого пользователя--------------
 public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<ShowAuthUserEventsRecyclerAdapter.ViewHolder> {
 
     //поля класса advertisingAndInformationRecyclerAdapter
     private LayoutInflater inflater;
-    private Cursor eventsCursor;
+    Event event = new Event();
+    List<Event> eventsList = new ArrayList<>(); //коллекция событий
     Context context;
     String queryAdapt;
     DBUtilities dbUtilities;
-    int idAuthUser;         //Авторизированный пользователь
+    String idAuthUser;         //Авторизированный пользователь
+
+    String eventId;
+    String eventCityName;
+    String eventFieldName;
+    String eventDate;
+    String eventTime;
+    String eventDuration;
+    String eventPrice;
+    String eventPassword;
+    String eventPhone;
+    String eventUserId;
 
     //параметр для вызова диалога "about"
     final String ID_ABOUT_DIALOG = "aboutEventShowAllEventDialog";
@@ -47,14 +60,14 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
             new DeleteEventDialog(); // диалог подтверждения удалить событие
 
     //конструктор
-    public ShowAuthUserEventsRecyclerAdapter(Context context, String queryAdapt, int idAuthUser) {
+    public ShowAuthUserEventsRecyclerAdapter(Context context, String idAuthUser) {
         this.inflater = LayoutInflater.from(context);
-        this.queryAdapt = queryAdapt;
         this.context = context;
         this.idAuthUser = idAuthUser;
         dbUtilities = new DBUtilities(context);
-//        dbUtilities.open();
-        eventsCursor =  null;//dbUtilities.getDb().rawQuery(queryAdapt, null);
+
+        //получаем коллекцию событий
+        eventsList = dbUtilities.getListEventsForAuthUser("", idAuthUser);
     } // advertisingAndInformationRecyclerAdapter
 
     //создаем новую разметку(View) путем указания разметки
@@ -68,24 +81,22 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
     //привязываем элементы разметки к переменным объекта(в данном случае к курсору)
     @Override
     public void onBindViewHolder(ShowAuthUserEventsRecyclerAdapter.ViewHolder holder, int position) {
-        eventsCursor.moveToPosition(position); // переходим в курсоре на текущую позицию
+        Event eventShow = eventsList.get(position);
 
         // получение данных
-        holder.tvCityShAuUsEvReAd.setText(eventsCursor.getString(0)); //город
-        holder.tvFieldShAuUsEvReAd.setText(eventsCursor.getString(1));//поле
-        holder.tvDateShAuUsEvReAd.setText(eventsCursor.getString(2)); // Дата
-        holder.tvTimeShAuUsEvReAd.setText(eventsCursor.getString(3)); //Время
-        holder.idEvent = eventsCursor.getInt(4);                    //idСобытия
-        holder.idOrganizer = eventsCursor.getInt(5);                //idОрганизатора
+        holder.tvCityShAuUsEvReAd.setText(eventShow.cityName); //город
+        holder.tvFieldShAuUsEvReAd.setText(eventShow.fieldName);//поле
+        holder.tvDateShAuUsEvReAd.setText(eventShow.eventData); // Дата
+        holder.tvTimeShAuUsEvReAd.setText(eventShow.eventTime); //Время
         holder.tvStatusShAuUsEvReAd.setText(
-                (eventsCursor.getInt(6) == 0)?"Участник":"Организатор"
+                (eventShow.eventUserStatus.equals("0"))?"Участник":"Организатор"
         ); // Статус игрока
 
     } // onBindViewHolder
 
     //получаем количество элементов объекта(курсора)
     @Override
-    public int getItemCount() { return eventsCursor.getCount(); }
+    public int getItemCount() { return eventsList.size(); }
 
     //Создаем класс ViewHolder с помощью которого мы получаем ссылку на каждый элемент
     //отдельного пункта списка
@@ -93,17 +104,15 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
             implements PopupMenu.OnMenuItemClickListener{
         final TextView tvDateShAuUsEvReAd, tvTimeShAuUsEvReAd, tvCityShAuUsEvReAd,
                        tvFieldShAuUsEvReAd, tvStatusShAuUsEvReAd;
-        public int idEvent;
-        public int idOrganizer;
 
         ViewHolder(View view){
             super(view);
 
-            tvDateShAuUsEvReAd = (TextView) view.findViewById(R.id.tvDateShAuUsEvReAd);
-            tvTimeShAuUsEvReAd = (TextView) view.findViewById(R.id.tvTimeShAuUsEvReAd);
-            tvCityShAuUsEvReAd = (TextView) view.findViewById(R.id.tvCityShAuUsEvReAd);
-            tvFieldShAuUsEvReAd = (TextView) view.findViewById(R.id.tvFieldShAuUsEvReAd);
-            tvStatusShAuUsEvReAd = (TextView) view.findViewById(R.id.tvStatusShAuUsEvReAd);
+            tvDateShAuUsEvReAd = view.findViewById(R.id.tvDateShAuUsEvReAd);
+            tvTimeShAuUsEvReAd = view.findViewById(R.id.tvTimeShAuUsEvReAd);
+            tvCityShAuUsEvReAd = view.findViewById(R.id.tvCityShAuUsEvReAd);
+            tvFieldShAuUsEvReAd = view.findViewById(R.id.tvFieldShAuUsEvReAd);
+            tvStatusShAuUsEvReAd = view.findViewById(R.id.tvStatusShAuUsEvReAd);
 
             //слушатель события нажатого меню
             view.setOnClickListener(new View.OnClickListener() {
@@ -118,8 +127,19 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
                     popup.setOnMenuItemClickListener(ShowAuthUserEventsRecyclerAdapter.ViewHolder.this);
                     popup.show();
 
+                    //получаем данные о нажатом событии
+                    event = eventsList.get(getAdapterPosition());
+                    eventId = event.eventId;
+                    eventCityName = event.cityName;
+                    eventFieldName = event.fieldName;
+                    eventDate = event.eventData;
+                    eventTime = event.eventTime;
+                    eventDuration = event.eventDuration;
+                    eventPrice = event.eventPrice;
+                    eventPassword = event.eventPassword;
+                    eventPhone = event.eventPhone;
+                    eventUserId = event.eventUserId;
                     //TODO -- надо доделать обновление адаптера
-                    eventsCursor =  null;//dbUtilities.getDb().rawQuery(queryAdapt, null);
                     notifyDataSetChanged();
                 }
             });
@@ -161,26 +181,23 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
 
         //редактировать событие
         private void editEvent() {
-            Cursor cursor;
-            // Запрос на полную информацию о собитии
-            String query = "SELECT fields.name, cities.name, date, time, duration, price, password, events.phone " +
-                    "FROM events " +
-                    "INNER JOIN fields ON fields._id = events.field_id " +
-                    "INNER JOIN cities ON cities._id = events.city_id " +
-                    "WHERE events._id = " + idEvent + ";";
-            cursor = null;//dbUtilities.getDb().rawQuery(query, null);
-            cursor.moveToPosition(0); // переходим в курсоре в нулевую позицию
+//            // Запрос на полную информацию о собитии
+//            String query = "SELECT fields.name, cities.name, date, time, duration, price, password, events.phone " +
+//                    "FROM events " +
+//                    "INNER JOIN fields ON fields._id = events.field_id " +
+//                    "INNER JOIN cities ON cities._id = events.city_id " +
+//                    "WHERE events._id = " + idEvent + ";";
             Intent intent = new Intent(context, EditEventActivity.class);
-            intent.putExtra("_id", idEvent);
-            intent.putExtra("field_name", cursor.getString(0));
-            intent.putExtra("city_name", cursor.getString(1));
-            intent.putExtra("date", cursor.getString(2));
-            intent.putExtra("time", cursor.getString(3));
-            intent.putExtra("duration", cursor.getInt(4));
-            intent.putExtra("price", cursor.getInt(5));
-            intent.putExtra("password", cursor.getString(6));
-            intent.putExtra("phone", cursor.getString(7));
-            intent.putExtra("user_id", idAuthUser);
+            intent.putExtra("id", eventId);
+            intent.putExtra("field_name", eventFieldName);
+            intent.putExtra("city_name", eventCityName);
+            intent.putExtra("date", eventDate);
+            intent.putExtra("time", eventTime);
+            intent.putExtra("duration", eventDuration);
+            intent.putExtra("price", eventPrice);
+            intent.putExtra("password", eventPassword);
+            intent.putExtra("phone", eventPhone);
+            intent.putExtra("user_id", eventUserId);
             context.startActivity(intent);
         }//editEvent
 
@@ -190,7 +207,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
             Log.d("MyLog", message);
             Bundle args = new Bundle();    // объект для передачи параметров в диалог
             args.putString("message", message);
-            args.putInt("event_id", idEvent);
+            args.putString("event_id", eventId);
             deleteEventDialog.setArguments(args);
 
             // отображение диалогового окна
@@ -204,39 +221,34 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
             Log.d("MyLog", message);
             Bundle args = new Bundle();    // объект для передачи параметров в диалог
             args.putString("message", message);
-            args.putInt("event_id", idEvent);
-            args.putInt("user_id", idAuthUser);
+            args.putString("event_id", eventId);
+            args.putString("user_id", idAuthUser);
             leaveEventDialog.setArguments(args);
 
             // отображение диалогового окна
             leaveEventDialog.show(((AppCompatActivity)context).
                     getSupportFragmentManager(), ID_LEAVE_DIALOG);
+
+            //получаем коллекцию событий
+            eventsList = dbUtilities.getListEventsForAuthUser("", idAuthUser);
         }//leaveEvent
 
         //строка с полной информацией о событии
         private String fullInfoAboutEvent() {
-            Cursor cursor;
-            // Запрос на полную информацию о собитии
-            String query = "SELECT cities.name, fields.name, date, time, duration, price, events.phone FROM events " +
-                    "INNER JOIN cities ON cities._id = events.city_id \n" +
-                    "INNER JOIN fields ON fields._id = events.field_id \n" +
-                    "WHERE events._id = " + idEvent + ";";
-            cursor = null;//dbUtilities.getDb().rawQuery(query, null);
-            cursor.moveToPosition(0); // переходим в курсоре в нулевую позицию
             return String.format("Собитие в городе %s\n" +
                             "На поле %s \n" +
                             "Назначено на %s\n" +
                             "Cостоится в %s\n" +
-                            "Продолжитльность %d мин\n" +
-                            "Стоимость %d руб\n" +
+                            "Продолжитльность %s мин\n" +
+                            "Стоимость %s руб\n" +
                             "Телефон %s",
-                    cursor.getString(0),
-                    cursor.getString(1),
-                    cursor.getString(2),
-                    cursor.getString(3),
-                    cursor.getInt(4),
-                    cursor.getInt(5),
-                    cursor.getString(6));
+                    eventCityName,
+                    eventFieldName,
+                    eventDate,
+                    eventTime,
+                    eventDuration,
+                    eventPrice,
+                    eventPhone);
         }//fullInfoAboutEvent
 
     } // class ViewHolder

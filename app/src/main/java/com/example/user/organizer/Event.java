@@ -11,12 +11,15 @@ public class Event implements Parcelable{
     String eventTime;
     String eventDuration;
     String eventPrice;
+    String eventPassword;
     String eventPhone;
     String eventUserId;
+    String eventUserStatus;
 
     public Event(String eventId, String cityName, String fieldName,
                  String eventData, String eventTime, String eventDuration,
-                 String eventPrice, String eventPhone, String eventUserId) {
+                 String eventPrice, String eventPassword, String eventPhone,
+                 String eventUserId, String eventUserStatus) {
         this.eventId = eventId;
         this.cityName = cityName;
         this.fieldName = fieldName;
@@ -24,13 +27,14 @@ public class Event implements Parcelable{
         this.eventTime = eventTime;
         this.eventDuration = eventDuration;
         this.eventPrice = eventPrice;
+        this.eventPassword = eventPassword;
         this.eventPhone = eventPhone;
         this.eventUserId = eventUserId;
+        this.eventUserStatus = eventUserStatus;
     }//Event
 
     public Event() {
     }//Event
-
 
     protected Event(Parcel in) {
         eventId = in.readString();
@@ -40,8 +44,10 @@ public class Event implements Parcelable{
         eventTime = in.readString();
         eventDuration = in.readString();
         eventPrice = in.readString();
+        eventPassword = in.readString();
         eventPhone = in.readString();
         eventUserId = in.readString();
+        eventUserStatus = in.readString();
     }
 
     public static final Creator<Event> CREATOR = new Creator<Event>() {
@@ -55,6 +61,12 @@ public class Event implements Parcelable{
             return new Event[size];
         }
     };
+
+    public String getEventPassword() { return eventPassword; }
+    public void setEventPassword(String eventPassword) { this.eventPassword = eventPassword; }
+
+    public String getEventUserStatus() { return eventUserStatus; }
+    public void setEventUserStatus(String eventUserStatus) { this.eventUserStatus = eventUserStatus; }
 
     public String getEventUserId() { return eventUserId; }
     public void setEventUserId(String eventUserId) { this.eventUserId = eventUserId; }
@@ -97,7 +109,9 @@ public class Event implements Parcelable{
         dest.writeString(eventTime);
         dest.writeString(eventDuration);
         dest.writeString(eventPrice);
+        dest.writeString(eventPassword);
         dest.writeString(eventPhone);
         dest.writeString(eventUserId);
+        dest.writeString(eventUserStatus);
     }
 }//Event

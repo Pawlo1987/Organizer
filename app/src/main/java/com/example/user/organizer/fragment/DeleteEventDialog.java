@@ -8,17 +8,17 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 
+import com.example.user.organizer.DBUtilities;
 import com.example.user.organizer.inteface.CustomInterface;
 
 //---------------------- Фрагмент с диалогом удалить событие -------------------
 public class DeleteEventDialog extends DialogFragment {
-    //интерфейс для Принятия участия
-    CustomInterface delete;
+    DBUtilities dbUtilities;
 
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
-        delete = (CustomInterface) context;
+        dbUtilities = new DBUtilities(context);
     } // onAttach
 
     @NonNull // создание диалога
@@ -30,7 +30,7 @@ public class DeleteEventDialog extends DialogFragment {
 
         // прочитать данные, переданные из активности (из точки вызова)
         String message = getArguments().getString("message");
-        int event_id = getArguments().getInt("event_id", 0);
+        String event_id = getArguments().getString("event_id");
 
         return builder
                 .setTitle("Подтверждение удаления события")
@@ -38,7 +38,7 @@ public class DeleteEventDialog extends DialogFragment {
 //                .setIcon(R.drawable.exlamation)
                 // лямбда-выражение на клик кнопки "Да"
                 .setPositiveButton("Подтверждаю",
-                        (dialog, whichButton) -> delete.deleteEvent(event_id))
+                        (dialog, whichButton) -> dbUtilities.deleteRowById("events", event_id))
                 .setNegativeButton("Не подтверждаю", null) // не назначаем слушателя кликов по кнопке "Нет"
                 .setCancelable(false)           // запрет закрытия диалога кнопкой Назад
                 .create();

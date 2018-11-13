@@ -97,7 +97,7 @@ public class LeaveEventDialog extends DialogFragment {
 
         //получаем данные для уведомления
         List<Event> listEvent = new ArrayList<>();
-        listEvent = dbUtilities.getListEvents(event_id);
+        listEvent = dbUtilities.getListEventsForAuthUser(event_id, user_id);
 
         dbUtilities.insertIntoNotifications(event_id,
               listEvent.get(0).getEventUserId(),    //увеомление для организатора

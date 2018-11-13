@@ -142,6 +142,7 @@ implements CallDialogsAuthUserEvents {
         Bundle args = new Bundle();    // объект для передачи параметров в диалог
         args.putString("message", message);
         args.putString("event_id", eventId);
+        args.putString("user_id", idAuthUser);
         deleteEventDialog.setArguments(args);
 
         // Возврат результата выполнения из DialogFragment во Fragment минуя Activity

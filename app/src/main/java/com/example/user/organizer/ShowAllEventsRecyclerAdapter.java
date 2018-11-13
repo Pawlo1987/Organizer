@@ -54,7 +54,8 @@ public class ShowAllEventsRecyclerAdapter extends
         this.context = context;
         this.idAuthUser = idAuthUser;
         dbUtilities = new DBUtilities(context);
-        this.eventsList = dbUtilities.getListEvents("");
+
+        this.eventsList = dbUtilities.getListEventsForAuthUser("", idAuthUser);
     } // ShowAllEventsRecyclerAdapter
 
     // метод для обновления адаптера
@@ -63,7 +64,8 @@ public class ShowAllEventsRecyclerAdapter extends
         eventsList.clear();
 
         //получаем коллекцию событий
-        eventsList = dbUtilities.getListEvents("");
+        eventsList = dbUtilities.getListEventsForAuthUser("", idAuthUser);
+
         notifyDataSetChanged();
     }//updateEventList
 
@@ -85,6 +87,16 @@ public class ShowAllEventsRecyclerAdapter extends
         holder.tvFieldShAlEvReAd.setText(eventShow.fieldName);//поле
         holder.tvDateShAlEvReAd.setText(dateShowFormat(eventShow.eventData)); // Дата
         holder.tvTimeShAlEvReAd.setText(eventShow.eventTime); //Время
+
+        //опредиляемся с цветом CardView взависимости от роли пользователя в собитии
+        int color;
+        if(eventShow.eventUserStatus.equals("0"))
+            color = context.getResources().getColor(R.color.colorMyColorBlue);
+        else if(eventShow.eventUserStatus.equals("1"))
+            color = context.getResources().getColor(R.color.colorMyColorGold);
+        else color = context.getResources().getColor(R.color.colorMyColorGrey);
+
+        holder.cvMainShAlEvAc.setCardBackgroundColor( color );
     } // onBindViewHolder
 
     //получаем количество элементов объекта(курсора)
@@ -112,17 +124,26 @@ public class ShowAllEventsRecyclerAdapter extends
             cvMainShAlEvAc.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
+                    //опредиляемся с цветом CardView взависимости от роли пользователя в собитии
+                    int color;
+                    if(eventsList.get(getAdapterPosition()).eventUserStatus.equals("0"))
+                            color = context.getResources().getColor(R.color.colorMyColorBlue);
+                        else if(eventsList.get(getAdapterPosition()).eventUserStatus.equals("1"))
+                            color = context.getResources().getColor(R.color.colorMyColorGold);
+                        else color = context.getResources().getColor(R.color.colorMyColorGrey);
+
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
-                            cvMainShAlEvAc.setCardBackgroundColor(Color.argb(255,255,255,255));
+                            cvMainShAlEvAc.setCardBackgroundColor(
+                                    context.getResources().getColor(R.color.colorMyColorWhite)
+                            );
                             break;
                         case MotionEvent.ACTION_UP:
-                            cvMainShAlEvAc.setCardBackgroundColor(Color.argb(255,170,170,170));
+                            cvMainShAlEvAc.setCardBackgroundColor(color);
                             break;
                         default:
-                            cvMainShAlEvAc.setCardBackgroundColor(Color.argb(255,170,170,170));
+                            cvMainShAlEvAc.setCardBackgroundColor(color);
                             break;
-
                     }//switch
                     return false;
                 }//onTouch

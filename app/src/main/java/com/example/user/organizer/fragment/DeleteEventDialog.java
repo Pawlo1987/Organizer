@@ -66,6 +66,7 @@ public class DeleteEventDialog extends DialogFragment {
         // прочитать данные, переданные из активности (из точки вызова)
         String message = getArguments().getString("message");
         String event_id = getArguments().getString("event_id");
+        String user_id = getArguments().getString("user_id");
 
         return builder
                 .setTitle("Подтверждение удаления события")
@@ -75,7 +76,7 @@ public class DeleteEventDialog extends DialogFragment {
                 .setPositiveButton("Подтверждаю", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        deleteEvent(event_id);
+                        deleteEvent(event_id, user_id);
                     }
                 })
                 .setNegativeButton("Не подтверждаю", null) // не назначаем слушателя кликов по кнопке "Нет"
@@ -84,7 +85,7 @@ public class DeleteEventDialog extends DialogFragment {
     }//onCreateDialog
 
     //подтверждение удаления
-    private void deleteEvent(String event_id){
+    private void deleteEvent(String event_id, String user_id){
         //заполняем список учасников(id)
         List<String> idParticipantsList = dbUtilities.getListValuesByValueAndHisColumn(
                 "participants", "event_id",
@@ -95,7 +96,7 @@ public class DeleteEventDialog extends DialogFragment {
         //удаляем старый список учасников из таблицы participants
         for (String idParticipants : idParticipantsList) {
             //получаем данные для уведомления
-            listEvent = dbUtilities.getListEvents(event_id);
+            listEvent = dbUtilities.getListEventsForAuthUser(event_id, user_id);
 
             dbUtilities.insertIntoNotifications(event_id,
                  dbUtilities.searchValueInColumn("participants", "id",

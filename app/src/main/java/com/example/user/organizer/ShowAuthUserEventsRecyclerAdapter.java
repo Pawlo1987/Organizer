@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.user.organizer.inteface.CallDialogsAuthUserEvents;
 
@@ -95,7 +96,14 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         holder.tvStatusShAuUsEvReAd.setText(
                 (eventShow.eventUserStatus.equals("0"))?"Участник":"Организатор"
         ); // Статус игрока
-
+        //опредиляемся с цветом CardView взависимости от роли пользователя в собитии
+        holder.cvMainShAuUsEvReAd.setCardBackgroundColor(
+                (eventShow.eventUserStatus.equals("0"))
+                    ?context.getResources().getColor(R.color.colorMyColorBlue)
+                    :context.getResources().getColor(R.color.colorMyColorGold)
+        );
+        if(eventShow.eventUserStatus.equals("2"))
+            holder.cvMainShAuUsEvReAd.setVisibility(View.GONE);
     } // onBindViewHolder
 
     //получаем количество элементов объекта(курсора)
@@ -112,7 +120,6 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
 
         ViewHolder(View view){
             super(view);
-
             tvDateShAuUsEvReAd = view.findViewById(R.id.tvDateShAuUsEvReAd);
             tvTimeShAuUsEvReAd = view.findViewById(R.id.tvTimeShAuUsEvReAd);
             tvCityShAuUsEvReAd = view.findViewById(R.id.tvCityShAuUsEvReAd);
@@ -122,30 +129,35 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
             ivDeleteEventShAuUsEvReAd = view.findViewById(R.id.ivDeleteEventShAuUsEvReAd);
             cvMainShAuUsEvReAd = view.findViewById(R.id.cvMainShAuUsEvReAd);
 
-            cvMainShAuUsEvReAd.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            cvMainShAuUsEvReAd.setCardBackgroundColor(Color.argb(255,255,255,255));
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            cvMainShAuUsEvReAd.setCardBackgroundColor(Color.argb(255,170,170,170));
-                            break;
-                        default:
-                            cvMainShAuUsEvReAd.setCardBackgroundColor(Color.argb(255,170,170,170));
-                            break;
+            //onTouch
+            cvMainShAuUsEvReAd.setOnTouchListener((v, event) -> {
+                //опредиляемся с цветом CardView взависимости от роли пользователя в собитии
+                int color = eventsList.get(getAdapterPosition()).eventUserStatus.equals("0")
+                        ?context.getResources().getColor(R.color.colorMyColorBlue)
+                        :context.getResources().getColor(R.color.colorMyColorGold);
 
-                    }//switch
-                    return false;
-                }//onTouch
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        cvMainShAuUsEvReAd.setCardBackgroundColor(
+                                context.getResources().getColor(R.color.colorMyColorWhite)
+                        );
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        cvMainShAuUsEvReAd.setCardBackgroundColor(color);
+                        break;
+                    default:
+                        cvMainShAuUsEvReAd.setCardBackgroundColor(color);
+                        break;
+                }//switch
+                return false;
             });//setOnTouchListener
 
-            cvMainShAuUsEvReAd.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    //получаем данные о нажатом событии
-                    event = eventsList.get(getAdapterPosition());
+            //onLongClick
+            cvMainShAuUsEvReAd.setOnLongClickListener(v -> {
+                //получаем данные о нажатом событии
+                event = eventsList.get(getAdapterPosition());
+                //если в данном событии авторизированный пользователь организатор
+                if(event.eventUserStatus.equals("1")) {
                     eventId = event.eventId;
                     eventCityName = event.cityName;
                     eventFieldName = event.fieldName;
@@ -159,15 +171,16 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
 
                     //выбран пункт редактировать события
                     editEvent();
-                    return true;
-                }//onLongClick
+                }else {
+                    Toast.makeText(context, "Нет прав для редактирования!", Toast.LENGTH_SHORT).show();
+                }//if-else
+                return true;
             });//setOnLongClickListener
 
             //слушатель события нажатия стрелки
             ivArrowShAuUsEvReAd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     //получаем данные о нажатом событии
                     event = eventsList.get(getAdapterPosition());
                     eventId = event.eventId;
@@ -183,7 +196,6 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
 
                     //выбран пункт подробная информация
                     aboutEvent();
-
                 }//onClick
             });//setOnClickListener
 
@@ -191,7 +203,6 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
             ivDeleteEventShAuUsEvReAd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     //получаем данные о нажатом событии
                     event = eventsList.get(getAdapterPosition());
                     eventId = event.eventId;
@@ -209,11 +220,8 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
                     if(tvStatusShAuUsEvReAd.getText().toString().equals("Организатор"))
                          deleteEvent();//выбран пункт удалить событие
                     else leaveEvent();
-
                 }//onClick
-
-            });
-
+            });//setOnClickListener
         } // ViewHolder
 
         //подробная информация

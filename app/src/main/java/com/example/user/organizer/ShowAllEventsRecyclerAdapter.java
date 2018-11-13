@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.user.organizer.fragment.SelectDurationDialog;
@@ -125,10 +126,12 @@ public class ShowAllEventsRecyclerAdapter extends
                 tvCityShAlEvReAd, tvFieldShAlEvReAd;
         CardView cvMainShAlEvAc;
         ImageView ivArrowShAlEvReAd, ivParticipantsShAlEvReAd;
+        LinearLayout llMainShAlEvReAd;
 
         ViewHolder(View view){
             super(view);
 
+            llMainShAlEvReAd = view.findViewById(R.id.llMainShAlEvReAd);
             tvDateShAlEvReAd = view.findViewById(R.id.tvDateShAlEvReAd);
             tvTimeShAlEvReAd = view.findViewById(R.id.tvTimeShAlEvReAd);
             tvCityShAlEvReAd = view.findViewById(R.id.tvCityShAlEvReAd);

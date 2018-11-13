@@ -11,8 +11,9 @@
     <TextView
         android:id="@+id/tvHeadSeFr"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="20dp"
+        android:layout_weight="1"
         android:fontFamily="@font/delius_swash_caps"
         android:text="@string/tvHeadSeFr"
         android:textAlignment="center"
@@ -23,7 +24,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="4"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_weight="1.1"
         android:orientation="horizontal">
 
         <Button
@@ -32,7 +35,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:text="@string/btnChangeLogoSeFr" />
+            android:text="@string/btnChangeLogoSeFr"
+            android:textSize="12sp" />
 
         <ImageView
             android:id="@+id/ivProfileLogoSeFr"
@@ -45,7 +49,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="5"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_weight="1.1"
         android:orientation="horizontal">
 
         <Button
@@ -54,12 +60,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="@string/btnChangeCitySeFr" />
+            android:text="@string/btnChangeCitySeFr"
+            android:textSize="12sp" />
 
         <Spinner
             android:id="@+id/spChangeCitySeFr"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_weight="1" />
 
@@ -68,7 +75,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="5"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_weight="1.1"
         android:orientation="horizontal">
 
         <Button
@@ -77,20 +86,23 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="@string/btnChangeNameSeFr" />
+            android:text="@string/btnChangeNameSeFr"
+            android:textSize="12sp" />
 
         <EditText
             android:id="@+id/etChangeNameSeFr"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:inputType="textPersonName"/>
+            android:inputType="textPersonName" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="5"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_weight="1.1"
         android:orientation="horizontal">
 
         <Button
@@ -99,7 +111,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="@string/btnChangeLoginSeFr" />
+            android:text="@string/btnChangeLoginSeFr"
+            android:textSize="12sp" />
 
         <EditText
             android:id="@+id/etChangeLoginSeFr"
@@ -112,7 +125,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="5"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_weight="1.1"
         android:orientation="horizontal">
 
         <Button
@@ -121,7 +136,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="@string/btnChangePasSeFr" />
+            android:text="@string/btnChangePasSeFr"
+            android:textSize="12sp" />
 
         <EditText
             android:id="@+id/etChangePasSeFr"
@@ -134,7 +150,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="5"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_weight="1.1"
         android:orientation="horizontal">
 
         <Button
@@ -143,7 +161,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="@string/btnChangeEmailSeFr" />
+            android:text="@string/btnChangeEmailSeFr"
+            android:textSize="12sp" />
 
         <EditText
             android:id="@+id/etChangeEmailSeFr"
@@ -156,7 +175,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="5"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_weight="1.1"
         android:orientation="horizontal">
 
         <Button
@@ -165,7 +186,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="@string/btnChangePhoneSeFr" />
+            android:text="@string/btnChangePhoneSeFr"
+            android:textSize="12sp" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/etChangePhoneSeFrLayout"
@@ -189,16 +211,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="5"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_weight="1.1"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/btnDeleteProfileSeFr"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_weight="1"
-            android:text="@string/btnDeleteProfileSeFr" />
+            android:text="@string/btnDeleteProfileSeFr"
+            android:textSize="12sp" />
     </LinearLayout>
 
 </LinearLayout>

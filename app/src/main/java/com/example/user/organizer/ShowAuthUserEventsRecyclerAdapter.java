@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -133,9 +134,11 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
                        tvFieldShAuUsEvReAd, tvStatusShAuUsEvReAd, tvExecutionStatusShAuUsEvReAd;
         ImageView ivArrowShAuUsEvReAd, ivDeleteEventShAuUsEvReAd, ivParticipantsShAuUsEvReAd;
         CardView cvMainShAuUsEvReAd;
+        LinearLayout llMainShAuUsEvReAd;
 
         ViewHolder(View view){
             super(view);
+            llMainShAuUsEvReAd = view.findViewById(R.id.llMainShAuUsEvReAd);
             tvDateShAuUsEvReAd = view.findViewById(R.id.tvDateShAuUsEvReAd);
             tvTimeShAuUsEvReAd = view.findViewById(R.id.tvTimeShAuUsEvReAd);
             tvCityShAuUsEvReAd = view.findViewById(R.id.tvCityShAuUsEvReAd);

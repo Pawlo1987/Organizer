@@ -103,8 +103,15 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
                     ?context.getResources().getColor(R.color.colorMyColorGreen)
                     :context.getResources().getColor(R.color.colorMyColorGold)
         );
+
+        //скрываем собыитя в которых пользовательне учавствует
         if(eventShow.eventUserStatus.equals("2"))
             holder.cvMainShAuUsEvReAd.setVisibility(View.GONE);
+
+        //проверка завершилось ли событие
+        boolean status = dbUtilities.getEventExecutionStatus(eventShow.eventData, eventShow.eventTime);
+        if(status) holder.tvExecutionStatusShAuUsEvReAd.setText("Активная");
+        else holder.tvExecutionStatusShAuUsEvReAd.setText("Не активная");
     } // onBindViewHolder
 
     //получаем количество элементов объекта(курсора)
@@ -115,7 +122,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
     //отдельного пункта списка
     public class ViewHolder extends RecyclerView.ViewHolder{
         final TextView tvDateShAuUsEvReAd, tvTimeShAuUsEvReAd, tvCityShAuUsEvReAd,
-                       tvFieldShAuUsEvReAd, tvStatusShAuUsEvReAd;
+                       tvFieldShAuUsEvReAd, tvStatusShAuUsEvReAd, tvExecutionStatusShAuUsEvReAd;
         ImageView ivArrowShAuUsEvReAd, ivDeleteEventShAuUsEvReAd;
         CardView cvMainShAuUsEvReAd;
 
@@ -125,10 +132,12 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
             tvTimeShAuUsEvReAd = view.findViewById(R.id.tvTimeShAuUsEvReAd);
             tvCityShAuUsEvReAd = view.findViewById(R.id.tvCityShAuUsEvReAd);
             tvFieldShAuUsEvReAd = view.findViewById(R.id.tvFieldShAuUsEvReAd);
+            tvExecutionStatusShAuUsEvReAd = view.findViewById(R.id.tvExecutionStatusShAuUsEvReAd);
             tvStatusShAuUsEvReAd = view.findViewById(R.id.tvStatusShAuUsEvReAd);
             ivArrowShAuUsEvReAd = view.findViewById(R.id.ivArrowShAuUsEvReAd);
             ivDeleteEventShAuUsEvReAd = view.findViewById(R.id.ivDeleteEventShAuUsEvReAd);
             cvMainShAuUsEvReAd = view.findViewById(R.id.cvMainShAuUsEvReAd);
+
 
             //onTouch
             cvMainShAuUsEvReAd.setOnTouchListener((v, event) -> {
@@ -157,8 +166,10 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
             cvMainShAuUsEvReAd.setOnLongClickListener(v -> {
                 //получаем данные о нажатом событии
                 event = eventsList.get(getAdapterPosition());
+                //проверка завершилось ли событие
+                boolean status = dbUtilities.getEventExecutionStatus(event.getEventData(), event.getEventTime());
                 //если в данном событии авторизированный пользователь организатор
-                if(event.eventUserStatus.equals("1")) {
+                if(event.eventUserStatus.equals("1") && status) {
                     eventId = event.eventId;
                     eventCityName = event.cityName;
                     eventFieldName = event.fieldName;

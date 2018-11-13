@@ -119,9 +119,9 @@
     <string name="item_about_field_catalog_rva">подробная информация</string>
     <string name="show_field_catalog">Каталог полей</string>
     <string name="btnCheckConMaAc">ПРОВЕРКА СОЕДИНЕНИЯ!</string>
-    <string name="tvTypeShAlEvReAd">Тренировка</string>
+    <string name="tvTypeShAlEvReAd">ИГРА</string>
     <string name="tvThirdLineShAlEvReAd">Город:</string>
-    <string name="tvTypeShAuUsEvReAd">Тренировка</string>
+    <string name="tvTypeShAuUsEvReAd">ИГРА</string>
     <string name="title_activity_maps">Map</string>
     <string name="tvGeoInputMethodCrFi">Геопозиция</string>
     <string name="btnSelectGeoposCrFi">на карте</string>

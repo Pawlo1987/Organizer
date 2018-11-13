@@ -16,7 +16,9 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -1279,4 +1281,58 @@ public class DBUtilities {
         );
     }//inputFilterForPhoneNumber
 
+    //получение статуса выполнениня события
+    //false - событие завершенно
+    //true - собыите ожидает игру
+    public boolean getEventExecutionStatus(String eventData, String eventTime) {
+        boolean status = false;
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateTimeNow = dateformat.format(c.getTime());
+        String dateTimeEvent = String.format("%s %s",eventData, eventTime);
+
+        if(Integer.parseInt(dateTimeEvent.substring(0,4)) >             //год события > год сейчас
+                Integer.parseInt(dateTimeNow.substring(0,4))){
+            status = true;
+        }else if(Integer.parseInt(dateTimeEvent.substring(0,4)) <      //год события < год сейчас
+                    Integer.parseInt(dateTimeNow.substring(0,4))){
+                status = false;
+        }else if(Integer.parseInt(dateTimeEvent.substring(0,4)) ==      //год события = год сейчас
+                    Integer.parseInt(dateTimeNow.substring(0,4))) {
+            if(Integer.parseInt(dateTimeEvent.substring(5,7)) >             //месяц события > месяц сейчас
+                    Integer.parseInt(dateTimeNow.substring(5,7))){
+                status = true;
+            }else if(Integer.parseInt(dateTimeEvent.substring(5,7)) <      //месяц события < месяц сейчас
+                    Integer.parseInt(dateTimeNow.substring(5,7))){
+                status = false;
+            }else if(Integer.parseInt(dateTimeEvent.substring(5,7)) ==      //месяц события = месяц сейчас
+                    Integer.parseInt(dateTimeNow.substring(5,7))) {
+                if(Integer.parseInt(dateTimeEvent.substring(8,10)) >             //день события > день сейчас
+                        Integer.parseInt(dateTimeNow.substring(8,10))){
+                    status = true;
+                }else if(Integer.parseInt(dateTimeEvent.substring(8,10)) <      //день события < день сейчас
+                        Integer.parseInt(dateTimeNow.substring(8,10))){
+                    status = false;
+                }else if(Integer.parseInt(dateTimeEvent.substring(8,10)) ==      //день события = день сейчас
+                        Integer.parseInt(dateTimeNow.substring(8,10))) {
+                    if(Integer.parseInt(dateTimeEvent.substring(11,13)) >             //час события > час сейчас
+                            Integer.parseInt(dateTimeNow.substring(11,13))){
+                        status = true;
+                    }else if(Integer.parseInt(dateTimeEvent.substring(11,13)) <      //час события < час сейчас
+                            Integer.parseInt(dateTimeNow.substring(11,13))){
+                        status = false;
+                    }else if(Integer.parseInt(dateTimeEvent.substring(11,13)) ==      //час события = час сейчас
+                            Integer.parseInt(dateTimeNow.substring(11,13))) {
+                        status = false;
+                    }
+                }
+            }
+        }
+        return status;
+    }//getEventExecutionStatus
+
+    //получение время
+    public void getTime() {
+
+    }//getTime
 }//DBUtilities

@@ -391,8 +391,10 @@ public class CreateEventActivity extends AppCompatActivity{
 
     //Создать новое событие
     private void createEvent() {
-
-        if ( etPriceCrEv.getText().toString().equals("")
+        //статус создания по времени(создавать минимум за час)
+        boolean status = dbUtilities.getEventExecutionStatus(eventDateForDB, eventStartTime);
+        if ( !status
+                ||etPriceCrEv.getText().toString().equals("")
                 || etPhoneCrEv.length()<14
                 || evPasswordCrEv.getText().toString().equals("")
                 || spListField.size() == 0) {

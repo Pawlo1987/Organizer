@@ -99,7 +99,11 @@ public class ShowAllEventsRecyclerAdapter extends
             color = context.getResources().getColor(R.color.colorMyColorGold);
         else color = context.getResources().getColor(R.color.colorMyColorGrey);
 
-        holder.cvMainShAlEvAc.setCardBackgroundColor( color );
+        //проверка завершилось ли событие
+        boolean status = dbUtilities.getEventExecutionStatus(eventShow.eventData, eventShow.eventTime);
+        if(status) holder.cvMainShAlEvAc.setCardBackgroundColor( color );
+        else holder.cvMainShAlEvAc.setVisibility(View.GONE);
+
     } // onBindViewHolder
 
     //получаем количество элементов объекта(курсора)

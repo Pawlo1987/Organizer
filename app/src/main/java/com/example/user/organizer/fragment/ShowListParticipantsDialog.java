@@ -92,7 +92,7 @@ public class ShowListParticipantsDialog extends DialogFragment {
         return builder
                 .setTitle("Список участников("+String.valueOf(loginUserList.size())+"):")
                 .setView(view)
-//              .setIcon(R.drawable.exlamation)
+                .setIcon(R.drawable.icon_information)
 //              лямбда-выражение на клик кнопки "Да"
                 .setPositiveButton("OK", null)
                 .setCancelable(false)           // запрет закрытия диалога кнопкой Назад

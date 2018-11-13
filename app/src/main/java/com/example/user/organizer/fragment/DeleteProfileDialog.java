@@ -16,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import com.example.user.organizer.AuthorizationActivity;
 import com.example.user.organizer.DBUtilities;
 import com.example.user.organizer.NavigationDrawerLogInActivity;
+import com.example.user.organizer.R;
 
 import java.util.List;
 
@@ -71,19 +72,19 @@ public class DeleteProfileDialog extends DialogFragment {
         String message = "УДАЛИТЬ ВАШ ПРОФИЛЬ?";
 
         return builder
-                .setTitle("Подтверждение изменения данных")
+                .setTitle("Вы подтверждаете удаление профиля?")
                 .setMessage(message)
-//                .setIcon(R.drawable.exlamation)
+                .setIcon(R.drawable.icon_question)
                 // лямбда-выражение на клик кнопки "Да"
 //                    .setPositiveButton("Подтверждаю",
 //                            (dialog, whichButton) -> dbUtilities.updateOneColumnTable(userId, column, logo))
-                .setPositiveButton("Подтверждаю", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Да", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         deleteProfile(userId);
                     }
                 })
-                .setNegativeButton("Не подтверждаю", null) // не назначаем слушателя кликов по кнопке "Нет"
+                .setNegativeButton("Нет", null) // не назначаем слушателя кликов по кнопке "Нет"
                 .setCancelable(false)           // запрет закрытия диалога кнопкой Назад
                 .create();
     }//onCreateDialog

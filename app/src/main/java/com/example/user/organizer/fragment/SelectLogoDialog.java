@@ -68,18 +68,18 @@ public class SelectLogoDialog extends DialogFragment {
         String table = getArguments().getString("table");
 
             return builder
-                    .setTitle("Подтверждение выбраного логотипа")
-//                .setIcon(R.drawable.exlamation)
+                    .setTitle("Вы подтверждаете выбор логотипа?")
+                    .setIcon(R.drawable.icon_question)
                     // лямбда-выражение на клик кнопки "Да"
 //                    .setPositiveButton("Подтверждаю",
 //                            (dialog, whichButton) -> dbUtilities.updateOneColumnTable(userId, "logo", logo))
-                    .setPositiveButton("Подтверждаю", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("Да", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             selectLogo(userId, logo, table);
                         }
                     })
-                    .setNegativeButton("Не подтверждаю", null) // не назначаем слушателя кликов по кнопке "Нет"
+                    .setNegativeButton("Нет", null) // не назначаем слушателя кликов по кнопке "Нет"
                     .setCancelable(false)           // запрет закрытия диалога кнопкой Назад
                     .create();
     }//onCreateDialog

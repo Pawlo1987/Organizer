@@ -349,12 +349,13 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
     //строка с полной информацией о пользователе
     private String fullInfoAboutUser() {
         User user = dbUtilities.getListUser(idAuthUser).get(0);
-        return String.format("Логин: %s\n" +
-                        "Пароль: %s \n" +
+        return String.format(
+                        "Логин: %s\n" +
+                        "Пароль: %s\n" +
                         "Имя: %s\n" +
                         "Телефон: %s\n" +
                         "Город: %s\n" +
-                        "Имейл: %s",
+                        "E-mail: %s",
                 user.getLogin(),
                 user.getPassword(),
                 user.getName(),

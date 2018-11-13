@@ -229,11 +229,11 @@ public class ShowAllEventsRecyclerAdapter extends
 
         //строка с полной информацией о событии
         private String fullInfoAboutEvent() {
-            return String.format("Собитие в городе %s\n" +
+            return String.format("Событие в городе %s\n" +
                             "На поле %s \n" +
                             "Назначено на %s\n" +
-                            "Cостоится в %s\n" +
-                            "Продолжитльность %s мин\n" +
+                            "Состоится в %s\n" +
+                            "Продолжительность %s мин\n" +
                             "Стоимость %s руб\n" +
                             "Телефон %s",
                     eventCityName,

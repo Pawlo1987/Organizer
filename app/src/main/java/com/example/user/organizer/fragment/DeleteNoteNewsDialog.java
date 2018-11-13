@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 
 import com.example.user.organizer.DBUtilities;
+import com.example.user.organizer.R;
 
 
 //---------------------- Фрагмент с диалогом удаления новостного поста-------------------
@@ -66,11 +67,11 @@ public class DeleteNoteNewsDialog extends DialogFragment {
         String message = "УДАЛИТЬ ПОСТ?";
 
         return builder
-                .setTitle("Подтверждение удаления поста")
+                .setTitle("Вы подтверждаете удаление поста?")
                 .setMessage(message)
-//                .setIcon(R.drawable.exlamation)
+                .setIcon(R.drawable.icon_question)
                 // лямбда-выражение на клик кнопки "Да"
-                .setPositiveButton("Подтверждаю", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Да", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         deleteNoteNews(noteId);
@@ -78,7 +79,7 @@ public class DeleteNoteNewsDialog extends DialogFragment {
                 })
 //                .setPositiveButton("Подтверждаю",
 //                            (dialog, whichButton) -> dbUtilities.deleteRowById("notes",noteId))
-                .setNegativeButton("Не подтверждаю", null) // не назначаем слушателя кликов по кнопке "Нет"
+                .setNegativeButton("Нет", null) // не назначаем слушателя кликов по кнопке "Нет"
                 .setCancelable(false)           // запрет закрытия диалога кнопкой Назад
                 .create();
     }//onCreateDialog

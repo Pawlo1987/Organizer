@@ -182,7 +182,8 @@ public class ShowFieldCatalogRecyclerAdapter extends
 
         //строка с полной информацией о поле
         private String fullInfoAboutField() {
-            return String.format("Поле находится в городе %s\n" +
+            return String.format("" +
+                            "Поле находится в городе %s\n" +
                             "Называется %s \n" +
                             "Номер телефона %s\n" +
                             "Освещение %s\n" +

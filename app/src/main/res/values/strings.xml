@@ -66,7 +66,7 @@
     <string name="btnCreateCrFi">Создать</string>
     <string name="btnBackCrFi">Отмена</string>
     <string name="tvCitySePaAc">Поиск в городе: </string>
-    <string name="edBinarySePaAc">Бинарный поиск</string>
+    <string name="edBinarySePaAc">Быстрый поиск</string>
     <string name="btnConfirmSePaAc">Подвердить выбор</string>
     <string name="btnCancelSePaAc">Отменить выбор</string>
     <string name="tvSelectParticipantsSePaAc">Participants</string>

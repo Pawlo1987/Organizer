@@ -264,7 +264,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         private void deleteEvent() {
             String message = fullInfoAboutEvent();
 
-            //через интерфейс СallDialogsAuthUserEvents
+            //через интерфейс CallDialogsAuthUserEvents
             authUserEventsInterface.callDialogDeleteDialog(context, message, eventId);
         }//deleteEvent
 
@@ -272,17 +272,17 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         private void leaveEvent() {
             String message = fullInfoAboutEvent();
 
-            //через интерфейс СallDialogsAuthUserEvents
+            //через интерфейс CallDialogsAuthUserEvents
             authUserEventsInterface.callDialogLeaveDialog(context, message, eventId);
         }//leaveEvent
 
         //строка с полной информацией о событии
         private String fullInfoAboutEvent() {
-            return String.format("Собитие в городе %s\n" +
+            return String.format("Событие в городе %s\n" +
                             "На поле %s \n" +
                             "Назначено на %s\n" +
-                            "Cостоится в %s\n" +
-                            "Продолжитльность %s мин\n" +
+                            "Состоится в %s\n" +
+                            "Продолжительность %s мин\n" +
                             "Стоимость %s руб\n" +
                             "Телефон %s",
                     eventCityName,

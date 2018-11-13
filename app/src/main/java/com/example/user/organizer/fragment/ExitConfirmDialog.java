@@ -11,6 +11,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 
+import com.example.user.organizer.R;
 import com.example.user.organizer.inteface.NavigationDrawerInterface;
 
 //---------------------- Фрагмент с диалогом подтверждения выхода из приложения-------------------
@@ -67,9 +68,9 @@ public class ExitConfirmDialog extends DialogFragment {
 
         if (flag)
             return builder
-                    .setTitle("Выход")
+                    .setTitle("Выход из аккаунта")
                     .setMessage("Вы уверены?")
-//                .setIcon(R.drawable.exlamation)
+                    .setIcon(R.drawable.icon_question)
                     // лямбда-выражение на клик кнопки "Да"
                     .setPositiveButton("Да", (dialog, whichButton) -> navigationDrawerInterface.signOut())
                     .setNegativeButton("Нет", null) // не назначаем слушателя кликов по кнопке "Нет"
@@ -77,9 +78,9 @@ public class ExitConfirmDialog extends DialogFragment {
                     .create();
         else
             return builder
-                    .setTitle("Выход")
+                    .setTitle("Выход из приложения")
                     .setMessage("Вы уверены?")
-//                .setIcon(R.drawable.exlamation)
+                    .setIcon(R.drawable.icon_question)
                     // лямбда-выражение на клик кнопки "Да"
                     .setPositiveButton("Да", (dialog, whichButton) -> navigationDrawerInterface.closeApp())
                     .setNegativeButton("Нет", null) // не назначаем слушателя кликов по кнопке "Нет"

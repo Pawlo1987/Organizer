@@ -95,7 +95,7 @@ public class SelectDurationDialog extends DialogFragment {
             return builder
                     .setTitle("Выберите длительность игры")
                     .setView(view)
-//                .setIcon(R.drawable.exlamation)
+                    .setIcon(R.drawable.icon_question)
                     // лямбда-выражение на клик кнопки "Да"
 //                    .setPositiveButton("Подтверждаю",
 //                            (dialog, whichButton) -> dbUtilities.updateOneColumnTable(userId, "logo", logo))

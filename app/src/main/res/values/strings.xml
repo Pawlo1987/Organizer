@@ -47,5 +47,25 @@
 
     <string name="action_settings">Settings</string>
     <string name="btnBackCrAcAc">Вернутся назад</string>
+    <string name="btnAddUser">Добавить участника</string>
+    <string name="tvCityCrEv">Город</string>
+    <string name="btnNewCityCrEv">Создать Город</string>
+    <string name="tvCreateCity">Создать город</string>
+    <string name="tvCityNameCrCi">Название</string>
+    <string name="tvRegionCrCi">Регион</string>
+    <string name="btnCreateCrCi">Создать город</string>
+    <string name="btnBackCrCi">Отмена</string>
+    <string name="tvCreateField">Создание поля</string>
+    <string name="tvCityCrFi">Город</string>
+    <string name="btnNewCityCrFi">Создать город</string>
+    <string name="tvNameCrFi">Название поля</string>
+    <string name="tvLightCrFi">Освещение</string>
+    <string name="tvCoatingCrFi">Покрытие</string>
+    <string name="tvShowerCrFi">Душ</string>
+    <string name="tvRoofCrFi">Крыша</string>
+    <string name="tvGeolocationCrFi">Геолокация</string>
+    <string name="tvAddressCrFi">Адрес</string>
+    <string name="btnCreateCrFi">Создать</string>
+    <string name="btnBackCrFi">Отмена</string>
 
 </resources>

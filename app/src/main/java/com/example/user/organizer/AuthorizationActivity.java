@@ -10,7 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
-//---------Активность для авторизация пользователя или перехода в фрагмент создания нового акаунта--
+//--------Активность для авторизация пользователя или перехода в актиность создания нового акаунта-
 
 public class AuthorizationActivity extends AppCompatActivity {
 
@@ -91,7 +91,7 @@ public class AuthorizationActivity extends AppCompatActivity {
             //переходин в актиность LoginPartActivity
             Intent intent = new Intent(this, LoginPartActivity.class);
             startActivity(intent);
-        }
+        } //if
 
     }//signIn
 

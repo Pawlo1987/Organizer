@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -22,7 +21,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     DBUtilities dbUtilities;
     Cursor creAccCursor;                // курсор для чтения данных из БД
     Context context;
-    List<String> spArrayCity;            // Данные для спинера
+    List<String> spListCity;            // Данные для спинера выбора города
 
     EditText etNameCrAcAc;
     EditText etLoginCrAcAc;
@@ -47,24 +46,24 @@ public class CreateAccountActivity extends AppCompatActivity {
         etPhoneCrAcAc = (EditText) findViewById(R.id.etPhoneCrAcAc);
         spDefCityCrAcAc = (Spinner) findViewById(R.id.spDefCityCrAcAc);
 
-        spArrayCity = new ArrayList<>();
+        //инициализация коллекции для спинера
+        spListCity = new ArrayList<>();
 
         context = getBaseContext();
         dbUtilities = new DBUtilities(context);
         dbUtilities.open();
 
-        // получаем данные из БД в виде курсора (название существующих городов)
+        //запрос для получения курсор с данными
         String query = "SELECT name FROM city;";
-        creAccCursor =  dbUtilities.getDb().rawQuery(query, null);
 
-        //заполнить spArrayCity данные отображаемые Spinner
-        fillList();
+        //заполнить spListCity данные для отображения в Spinner
+        spListCity = dbUtilities.fillList(query);
 
         //создание адаптера для спинера
         spAdapterCity = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_spinner_item,
-                spArrayCity
+                spListCity
         );
 
         // назначение адапетра для списка
@@ -72,17 +71,6 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         spDefCityCrAcAc.setAdapter(spAdapterCity);
     }//onCreate
-
-    //заполнить ListCity данные отображаемые Spinner
-    private void fillList() {
-        int n = creAccCursor.getCount();        //количество данных в курсоре
-       // spArrayCity = new String[n];
-
-        for (int i = 0; i < n; i++) {
-            creAccCursor.moveToPosition(i); // переходим в курсоре на текущую позицию
-            spArrayCity.add(creAccCursor.getString(0));
-        }//for
-    }//fillList
 
     //обработчик неажатия клавишы Создать запись пользователя
     public void createNewAccount() {
@@ -92,13 +80,11 @@ public class CreateAccountActivity extends AppCompatActivity {
         cv.put("password", etPasswordCrAcAc.getText().toString());
         cv.put("name", etNameCrAcAc.getText().toString());
         cv.put("phone_number", etPhoneCrAcAc.getText().toString());
-        cv.put("def_city", spArrayCity.indexOf(spDefCityCrAcAc.getSelectedItem()) + 1);
+        cv.put("def_city", spListCity.indexOf(spDefCityCrAcAc.getSelectedItem()) + 1);
         cv.put("email", etEmailCrAcAc.getText().toString());
-        dbUtilities.addNewUser(cv);
 
-        String query = "SELECT * FROM user;";
-        creAccCursor =  dbUtilities.getDb().rawQuery(query, null);
-        Log.d("myLog", String.format("%d", creAccCursor.getCount()));
+        //добваить данные через объект ContentValues(cv), в таблицу "user"
+        dbUtilities.insertInto(cv, "user");
 
         //переходин в актиность LoginPartActivity
         Intent intent = new Intent(this, LoginPartActivity.class);

@@ -3,6 +3,8 @@ package com.example.user.organizer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+//----Активность для потверждения выхода из приложения-----------------
+
 public class ExitActivity extends AppCompatActivity {
 
     final String ID_EXIT_DIALOG = "dialogExitConfirm";

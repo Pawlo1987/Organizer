@@ -2,22 +2,18 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.hardware.Sensor;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.List;
 
-//------------------ Адаптор для элемента sensor -----------
+//-------Активность адаптера для вывода(просмотра) всех событий--------------
+
 public class ShowAllEventsRecyclerAdapter extends RecyclerView.Adapter<ShowAllEventsRecyclerAdapter.ViewHolder>{
 
-    //поля класса SensorAdapter
+    //поля класса ShowAllEventsRecyclerAdapter
     private LayoutInflater inflater;
     private Cursor eventsCursor;
     DBUtilities dbUtilities;
@@ -27,7 +23,7 @@ public class ShowAllEventsRecyclerAdapter extends RecyclerView.Adapter<ShowAllEv
         this.inflater = LayoutInflater.from(context);
         this.eventsCursor = eventsCursor;
         dbUtilities = new DBUtilities(context);
-    } // SensorAdapter
+    } // ShowAllEventsRecyclerAdapter
 
     //создаем новую разметку(View) путем указания разметки
     @Override

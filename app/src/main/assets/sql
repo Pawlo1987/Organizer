@@ -17,4 +17,17 @@ FROM
 user;
 
 --запрос для записи нового пользователя
-INSERT INTO user (login, password, name, phone_number, def_city, email) VALUES ("pavel85", "4a45sd", "PAvel", "1564132", 4, "asd@asdf.ru");
+INSERT INTO user (login, password, name, phone_number, def_city, email) 
+VALUES ("pavel85", "4a45sd", "PAvel", "1564132", 4, "asd@asdf.ru");
+
+--данные для спинера cityName
+SELECT name FROM city;
+
+--данные для спинера fieldName
+SELECT field.name FROM field WHERE city = 3;
+
+--данные для спинера region
+SELECT name FROM region;
+
+--данные для спинера coating
+SELECT type FROM coating;

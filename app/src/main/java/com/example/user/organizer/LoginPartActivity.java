@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TabHost;
 
+//--Активность с инициализацией активных клавиш Tab Tools после авторизации-----
+
 public class LoginPartActivity extends TabActivity {
 
 

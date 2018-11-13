@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TabHost;
 
+////--Активность с инициализацией активных клавиш Tab Tools до авторизации-----
+
 public class LogoutPartActivity extends TabActivity {
 
     @Override

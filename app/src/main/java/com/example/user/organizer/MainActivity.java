@@ -10,7 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TabHost;
 
-
+//-------Главная Активность----------------
 public class MainActivity extends AppCompatActivity {
 
     final String ID_EXIT_DIALOG = "dialogExitConfirm";
@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        Intent intent = new Intent(this, LogoutPartActivity.class);
+        Intent intent = new Intent(this, LoginPartActivity.class);
         startActivity(intent);
 
     }//onCreate

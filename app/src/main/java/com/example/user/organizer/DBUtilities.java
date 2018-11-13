@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //--------------Вспомагательный класс для работы с БД-----------------------------
 public class DBUtilities {
 
@@ -20,10 +23,25 @@ public class DBUtilities {
         dbHelper.create_db();
     } // DBUtilities
 
-    //добавить пользователя в активности CreateAccountActivity
-    public void addNewUser(ContentValues cv){
-        db.insert("user", null,  cv);
-    }//addNewUser
+    //добавить строку в таблицу, соответственно параметры(cv - данные, table - таблица)
+    public void insertInto(ContentValues cv, String table){
+        db.insert(table, null,  cv);
+    }//insertInto
+
+    //заполнить коллекцию(List) данные для отображения в Spinner
+    public List<String> fillList(String query) {
+        List<String> list = new ArrayList<>();
+        Cursor cursor;
+
+        // получаем данные из БД в виде курсора
+        cursor = db.rawQuery(query, null);
+        int n = cursor.getCount();        //количество строк в курсоре
+        for (int i = 0; i < n; i++) {
+            cursor.moveToPosition(i); // переходим в курсоре на текущую позицию
+            list.add(cursor.getString(0));
+        }//for
+        return list;
+    }//fillList
 
     public Cursor updCursor(){
         String query = "SELECT * FROM employees";

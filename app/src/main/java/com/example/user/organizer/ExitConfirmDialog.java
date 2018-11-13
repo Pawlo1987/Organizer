@@ -7,7 +7,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 
-//---------------------- диалог подтверждения выхода из приложения-------------------
+//---------------------- Фрагмент с диалогом подтверждения выхода из приложения-------------------
 public class ExitConfirmDialog extends DialogFragment {
 
     @NonNull // создание диалога

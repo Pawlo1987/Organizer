@@ -3,15 +3,12 @@ package com.example.user.organizer;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-
-import com.example.user.organizer.activity.LoginActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,7 +141,7 @@ public class CreateFieldActivity extends AppCompatActivity {
 
     //вернутся в активность авторизации
     private void turnBack() {
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, AuthorizationActivity.class);
         startActivity(intent);
     }//turnBack
 

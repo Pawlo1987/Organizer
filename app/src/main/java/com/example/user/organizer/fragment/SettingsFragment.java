@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -98,6 +99,7 @@ public class SettingsFragment extends Fragment implements SettingsInterface {
         this.context = context;
         dbUtilities = new DBUtilities(context);
 
+
         // прочитать данные, переданные из активности (из точки вызова)
         idAuthUser = getArguments().getString("idAuthUser");
 
@@ -115,7 +117,8 @@ public class SettingsFragment extends Fragment implements SettingsInterface {
         new DownloadImageTask( view.findViewById(R.id.ivProfileLogoSeFr))
                 .execute("http://strahovanie.dn.ua/football_db/logo/logo_" + user.getLogo() + ".png");
 
-
+        FloatingActionButton fabMain = getActivity().findViewById(R.id.fabMain);
+        fabMain.setVisibility(View.GONE);
         // привязка поля ввода нового имени
         etChangeNameSeFr = view.findViewById(R.id.etChangeNameSeFr);
         etChangeNameSeFr.setText(user.getName());

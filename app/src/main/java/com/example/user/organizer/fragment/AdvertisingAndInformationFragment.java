@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -109,6 +110,8 @@ public class AdvertisingAndInformationFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View result = inflater.inflate(R.layout.fragment_advertising_and_information,  container, false);
+        FloatingActionButton fabMain = getActivity().findViewById(R.id.fabMain);
+        fabMain.setVisibility(View.VISIBLE);
 
         btnNewNoteAdAnInAc = result.findViewById(R.id.btnNewNoteAdAnInAc);
 
@@ -161,8 +164,21 @@ public class AdvertisingAndInformationFragment extends Fragment {
         buildUserRecyclerView(
                 spCityAdAnInAc.getItemAtPosition(spPos).toString()
         );
+        fabMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshList();
+            }
+        });
+
         return result;
     } // onCreateView
+
+    //обновляем recyclerview
+    private void refreshList() {
+        buildUserRecyclerView(spCityAdAnInAc.getSelectedItem().toString());
+        rvNoteLineAdAnInAc.setAdapter(advertisingAndInformationRecyclerAdapter);
+    }//refreshList
 
     //-----------------------Метод для приема результатов из активностей----------------------------
     @Override
@@ -185,6 +201,7 @@ public class AdvertisingAndInformationFragment extends Fragment {
 
             //обращяемся к БД на сервер для создания новой записи в таблицу notes
             dbUtilities.insertIntoNotes(logo, head, idAuthUser, date, city_id, message, tsizemessage, tstylemessage);
+            refreshList();
         }//RESULT_OK
 
         //устанавливаем спинер в позицию "ВСЕ ГОРОДА"

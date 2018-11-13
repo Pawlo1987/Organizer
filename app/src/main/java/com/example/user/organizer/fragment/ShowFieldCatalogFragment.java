@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,6 +94,8 @@ public class ShowFieldCatalogFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View result = inflater.inflate(R.layout.fragment_show_field_catalog, container, false);
+        FloatingActionButton fabMain = getActivity().findViewById(R.id.fabMain);
+        fabMain.setVisibility(View.VISIBLE);
 
         btnMapShFiCaFr = (Button)result.findViewById(R.id.btnMapShFiCaFr);
         btnMapShFiCaFr.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +112,23 @@ public class ShowFieldCatalogFragment extends Fragment {
         //привязываем адаптер к recycler объекту
         rvMainShFiCaFr.setAdapter(showFieldCatalogRecyclerAdapter);
 
+        fabMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshList();
+            }
+        });
+
         return result;
     } // onCreateView
+
+    //обновляем recyclerview
+    private void refreshList() {
+        //получаем коллекцию полей
+        if(connection) fieldList = dbUtilities.getListField("");
+        else fieldList = dbLocalUtilities.getFieldList();
+        showFieldCatalogRecyclerAdapter.notifyDataSetChanged();
+        //привязываем адаптер к recycler объекту
+        rvMainShFiCaFr.setAdapter(showFieldCatalogRecyclerAdapter);
+    }//refreshList
 }

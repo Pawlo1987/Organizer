@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -88,14 +89,31 @@ public class ShowAllEventsFragment extends Fragment
                              Bundle savedInstanceState) {
 
         View result = inflater.inflate(R.layout.fragment_show_all_event, container, false);
+
+        FloatingActionButton fabMain = getActivity().findViewById(R.id.fabMain);
+        fabMain.setVisibility(View.VISIBLE);
         // RecyclerView для отображения таблицы users БД
         rvMainShAlEvAc = result.findViewById(R.id.rvMainShAlEvAc);
 
         //привязываем адаптер к recycler объекту
         rvMainShAlEvAc.setAdapter(showAllEventsRecyclerAdapter);
 
+        fabMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshList();
+            }
+        });
+
         return result;
     } // onCreateView
+
+    //обновляем recyclerview
+    private void refreshList() {
+        showAllEventsRecyclerAdapter.updateEventList();
+        //привязываем адаптер к recycler объекту
+        rvMainShAlEvAc.setAdapter(showAllEventsRecyclerAdapter);
+    }//refreshList
 
     // точка выхода из DialogFragment при положительных
     @Override

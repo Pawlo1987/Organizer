@@ -3,6 +3,9 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/create_new_event"
+            android:title="@string/create_new_event" />
+        <item
             android:id="@+id/show_field_catalog"
             android:title="@string/show_field_catalog" />
         <item

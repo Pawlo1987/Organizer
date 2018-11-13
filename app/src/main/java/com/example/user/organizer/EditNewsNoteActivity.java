@@ -235,6 +235,7 @@ public class EditNewsNoteActivity extends AppCompatActivity implements Advertisi
                 String.valueOf(spSize.getSelectedItemPosition()),
                 String.valueOf(spStyle.getSelectedItemPosition())
         );
+
         finish();
     }//confirmSelect
 

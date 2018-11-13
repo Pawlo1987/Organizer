@@ -95,15 +95,8 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent= new Intent(getBaseContext(), CreateEventActivity.class);
-                intent.putExtra("idAuthUser",idAuthUser);
-                startActivity(intent);
-            }
-        });
+        FloatingActionButton fabMain = (FloatingActionButton) findViewById(R.id.fabMain);
+        fabMain.setVisibility(View.GONE);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -301,7 +294,11 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         Log.d("MyLog", String.format("%s",item));
         fTrans = getFragmentManager().beginTransaction();
 
-        if (id == R.id.show_field_catalog) {
+        if (id == R.id.create_new_event) {
+                Intent intent= new Intent(getBaseContext(), CreateEventActivity.class);
+                intent.putExtra("idAuthUser",idAuthUser);
+                startActivity(intent);
+        } else if (id == R.id.show_field_catalog) {
             fTrans.replace(R.id.container, showFieldCatalogFragment);
         } else if (id == R.id.show_user_events) {
             fTrans.replace(R.id.container, showAuthUserEventsFragment);

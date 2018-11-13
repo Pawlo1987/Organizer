@@ -142,5 +142,6 @@
     <string name="tvNewNoteEdNeNoAc">Редактируем запись</string>
     <string name="btnConfirmEdNeNoAc">Принять</string>
     <string name="btnDeleteEdNeNoAc">Удалить пост</string>
+    <string name="create_new_event">Создать событие</string>
 
 </resources>

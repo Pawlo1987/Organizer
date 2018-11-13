@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -96,14 +97,30 @@ implements AuthUserEventsInterface {
                              Bundle savedInstanceState) {
 
         View result = inflater.inflate(R.layout.fragment_show_auth_user_events,  container, false);
+        FloatingActionButton fabMain = getActivity().findViewById(R.id.fabMain);
+        fabMain.setVisibility(View.VISIBLE);
 
         // RecyclerView для отображения таблицы users БД
         rvMainShAuUsEvAc = result.findViewById(R.id.rvMainShAuUsEvAc);
         //привязываем адаптер к recycler объекту
         rvMainShAuUsEvAc.setAdapter(showAuthUserEventsRecyclerAdapter);
 
+        fabMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshList();
+            }
+        });
+
         return result;
     } // onCreateView
+
+    //обновляем recyclerview
+    private void refreshList() {
+        showAuthUserEventsRecyclerAdapter.updateEventList();
+        //привязываем адаптер к recycler объекту
+        rvMainShAuUsEvAc.setAdapter(showAuthUserEventsRecyclerAdapter);
+    }//refreshList
 
     // точка выхода из DialogFragment при положительных
     @Override

@@ -9,8 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -121,7 +119,7 @@ public class CreateEventActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id){
 
                 //заполнить spListField данные для отображения в Spinner
-                spListField = dbUtilities.getSomeFieldsfromDB(spCityCrEv.getItemAtPosition(position).toString());
+                spListField = dbUtilities.getSomeFieldsFromDB(spCityCrEv.getItemAtPosition(position).toString());
 
                 spFieldCrEv.setAdapter(buildSpinnerStr(spListField));
             }//onItemSelected
@@ -148,7 +146,6 @@ public class CreateEventActivity extends AppCompatActivity {
 
     //строим Spinner
     private ArrayAdapter buildSpinnerStr(List<String> list) {
-
         ArrayAdapter<String> spinnerAdapter;
 
         //создание адаптера для спинера
@@ -166,7 +163,6 @@ public class CreateEventActivity extends AppCompatActivity {
 
     //строим Spinner
     private ArrayAdapter buildSpinnerInt(List<Integer> list) {
-
         ArrayAdapter<Integer> spinnerAdapter;
 
         //создание адаптера для спинера

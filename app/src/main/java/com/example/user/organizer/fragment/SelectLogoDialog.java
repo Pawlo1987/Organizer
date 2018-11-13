@@ -4,6 +4,8 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,15 +13,12 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 
-import com.example.user.organizer.inteface.NavigationDrawerInterface;
+import com.example.user.organizer.DBUtilities;
+import com.example.user.organizer.NavigationDrawerLogInActivity;
 
-//---------------------- Фрагмент с диалогом подтверждения выхода из приложения-------------------
-
-public class ExitConfirmDialog extends DialogFragment {
-
-    //инициализация интерфейса
-    NavigationDrawerInterface navigationDrawerInterface;
-    Context context;
+//---------------------- Фрагмент с диалогом выбрать логотип-------------------
+public class SelectLogoDialog extends DialogFragment {
+    DBUtilities dbUtilities;
 
     // Метод onAttach() вызывается в начале жизненного цикла фрагмента, и именно здесь
     // мы можем получить контекст фрагмента, в качестве которого выступает класс MainActivity.
@@ -51,8 +50,7 @@ public class ExitConfirmDialog extends DialogFragment {
         //тут можно кастовать контест к активити.
         //но лучше к реализуемому ею интерфейсу
         //чтоб не проверять из какого пакета активити в каждом из случаев
-        this.context = context;
-        navigationDrawerInterface = (NavigationDrawerInterface) context;
+        dbUtilities = new DBUtilities(context);
     }//onAttachToContext
 
     @NonNull // создание диалога
@@ -63,28 +61,33 @@ public class ExitConfirmDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(current);
 
         // прочитать данные, переданные из активности (из точки вызова)
-        boolean flag = getArguments().getBoolean("flag", false);
+        String userId = getArguments().getString("user_id");
+        String logo = getArguments().getString("logo");
 
-        if (flag)
             return builder
-                    .setTitle("Выход")
-                    .setMessage("Вы уверены?")
+                    .setTitle("Подтверждение выбраного логотипа")
 //                .setIcon(R.drawable.exlamation)
                     // лямбда-выражение на клик кнопки "Да"
-                    .setPositiveButton("Да", (dialog, whichButton) -> navigationDrawerInterface.signOut())
-                    .setNegativeButton("Нет", null) // не назначаем слушателя кликов по кнопке "Нет"
-                    .setCancelable(false)           // запрет закрытия диалога кнопкой Назад
-                    .create();
-        else
-            return builder
-                    .setTitle("Выход")
-                    .setMessage("Вы уверены?")
-//                .setIcon(R.drawable.exlamation)
-                    // лямбда-выражение на клик кнопки "Да"
-                    .setPositiveButton("Да", (dialog, whichButton) -> navigationDrawerInterface.closeApp())
-                    .setNegativeButton("Нет", null) // не назначаем слушателя кликов по кнопке "Нет"
+//                    .setPositiveButton("Подтверждаю",
+//                            (dialog, whichButton) -> dbUtilities.updateOneColumnTable(userId, "logo", logo))
+                    .setPositiveButton("Подтверждаю", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            selectLogo(userId, logo);
+                        }
+                    })
+                    .setNegativeButton("Не подтверждаю", null) // не назначаем слушателя кликов по кнопке "Нет"
                     .setCancelable(false)           // запрет закрытия диалога кнопкой Назад
                     .create();
     }//onCreateDialog
 
-}//class ExitConfirmDialog
+    private void selectLogo(String userId, String value) {
+        //Занесем данные в БД
+        dbUtilities.updateOneColumnTable(userId, "logo", value, "users");
+
+        //Вернемся в основную активность для обновления данных
+        Intent intent = new Intent(getContext(), NavigationDrawerLogInActivity.class);
+        intent.putExtra("idAuthUser", userId);
+        startActivity(intent);
+}
+}//callDialogSelectLogo

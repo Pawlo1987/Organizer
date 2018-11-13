@@ -99,9 +99,10 @@ public class CreateAccountActivity extends AppCompatActivity {
         String phone = etPhoneCrAcAc.getText().toString();
         String city_id = String.valueOf(spListCity.indexOf(spDefCityCrAcAc.getSelectedItem()) + 1);
         String email = etEmailCrAcAc.getText().toString();
+        String logo = "22";
 
         //обращяемся к базе данных на сервер для создания новой записи в таблицу user
-        dbUtilities.insertIntoUsers( login, password, name, phone, city_id, email);
+        dbUtilities.insertIntoUsers( login, password, name, phone, city_id, email, logo);
         finish();
     }//CreateNewAccount
 

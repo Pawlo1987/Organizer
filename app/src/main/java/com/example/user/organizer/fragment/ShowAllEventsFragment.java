@@ -18,10 +18,10 @@ import android.view.ViewGroup;
 import com.example.user.organizer.DBUtilities;
 import com.example.user.organizer.R;
 import com.example.user.organizer.ShowAllEventsRecyclerAdapter;
-import com.example.user.organizer.inteface.CallDialogsAllEvents;
+import com.example.user.organizer.inteface.AllEventsInterface;
 
 public class ShowAllEventsFragment extends Fragment
-        implements CallDialogsAllEvents {
+        implements AllEventsInterface {
 
     RecyclerView rvMainShAlEvAc;
 
@@ -39,7 +39,7 @@ public class ShowAllEventsFragment extends Fragment
             new TakePartShowAllEventDialog(); // диалог подтверждения выхода из приложения
 
     final String ID_ABOUT_DIALOG = "aboutEventShowAllEventDialog";  //параметр для вызова диалога "about"
-    final String ID_TAKEPART_DIALOG = "takePartShowAllEventDialog";  //параметр для вызова диалога "takePart"
+    final String ID_TAKE_PART_DIALOG = "takePartShowAllEventDialog";  //параметр для вызова диалога "callDialogTakePart"
 
     // Метод onAttach() вызывается в начале жизненного цикла фрагмента, и именно здесь
     // мы можем получить контекст фрагмента, в качестве которого выступает класс MainActivity.
@@ -96,7 +96,7 @@ public class ShowAllEventsFragment extends Fragment
     } // onCreateView
 
     @Override
-    public void aboutDialog(Context context, String message) {
+    public void callDialogAboutDialog(Context context, String message) {
         Bundle args = new Bundle();    // объект для передачи параметров в диалог
         args.putString("message", message);
         aboutEventShowAllEventDialog.setArguments(args);
@@ -104,10 +104,10 @@ public class ShowAllEventsFragment extends Fragment
         // отображение диалогового окна
         aboutEventShowAllEventDialog.show(((AppCompatActivity)context).
                 getSupportFragmentManager(), ID_ABOUT_DIALOG);
-    }//aboutDialog
+    }//callDialogAboutDialog
 
     @Override
-    public void takePart(Context context, String eventId, boolean userTakeInPart, String message) {
+    public void callDialogTakePart(Context context, String eventId, boolean userTakeInPart, String message) {
         Bundle args = new Bundle();    // объект для передачи параметров в диалог
         args.putString("message", message);
         args.putBoolean("userTakeInPart", userTakeInPart);
@@ -117,6 +117,6 @@ public class ShowAllEventsFragment extends Fragment
 
         // отображение диалогового окна
         takePartShowAllEventDialog.show(((AppCompatActivity)context).
-                getSupportFragmentManager(), ID_TAKEPART_DIALOG);
-    }//takePart
+                getSupportFragmentManager(), ID_TAKE_PART_DIALOG);
+    }//callDialogTakePart
 }

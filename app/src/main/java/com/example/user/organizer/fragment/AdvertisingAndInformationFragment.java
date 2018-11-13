@@ -22,7 +22,6 @@ import com.example.user.organizer.CreateNewsNoteActivity;
 import com.example.user.organizer.DBUtilities;
 import com.example.user.organizer.Note;
 import com.example.user.organizer.R;
-import com.example.user.organizer.ShowAllEventsRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -216,7 +215,7 @@ public class AdvertisingAndInformationFragment extends Fragment {
 
         //получение записией новостей из БД
         if(cityName.equals("ВСЕ ГОРОДА")) {
-            notes = dbUtilities.getAllNotesfromDB();
+            notes = dbUtilities.getAllNotes();
         }else{
             //получаем записи новостей из БД по определенному городу
             notes = dbUtilities.getSomeNotesfromDB(cityName);

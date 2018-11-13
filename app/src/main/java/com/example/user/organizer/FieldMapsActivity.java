@@ -11,8 +11,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
-import android.support.v7.app.ActionBar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -99,7 +97,7 @@ public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCal
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //заполнить spListField данные для отображения в Spinner
-                spListField = dbUtilities.getSomeFieldsfromDB(spMapCity.getItemAtPosition(position).toString());
+                spListField = dbUtilities.getSomeFieldsFromDB(spMapCity.getItemAtPosition(position).toString());
                 spMapField.setAdapter(buildSpinnerStr(spListField));
             }//onItemSelected
 

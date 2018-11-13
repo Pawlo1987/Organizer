@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 
 //---------------------- Фрагмент с диалогом подробнее о поле -------------------
-
 public class AboutFieldShowFieldCatalogDialog extends DialogFragment {
 
     @NonNull // создание диалога

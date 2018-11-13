@@ -5,6 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.example.user.organizer.inteface.SelectLogoInterface;
+
+import java.util.ArrayList;
+import java.util.List;
 
 //-------Адаптера для вывода(просмотра) при выборе логотипа--------------
 public class SelectLogoRecyclerAdapter extends
@@ -15,16 +21,33 @@ public class SelectLogoRecyclerAdapter extends
     DBUtilities dbUtilities;
     Context context;
     String idAuthUser;         //Авторизированный пользователь
+    List<Integer> listLogo = new ArrayList<>();
+    SelectLogoInterface selectLogoInterface;
+    int nextLogo;       //позиция выбранная в адаптере
 
     //конструктор
-    public SelectLogoRecyclerAdapter( Context context, String idAuthUser) {
+    public SelectLogoRecyclerAdapter(SelectLogoInterface selectLogoInterface,
+                                      Context context, String idAuthUser) {
         this.inflater = LayoutInflater.from(context);
         //получение интерфеса из класса Фрагмента
         //для обработки нажатия элементов RecyclerAdapter
         this.context = context;
         this.idAuthUser = idAuthUser;
         dbUtilities = new DBUtilities(context);
+        this.selectLogoInterface = selectLogoInterface;
+
+        //колличество логотипов в базе
+        int n = Integer.parseInt(dbUtilities.getLogoCount());
+        int i = 1;
+
+        //заполняем коллекцию логотипов для адаптера
+        while(i<=n){
+            listLogo.add(i);
+            i=i+2;
+        }//while
+
     } // SelectLogoRecyclerAdapter
+
 
     //создаем новую разметку(View) путем указания разметки
     @Override
@@ -37,23 +60,53 @@ public class SelectLogoRecyclerAdapter extends
     //привязываем элементы разметки к переменным объекта(в данном случае к курсору)
     @Override
     public void onBindViewHolder(SelectLogoRecyclerAdapter.ViewHolder holder, int position) {
+        nextLogo = listLogo.get(position);
+
+        // Показать картинку
+        new DownloadImageTask( holder.ivLeftSeLoReAd)
+                .execute("http://strahovanie.dn.ua/football_db/logo/logo_" + String.valueOf(nextLogo) + ".png");
+        new DownloadImageTask( holder.ivRightSeLoReAd)
+                .execute("http://strahovanie.dn.ua/football_db/logo/logo_" + String.valueOf(nextLogo+1) + ".png");
 
     } // onBindViewHolder
 
-    //получаем количество элементов объекта(курсора)
+    //получаем количество элементов объекта
     @Override
-    public int getItemCount() { return 0; }
+    public int getItemCount() { return listLogo.size(); }
 
     //Создаем класс ViewHolder с помощью которого мы получаем ссылку на каждый элемент
     //отдельного пункта списка и подключаем слушателя события нажатия меню
     public class ViewHolder extends RecyclerView.ViewHolder{
+        ImageView ivLeftSeLoReAd, ivRightSeLoReAd;
 
         ViewHolder(View view) {
             super(view);
+            ivLeftSeLoReAd = view.findViewById(R.id.ivLeftSeLoReAd);
+            ivRightSeLoReAd = view.findViewById(R.id.ivRightSeLoReAd);
 
-        }
+            ivLeftSeLoReAd.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+
+                    //вызов диалога по выбору логотипа
+                    selectLogoInterface.callDialogSelectLogo(
+                            context, String.valueOf(listLogo.get(getAdapterPosition())), idAuthUser);
+                    return false;
+                }
+            });
+
+            ivRightSeLoReAd.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    //вызов диалога по выбору логотипа
+                    selectLogoInterface.callDialogSelectLogo(
+                            context, String.valueOf(listLogo.get(getAdapterPosition())+1), idAuthUser);
+                    return false;
+                }
+            });
+
+        }//ViewHolder
+
     } // class ViewHolder
-
-
 
 }//SelectLogoRecyclerAdapter

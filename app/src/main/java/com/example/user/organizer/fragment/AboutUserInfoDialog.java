@@ -7,10 +7,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 
-//---------------------- Фрагмент с диалогом подробнее о событии -------------------
-
-public class AboutEventShowAllEventDialog extends DialogFragment {
-
+public class AboutUserInfoDialog extends DialogFragment {
     @NonNull // создание диалога
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -20,13 +17,13 @@ public class AboutEventShowAllEventDialog extends DialogFragment {
 
         // прочитать данные, переданные из активности (из точки вызова)
         String message = getArguments().getString("message");
-            return builder
-                    .setTitle("Подробная информация")
-                    .setMessage(message)
+        return builder
+                .setTitle("Подробная информация о пользователе")
+                .setMessage(message)
 //                .setIcon(R.drawable.exlamation)
-                    // лямбда-выражение на клик кнопки "Да"
-                    .setPositiveButton("OK", null)
-                    .setCancelable(false)           // запрет закрытия диалога кнопкой Назад
-                    .create();
+                // лямбда-выражение на клик кнопки "Да"
+                .setPositiveButton("OK", null)
+                .setCancelable(false)           // запрет закрытия диалога кнопкой Назад
+                .create();
     }//onCreateDialog
-}//AboutEventShowAllEventDialog
+}//aboutUserInfoDialog

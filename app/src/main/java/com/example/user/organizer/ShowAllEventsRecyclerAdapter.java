@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.user.organizer.inteface.CallDialogsAllEvents;
+import com.example.user.organizer.inteface.AllEventsInterface;
 
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
@@ -28,7 +28,7 @@ public class ShowAllEventsRecyclerAdapter extends
     Event event = new Event();
     List<Event> eventsList = new ArrayList<>(); //коллекция событий
     DBUtilities dbUtilities;
-    CallDialogsAllEvents callDialogsAllEvents;
+    AllEventsInterface allEventsInterface;
     Context context;
     String idAuthUser;         //Авторизированный пользователь
 
@@ -44,12 +44,12 @@ public class ShowAllEventsRecyclerAdapter extends
     String eventUserId;
 
     //конструктор
-    public ShowAllEventsRecyclerAdapter(CallDialogsAllEvents callDialogsAllEvents,
+    public ShowAllEventsRecyclerAdapter(AllEventsInterface allEventsInterface,
                                         Context context, String idAuthUser) {
         this.inflater = LayoutInflater.from(context);
         //получение интерфеса из класса Фрагмента
         //для обработки нажатия элементов RecyclerAdapter
-        this.callDialogsAllEvents = callDialogsAllEvents;
+        this.allEventsInterface = allEventsInterface;
         this.context = context;
         this.idAuthUser = idAuthUser;
         dbUtilities = new DBUtilities(context);
@@ -207,16 +207,16 @@ public class ShowAllEventsRecyclerAdapter extends
                 message = fullInfoAboutEvent();
             }//if-else
 
-            //через интерфейс callDialogsAllEvents
-            callDialogsAllEvents.takePart(context, eventId, userTakeInPart, message);
-        }//takePart
+            //через интерфейс allEventsInterface
+            allEventsInterface.callDialogTakePart(context, eventId, userTakeInPart, message);
+        }//callDialogTakePart
 
         //Вызов диалога для подробной информации о событии
         private void aboutEvent() {
             String message = fullInfoAboutEvent();
 
-            //через интерфейс callDialogsAllEvents
-            callDialogsAllEvents.aboutDialog(context, message);
+            //через интерфейс allEventsInterface
+            allEventsInterface.callDialogAboutDialog(context, message);
         }//aboutEvent
 
         //строка с полной информацией о событии

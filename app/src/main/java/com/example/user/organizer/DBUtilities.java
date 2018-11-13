@@ -32,6 +32,7 @@ public class DBUtilities{
                 ||(getTableSize("cities") == null) //проверка подключения к БД
                 ? false : true;
     }
+
     //проверка введенных параметров для авторизации
     public String getAuthUserParam(String login, String password) {
         String idAuthUser = null;
@@ -165,7 +166,7 @@ public class DBUtilities{
     }//getStrListTableFromDB
 
     // получение списка всех имеющихся новостей из базы
-    public List<Note> getAllNotesfromDB() {
+    public List<Note> getAllNotes() {
         List<Note> notes = new ArrayList<>();
 
         //обращаемся к базе для получения списка имен городов
@@ -204,7 +205,7 @@ public class DBUtilities{
             e.printStackTrace();
         }//try-catch
         return notes;
-    }//getNotesfromDB
+    }//getAllNotes
 
     //вспомагательный внутренний метод для преобразования JSONObject в List
     private List<String> getListFromJSON(JSONObject jList) {
@@ -226,9 +227,9 @@ public class DBUtilities{
 
     //обращяемся к БД на сервер для создания новой записи в таблицу users
     public void insertIntoUsers(String login, String password, String name, String phone,
-                                String city_id, String email) {
+                                String city_id, String email, String logo) {
         try(BackgroundWorker bg = new BackgroundWorker()){
-            bg.execute("insertIntoUsers", login, password, name, phone, city_id, email);
+            bg.execute("insertIntoUsers", login, password, name, phone, city_id, email, logo);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
@@ -458,7 +459,7 @@ public class DBUtilities{
     }//getSomeNotesfromDB
 
     // получение списка имен полей по признаку город
-    public List<String> getSomeFieldsfromDB(String cityName) {
+    public List<String> getSomeFieldsFromDB(String cityName) {
         List<String> list = new ArrayList<>();
 
         //получаем id по имени
@@ -489,7 +490,7 @@ public class DBUtilities{
         }//try-catch
 
         return list;
-    }//getSomeFieldsfromDB
+    }//getSomeFieldsFromDB
 
     // получение списка уведомлений по признаку user_id
     public List<Notification> getSomeNotifications(String user_id) {
@@ -846,6 +847,32 @@ public class DBUtilities{
         return userList;
     }//getListUser
 
+    public String getLogoCount() {
+        String result = null;
+        //обращаемся к базе для получения списка необходимых полей таблицы
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("getLogoCount");
+
+            String resultdb = bg.get();
+            Log.d("FOOTBALL", resultdb);
+            JSONObject jResult = new JSONObject(resultdb);
+
+            if(jResult.getString("error").toString().equals("")){
+                JSONObject jLogoCount = jResult.getJSONObject("count");
+                List<String> logoCount = getListFromJSON(jLogoCount);
+
+                result = logoCount.get(0);
+            }else{
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }//if-else
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
+
+        return result;
+    }//getLogoList
+
     //получение коллекции событий для авторизированого пользователя
     public List<Event> getListEvents(String eventId, String idAuthUser) {
         List<Event> eventsList = new ArrayList<>();
@@ -990,7 +1017,7 @@ public class DBUtilities{
 
                 Log.d("FOOTBALL", list.toString());
             }else{
-                Toast.makeText(context, "Учасников нет!", Toast.LENGTH_LONG).show();
+//                Toast.makeText(context, "Учасников нет!", Toast.LENGTH_LONG).show();
             }//if-else
 
         }catch(Exception e){
@@ -1069,5 +1096,25 @@ public class DBUtilities{
             e.printStackTrace();
         }//try-catch
     }
+
+    //обновляем один столбец в  определенной записи таблици по id
+    public void updateOneColumnTable( String id, String column, String value, String table) {
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("updateOneColumnTable", id, column, value, table);
+
+            String resultdb = bg.get();
+            JSONObject jResult = new JSONObject(resultdb);
+            if(jResult.getString("error").toString().equals("")){
+                //выводим текст с положительным ответом
+                Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
+            }else{
+                //выводим текст с отрецательным ответом
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }//if-else
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
+    }//updateOneColumnTable
 
 }//DBUtilities

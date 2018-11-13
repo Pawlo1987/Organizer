@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 
 import com.example.user.organizer.DBUtilities;
-import com.example.user.organizer.inteface.CustomInterface;
 
 //---------------------- Фрагмент с диалогом принять участие -------------------
 public class TakePartShowAllEventDialog extends DialogFragment {

@@ -261,6 +261,17 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
                     return "IO:" + e.getMessage();
                 } // try-catch
 
+            case "getLogoCount":
+                try {
+                    // формируем строку для отправки на сервер
+                    String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8");
+
+                    return workWithServer(postData);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return "IO:" + e.getMessage();
+                } // try-catch
+
             case "getListCoating":
                 try {
                     // параметры для передачи на сервер (для получения списка покрытий полей)
@@ -301,6 +312,27 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
                     String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8")
                             + "&" + URLEncoder.encode("eventId", "utf8") + "=" + URLEncoder.encode(eventId, "utf8")
                             + "&" + URLEncoder.encode("idAuthUser", "utf8") + "=" + URLEncoder.encode(idAuthUser, "utf8");
+
+                    return workWithServer(postData);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return "IO:" + e.getMessage();
+                } // try-catch
+
+            case "updateOneColumnTable":
+                try {
+                    // параметры для передачи на сервер (для обновления записи таблицы события по id)
+                    String id = params[1];
+                    String column = params[2];
+                    String value = params[3];
+                    String table = params[4];
+
+                    // формируем строку для отправки на сервер
+                    String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8")
+                            + "&" + URLEncoder.encode("id", "utf8") + "=" + URLEncoder.encode(id, "utf8")
+                            + "&" + URLEncoder.encode("column", "utf8") + "=" + URLEncoder.encode(column, "utf8")
+                            + "&" + URLEncoder.encode("value", "utf8") + "=" + URLEncoder.encode(value, "utf8")
+                            + "&" + URLEncoder.encode("table", "utf8") + "=" + URLEncoder.encode(table, "utf8");
 
                     return workWithServer(postData);
                 } catch (IOException e) {
@@ -387,6 +419,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
                     String phone = params[4];
                     String city_id = params[5];
                     String email = params[6];
+                    String logo = params[7];
 
                     // формируем строку для отправки на сервер
                     String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8")
@@ -395,7 +428,8 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
                             + "&" + URLEncoder.encode("name", "utf8") + "=" + URLEncoder.encode(name, "utf8")
                             + "&" + URLEncoder.encode("phone", "utf8") + "=" + URLEncoder.encode(phone, "utf8")
                             + "&" + URLEncoder.encode("city_id", "utf8") + "=" + URLEncoder.encode(city_id, "utf8")
-                            + "&" + URLEncoder.encode("email", "utf8") + "=" + URLEncoder.encode(email, "utf8");
+                            + "&" + URLEncoder.encode("email", "utf8") + "=" + URLEncoder.encode(email, "utf8")
+                            + "&" + URLEncoder.encode("logo", "utf8") + "=" + URLEncoder.encode(logo, "utf8");
 
                     return workWithServer(postData);
                 } catch (IOException e) {

@@ -2,7 +2,6 @@ package com.example.user.organizer;
 
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -18,26 +17,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.user.organizer.fragment.AboutEventShowAllEventDialog;
+import com.example.user.organizer.fragment.AboutUserInfoDialog;
 import com.example.user.organizer.fragment.AdvertisingAndInformationFragment;
 import com.example.user.organizer.fragment.ExitConfirmDialog;
 import com.example.user.organizer.fragment.SettingsFragment;
 import com.example.user.organizer.fragment.ShowAllEventsFragment;
 import com.example.user.organizer.fragment.ShowAuthUserEventsFragment;
 import com.example.user.organizer.fragment.ShowFieldCatalogFragment;
-import com.example.user.organizer.inteface.CustomInterface;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import com.example.user.organizer.inteface.NavigationDrawerInterface;
 
 //--------Боковое меню и управление им( посути основная активность)
 public class NavigationDrawerLogInActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, CustomInterface{
+        implements NavigationView.OnNavigationItemSelectedListener, NavigationDrawerInterface {
 
     DBUtilities dbUtilities;
     User user;
     String idAuthUser;                  //id Авторизированого пользователя
+    String userInfo;
 
+    //параметр для вызова диалога "aboutUserInfoDialog"
+    final String ID_ABOUT_USER_INFO_DIALOG = "aboutUserInfoDialog";
     final String ID_EXIT_DIALOG = "dialogExitConfirm";          //параметр для вызова диалога "выход"
     private ExitConfirmDialog exitConfirmDialog; // диалог подтверждения выхода из приложения
     ShowAllEventsFragment showAllEventsFragment;
@@ -46,6 +46,9 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
     AdvertisingAndInformationFragment advertisingAndInformationFragment;
     SettingsFragment settingsFragment;
     FragmentTransaction fTrans;
+
+    AboutUserInfoDialog aboutUserInfoDialog =
+            new AboutUserInfoDialog(); // диалог информация о пользователе
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,13 +109,16 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         User user = dbUtilities.getListUser(idAuthUser).get(0);
         //логотип пользователя отобразить в боковом меню
         ivProfileLogo.setImageResource(0);
-        ivProfileLogo.setImageResource(Integer.parseInt(user.getLogo()));
+
+        // Показать картинку
+        new DownloadImageTask( headerLayout.findViewById(R.id.ivProfileLogo))
+                .execute("http://strahovanie.dn.ua/football_db/logo/logo_" + user.getLogo() + ".png");
 
         //нажатие на logo
         ivProfileLogo.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(getApplicationContext(), "click", Toast.LENGTH_SHORT).show();
+                aboutUserInfoDialog();
                 return false;
             }
         });
@@ -201,6 +207,25 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         System.exit(0);
     }//closeApp
 
+    //строка с полной информацией о пользователе
+    private String fullInfoAboutUser() {
+        User user = dbUtilities.getListUser(idAuthUser).get(0);
+        return String.format("Логин: %s\n" +
+                        "Пароль: %s \n" +
+                        "Имя: %s\n" +
+                        "Телефон: %s\n" +
+                        "Город: %s\n" +
+                        "Имейл: %s",
+                user.getLogin(),
+                user.getPassword(),
+                user.getName(),
+                user.getPhone(),
+                dbUtilities.searchValueInColumn(
+                        "cities", "id", "name", user.getCity_id()
+                ),
+                user.getEmail());
+    }//fullInfoAboutEvent
+
     @Override
     public void signOut() {
         moveTaskToBack(true);
@@ -209,6 +234,18 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         Intent intent = new Intent(this, AuthorizationActivity.class);
         startActivity(intent);
     }//signOut
+
+    //вызов диалога
+    @Override
+    public void aboutUserInfoDialog() {
+        userInfo = fullInfoAboutUser();
+        Bundle args = new Bundle();    // объект для передачи параметров в диалог
+        args.putString("message", userInfo);
+        aboutUserInfoDialog.setArguments(args);
+
+        // Точка вызова отображение диалогового окна
+        aboutUserInfoDialog.show(getSupportFragmentManager(), ID_ABOUT_USER_INFO_DIALOG);
+    }//aboutUserInfoDialog
 
     @Override
     protected void onDestroy() {

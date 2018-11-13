@@ -16,11 +16,11 @@ import android.view.ViewGroup;
 import com.example.user.organizer.DBUtilities;
 import com.example.user.organizer.R;
 import com.example.user.organizer.ShowAuthUserEventsRecyclerAdapter;
-import com.example.user.organizer.inteface.CallDialogsAuthUserEvents;
+import com.example.user.organizer.inteface.AuthUserEventsInterface;
 
 //-----------Фрагмент выводит активные события авторизированного пользователя---------------------
 public class ShowAuthUserEventsFragment extends Fragment
-implements CallDialogsAuthUserEvents {
+implements AuthUserEventsInterface {
     RecyclerView rvMainShAuUsEvAc;
 
     // адаптер для отображения recyclerView
@@ -85,7 +85,7 @@ implements CallDialogsAuthUserEvents {
         idAuthUser = getArguments().getString("idAuthUser");
 
         // создаем адаптер, передаем в него курсор
-        // параметр this в данном случае используется для передачи интерефеса CallDialogsAuthUserEvents
+        // параметр this в данном случае используется для передачи интерефеса AuthUserEventsInterface
         // в адаптер
         showAuthUserEventsRecyclerAdapter
                 = new ShowAuthUserEventsRecyclerAdapter(this, context, idAuthUser);
@@ -118,9 +118,9 @@ implements CallDialogsAuthUserEvents {
         }//if
     }//onActivityResult
 
-    //Метод имплеметируемые интерфейсом CallDialogsAuthUserEvents
+    //Метод имплеметируемые интерфейсом AuthUserEventsInterface
     @Override
-    public void leaveDialog(Context context, String message, String eventId) {
+    public void callDialogLeaveDialog(Context context, String message, String eventId) {
             Bundle args = new Bundle();    // объект для передачи параметров в диалог
             args.putString("message", message);
             args.putString("event_id", eventId);
@@ -136,9 +136,9 @@ implements CallDialogsAuthUserEvents {
 
     }
 
-    //Метод имплеметируемые интерфейсом CallDialogsAuthUserEvents
+    //Метод имплеметируемые интерфейсом AuthUserEventsInterface
     @Override
-    public void deleteDialog(Context context, String message, String eventId) {
+    public void callDialogDeleteDialog(Context context, String message, String eventId) {
         Bundle args = new Bundle();    // объект для передачи параметров в диалог
         args.putString("message", message);
         args.putString("event_id", eventId);
@@ -153,9 +153,9 @@ implements CallDialogsAuthUserEvents {
         deleteEventDialog.show(getFragmentManager(), ID_DELETE_DIALOG);
     }
 
-    //Метод имплеметируемые интерфейсом CallDialogsAuthUserEvents
+    //Метод имплеметируемые интерфейсом AuthUserEventsInterface
     @Override
-    public void aboutDialog(Context context, String message) {
+    public void callDialogAboutDialog(Context context, String message) {
         Bundle args = new Bundle();    // объект для передачи параметров в диалог
         args.putString("message", message);
         aboutEventShowAllEventDialog.setArguments(args);

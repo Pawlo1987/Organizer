@@ -4,6 +4,8 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,15 +13,12 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 
-import com.example.user.organizer.inteface.NavigationDrawerInterface;
+import com.example.user.organizer.DBUtilities;
+import com.example.user.organizer.NavigationDrawerLogInActivity;
 
-//---------------------- Фрагмент с диалогом подтверждения выхода из приложения-------------------
-
-public class ExitConfirmDialog extends DialogFragment {
-
-    //инициализация интерфейса
-    NavigationDrawerInterface navigationDrawerInterface;
-    Context context;
+//------- Фрагмент с диалогом перезаписи одного значения таблицы в учетной записи пользователя ---
+public class ChangeColumnDialog extends DialogFragment {
+    DBUtilities dbUtilities;
 
     // Метод onAttach() вызывается в начале жизненного цикла фрагмента, и именно здесь
     // мы можем получить контекст фрагмента, в качестве которого выступает класс MainActivity.
@@ -51,8 +50,7 @@ public class ExitConfirmDialog extends DialogFragment {
         //тут можно кастовать контест к активити.
         //но лучше к реализуемому ею интерфейсу
         //чтоб не проверять из какого пакета активити в каждом из случаев
-        this.context = context;
-        navigationDrawerInterface = (NavigationDrawerInterface) context;
+        dbUtilities = new DBUtilities(context);
     }//onAttachToContext
 
     @NonNull // создание диалога
@@ -63,28 +61,38 @@ public class ExitConfirmDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(current);
 
         // прочитать данные, переданные из активности (из точки вызова)
-        boolean flag = getArguments().getBoolean("flag", false);
+        String userId = getArguments().getString("user_id");
+        String column = getArguments().getString("column");
+        String value = getArguments().getString("value");
+        String dataMessage = getArguments().getString("dataMessage");
 
-        if (flag)
-            return builder
-                    .setTitle("Выход")
-                    .setMessage("Вы уверены?")
+        String message = "Новые данные: " + dataMessage;
+
+        return builder
+                .setTitle("Подтверждение изменения данных")
+                .setMessage(message)
 //                .setIcon(R.drawable.exlamation)
-                    // лямбда-выражение на клик кнопки "Да"
-                    .setPositiveButton("Да", (dialog, whichButton) -> navigationDrawerInterface.signOut())
-                    .setNegativeButton("Нет", null) // не назначаем слушателя кликов по кнопке "Нет"
-                    .setCancelable(false)           // запрет закрытия диалога кнопкой Назад
-                    .create();
-        else
-            return builder
-                    .setTitle("Выход")
-                    .setMessage("Вы уверены?")
-//                .setIcon(R.drawable.exlamation)
-                    // лямбда-выражение на клик кнопки "Да"
-                    .setPositiveButton("Да", (dialog, whichButton) -> navigationDrawerInterface.closeApp())
-                    .setNegativeButton("Нет", null) // не назначаем слушателя кликов по кнопке "Нет"
-                    .setCancelable(false)           // запрет закрытия диалога кнопкой Назад
-                    .create();
+                // лямбда-выражение на клик кнопки "Да"
+//                    .setPositiveButton("Подтверждаю",
+//                            (dialog, whichButton) -> dbUtilities.updateOneColumnTable(userId, column, logo))
+                .setPositiveButton("Подтверждаю", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        updateData(userId, column, value, "users");
+                    }
+                })
+                .setNegativeButton("Не подтверждаю", null) // не назначаем слушателя кликов по кнопке "Нет"
+                .setCancelable(false)           // запрет закрытия диалога кнопкой Назад
+                .create();
     }//onCreateDialog
 
-}//class ExitConfirmDialog
+    private void updateData(String userId, String column, String value, String table) {
+        //Занесем данные в БД
+        dbUtilities.updateOneColumnTable(userId, column, value, table);
+
+        //Вернемся в основную активность для обновления данных
+        Intent intent = new Intent(getContext(), NavigationDrawerLogInActivity.class);
+        intent.putExtra("idAuthUser", userId);
+        startActivity(intent);
+    }//updateData
+}//callDialogChangeColumn

@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.user.organizer.inteface.CallDialogsAuthUserEvents;
+import com.example.user.organizer.inteface.AuthUserEventsInterface;
 
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
@@ -30,7 +30,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
     List<Event> eventsList = new ArrayList<>(); //коллекция событий
     Context context;
     DBUtilities dbUtilities;
-    CallDialogsAuthUserEvents callDialogsAuthUserEvents;
+    AuthUserEventsInterface authUserEventsInterface;
     String idAuthUser;         //Авторизированный пользователь
 
     String eventId;
@@ -46,7 +46,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
     String eventUserId;
 
     //конструктор
-    public ShowAuthUserEventsRecyclerAdapter(CallDialogsAuthUserEvents callDialogsAuthUserEvents,
+    public ShowAuthUserEventsRecyclerAdapter(AuthUserEventsInterface authUserEventsInterface,
                                              Context context, String idAuthUser) {
         this.inflater = LayoutInflater.from(context);
         this.context = context;
@@ -54,7 +54,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         dbUtilities = new DBUtilities(context);
         //получение интерфеса из класса Фрагмента
         //для обработки нажатия элементов RecyclerAdapter
-        this.callDialogsAuthUserEvents = callDialogsAuthUserEvents;
+        this.authUserEventsInterface = authUserEventsInterface;
 
         //получаем коллекцию событий
         eventsList = dbUtilities.getListEvents("", idAuthUser);
@@ -228,7 +228,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
             String message = fullInfoAboutEvent();
 
             //через интерфейс СallDialogsAuthUserEvents
-            callDialogsAuthUserEvents.aboutDialog(context, message);
+            authUserEventsInterface.callDialogAboutDialog(context, message);
         }//aboutEvent
 
         //редактировать событие
@@ -252,7 +252,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
             String message = fullInfoAboutEvent();
 
             //через интерфейс СallDialogsAuthUserEvents
-            callDialogsAuthUserEvents.deleteDialog(context, message, eventId);
+            authUserEventsInterface.callDialogDeleteDialog(context, message, eventId);
         }//deleteEvent
 
         //покинуть событие
@@ -260,7 +260,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
             String message = fullInfoAboutEvent();
 
             //через интерфейс СallDialogsAuthUserEvents
-            callDialogsAuthUserEvents.leaveDialog(context, message, eventId);
+            authUserEventsInterface.callDialogLeaveDialog(context, message, eventId);
         }//leaveEvent
 
         //строка с полной информацией о событии

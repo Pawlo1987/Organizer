@@ -1,30 +1,16 @@
 package com.example.user.organizer;
 
 
-import android.app.FragmentTransaction;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.user.organizer.fragment.AdvertisingAndInformationFragment;
-import com.example.user.organizer.fragment.ExitConfirmDialog;
-import com.example.user.organizer.fragment.ShowAuthUserEventsFragment;
-import com.example.user.organizer.fragment.ShowFieldCatalogFragment;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
 
 //-------Главная Активность----------------

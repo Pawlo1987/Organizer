@@ -297,6 +297,7 @@ public class CreateEventActivity extends AppCompatActivity {
     //обработка нажатия клавиши создания нового поля
     private void createNewField() {
         Intent intent = new Intent(this, CreateFieldActivity.class);
+        intent.putExtra("idAuthUser", idAuthUser);
         startActivity(intent);
     }//createNewField
 

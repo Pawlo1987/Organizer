@@ -123,5 +123,6 @@
     <string name="tvThirdLineShAlEvReAd">Город:</string>
     <string name="tvTypeShAuUsEvReAd">Тренировка</string>
     <string name="title_activity_maps">Map</string>
+    <string name="tvGeoInputMethodCrFi">Способ ввода</string>
 
 </resources>

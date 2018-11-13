@@ -90,7 +90,7 @@ public class ShowAllEventsRecyclerAdapter extends
         //опредиляемся с цветом CardView взависимости от роли пользователя в собитии
         int color;
         if(eventShow.eventUserStatus.equals("0"))
-            color = context.getResources().getColor(R.color.colorMyColorBlue);
+            color = context.getResources().getColor(R.color.colorMyColorGreen);
         else if(eventShow.eventUserStatus.equals("1"))
             color = context.getResources().getColor(R.color.colorMyColorGold);
         else color = context.getResources().getColor(R.color.colorMyColorGrey);
@@ -126,7 +126,7 @@ public class ShowAllEventsRecyclerAdapter extends
                     //опредиляемся с цветом CardView взависимости от роли пользователя в собитии
                     int color;
                     if(eventsList.get(getAdapterPosition()).eventUserStatus.equals("0"))
-                            color = context.getResources().getColor(R.color.colorMyColorBlue);
+                            color = context.getResources().getColor(R.color.colorMyColorGreen);
                         else if(eventsList.get(getAdapterPosition()).eventUserStatus.equals("1"))
                             color = context.getResources().getColor(R.color.colorMyColorGold);
                         else color = context.getResources().getColor(R.color.colorMyColorGrey);

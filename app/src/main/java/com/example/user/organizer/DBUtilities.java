@@ -270,10 +270,10 @@ public class DBUtilities{
     //обращяемся к БД на сервер для создания новой записи в таблицу fields
     public void insertIntoFields(String city_id, String name, String phone, String light_status,
                                  String coating_id, String shower_status, String roof_status,
-                                 String geo_long, String geo_lat, String address) {
+                                 String geo_long, String geo_lat, String address, String user_id) {
         try(BackgroundWorker bg = new BackgroundWorker()){
             bg.execute("insertIntoFields", city_id, name, phone, light_status, coating_id,
-                        shower_status, roof_status, geo_long, geo_lat, address);
+                        shower_status, roof_status, geo_long, geo_lat, address, user_id);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
@@ -695,13 +695,17 @@ public class DBUtilities{
                 JSONObject jListAddress = jResult.getJSONObject("address");
                 List<String> listAddress = getListFromJSON(jListAddress);
 
+                JSONObject jListUser = jResult.getJSONObject("user");
+                List<String> listUser = getListFromJSON(jListUser);
+
                 int n = listId.size();
 
                 for (int i = 0; i <n ; i++) {
                     fieldList.add(new Field(listId.get(i), listCity.get(i),
                             listName.get(i), listPhone.get(i), listLight.get(i),
                             listCoating.get(i), listShower.get(i), listRoof.get(i),
-                            listGeoLong.get(i), listGeoLat.get(i),listAddress.get(i)));
+                            listGeoLong.get(i), listGeoLat.get(i),listAddress.get(i),
+                            listUser.get(i)));
                 }//fori
 
             }else{

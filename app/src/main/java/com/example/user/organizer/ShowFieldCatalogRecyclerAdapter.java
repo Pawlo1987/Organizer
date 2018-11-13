@@ -3,17 +3,17 @@ package com.example.user.organizer;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.PopupMenu;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.user.organizer.fragment.AboutEventShowAllEventDialog;
 import com.example.user.organizer.fragment.AboutFieldShowFieldCatalogDialog;
-import com.example.user.organizer.fragment.TakePartShowAllEventDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +42,7 @@ public class ShowFieldCatalogRecyclerAdapter extends
     String geo_long;
     String geo_lat;
     String address;
+    String user_id;
 
     AboutFieldShowFieldCatalogDialog aboutFieldShowFieldCatalogDialog =
             new AboutFieldShowFieldCatalogDialog(); // диалог подроднее о поле
@@ -73,9 +74,14 @@ public class ShowFieldCatalogRecyclerAdapter extends
         Field fieldShow = fieldList.get(position);
 
         // получение данных
-        holder.tvCityShFiCaReAd.setText(fieldShow.city_id);     //город
-        holder.tvNameShFiCaReAd.setText(fieldShow.name);        //поле
-        holder.tvPhoneShFiCaReAd.setText(fieldShow.phone);       //телефон
+        holder.tvCityShFiCaReAd.setText(fieldShow.city_id);             //город
+        holder.tvNameShFiCaReAd.setText("\""+fieldShow.name+"\"");      //поле
+        //опредиляемся с цветом CardView взависимости от роли пользователя в собитии
+        holder.cvMainShFiCaReAd.setCardBackgroundColor(
+                (fieldShow.user_id.equals(idAuthUser))
+                        ?context.getResources().getColor(R.color.colorMyColorGold)
+                        :context.getResources().getColor(R.color.colorMyColorGreen)
+        );
     } // onBindViewHolder
 
     //получаем количество элементов объекта(курсора)
@@ -84,26 +90,23 @@ public class ShowFieldCatalogRecyclerAdapter extends
 
     //Создаем класс ViewHolder с помощью которого мы получаем ссылку на каждый элемент
     //отдельного пункта списка и подключаем слушателя события нажатия меню
-    public class ViewHolder extends RecyclerView.ViewHolder
-            implements PopupMenu.OnMenuItemClickListener{
-        final TextView tvCityShFiCaReAd, tvNameShFiCaReAd, tvPhoneShFiCaReAd;
+    public class ViewHolder extends RecyclerView.ViewHolder{
+        final TextView tvCityShFiCaReAd, tvNameShFiCaReAd;
+        ImageView ivInfoShFiCaReAd;
+        CardView cvMainShFiCaReAd;
 
         ViewHolder(View view){
             super(view);
 
             tvCityShFiCaReAd = view.findViewById(R.id.tvCityShFiCaReAd);
             tvNameShFiCaReAd = view.findViewById(R.id.tvNameShFiCaReAd);
-            tvPhoneShFiCaReAd = view.findViewById(R.id.tvPhoneShFiCaReAd);
+            ivInfoShFiCaReAd = view.findViewById(R.id.ivInfoShFiCaReAd);
+            cvMainShFiCaReAd = view.findViewById(R.id.cvMainShFiCaReAd);
 
-            //слушатель события нажатого меню
-            view.setOnClickListener(new View.OnClickListener() {
+            //слушатель события нажатия инфо-значка
+            ivInfoShFiCaReAd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    PopupMenu popup = new PopupMenu(view.getContext(), view);
-                    popup.inflate(R.menu.rva_field_catalog_popup_menu);
-                    popup.setOnMenuItemClickListener(ViewHolder.this);
-                    popup.show();
-
                     //получаем данные о нажатом событии
                     field = fieldList.get(getAdapterPosition());
                     id = field.id;
@@ -117,20 +120,61 @@ public class ShowFieldCatalogRecyclerAdapter extends
                     geo_long = field.geo_long;
                     geo_lat = field.geo_lat;
                     address = field.address;
-                }//onClick
-            });
-        } // ViewHolder
+                    user_id = field.user_id;
 
-        //обработчик выбраного пункта меню
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.item_about_field_catalog_rva:    //выбран пункт подробная информация
                     aboutField();
-                    break;
-            }//switch
-            return false;
-        }//onMenuItemClick
+                }//onClick
+            });//setOnClickListener
+
+            //onTouch
+            cvMainShFiCaReAd.setOnTouchListener((v, event) -> {
+                //опредиляемся с цветом CardView взависимости от роли пользователя в собитии
+                int color = fieldList.get(getAdapterPosition()).user_id.equals(idAuthUser)
+                        ?context.getResources().getColor(R.color.colorMyColorGold)
+                        :context.getResources().getColor(R.color.colorMyColorGreen);
+
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        cvMainShFiCaReAd.setCardBackgroundColor(
+                                context.getResources().getColor(R.color.colorMyColorWhite)
+                        );
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        cvMainShFiCaReAd.setCardBackgroundColor(color);
+                        break;
+                    default:
+                        cvMainShFiCaReAd.setCardBackgroundColor(color);
+                        break;
+                }//switch
+                return false;
+            });//setOnTouchListener
+
+            //onLongClick
+            cvMainShFiCaReAd.setOnLongClickListener(v -> {
+                //получаем данные о выбранном поле
+                field = fieldList.get(getAdapterPosition());
+                //если в данном событии авторизированный пользователь создатель поля
+                if(field.user_id.equals(idAuthUser)) {
+//                    eventId = event.eventId;
+//                    eventCityName = event.cityName;
+//                    eventFieldName = event.fieldName;
+//                    eventDate = event.eventData;
+//                    showEventDate = dateShowFormat(eventDate);
+//                    eventTime = event.eventTime;
+//                    eventDuration = event.eventDuration;
+//                    eventPrice = event.eventPrice;
+//                    eventPhone = event.eventPhone;
+//                    eventUserId = event.eventUserId;
+//
+//                    //выбран пункт редактировать события
+//                    editEvent();
+                }else {
+                    Toast.makeText(context, "Нет прав для редактирования!", Toast.LENGTH_SHORT).show();
+                }//if-else
+                return true;
+            });//setOnLongClickListener
+
+        } // ViewHolder
 
         //Вызов диалога для подробной информации о поле
         private void aboutField() {

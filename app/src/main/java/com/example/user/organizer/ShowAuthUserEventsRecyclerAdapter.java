@@ -98,7 +98,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         //опредиляемся с цветом CardView взависимости от роли пользователя в собитии
         holder.cvMainShAuUsEvReAd.setCardBackgroundColor(
                 (eventShow.eventUserStatus.equals("0"))
-                    ?context.getResources().getColor(R.color.colorMyColorBlue)
+                    ?context.getResources().getColor(R.color.colorMyColorGreen)
                     :context.getResources().getColor(R.color.colorMyColorGold)
         );
         if(eventShow.eventUserStatus.equals("2"))
@@ -132,7 +132,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
             cvMainShAuUsEvReAd.setOnTouchListener((v, event) -> {
                 //опредиляемся с цветом CardView взависимости от роли пользователя в собитии
                 int color = eventsList.get(getAdapterPosition()).eventUserStatus.equals("0")
-                        ?context.getResources().getColor(R.color.colorMyColorBlue)
+                        ?context.getResources().getColor(R.color.colorMyColorGreen)
                         :context.getResources().getColor(R.color.colorMyColorGold);
 
                 switch (event.getAction()) {

@@ -23,6 +23,8 @@ public class CreateFieldActivity extends AppCompatActivity {
     List<String> spListBoolean;         // Данные для спинера выбора освещение
     List<String> spListCoating;         // Данные для спинера выбора покрытие
 
+    String idAuthUser;      // id авторизированого пользователя
+
     EditText etNameCrFi;
     EditText etGeolatCrFi;
     EditText etGeolongCrFi;
@@ -44,6 +46,8 @@ public class CreateFieldActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_field);
+
+        idAuthUser = getIntent().getStringExtra("idAuthUser");
 
         //привязка ресурсов к объектам
         etNameCrFi = (EditText) findViewById(R.id.etNameCrFi);
@@ -114,10 +118,9 @@ public class CreateFieldActivity extends AppCompatActivity {
         spRoofCrFi.setAdapter(spAdapterBoolean);
     }//onCreate
 
-    //обработчик неажатия клавишы Создать запись пользователя
+    //обработчик нажатия клавишы Создать запись пользователя
     public void createNewField() {
 
-        ContentValues cv = new ContentValues();
         String city_id = String.valueOf(spListCity.indexOf(spCityCrFi.getSelectedItem()) + 1);
         String name = etNameCrFi.getText().toString();
         String phone = etPhoneCrFi.getText().toString();
@@ -128,10 +131,11 @@ public class CreateFieldActivity extends AppCompatActivity {
         String geo_long = etGeolongCrFi.getText().toString();
         String geo_lat = etGeolatCrFi.getText().toString();
         String address = etAddressCrFi.getText().toString();
+        String user_id = idAuthUser;
 
         //добваить данные через объект ContentValues(cv), в таблицу "field"
         dbUtilities.insertIntoFields( city_id, name, phone, light_status, coating_id,
-                shower_status, roof_status, geo_long, geo_lat, address);
+                shower_status, roof_status, geo_long, geo_lat, address, user_id);
 
         finish();
 

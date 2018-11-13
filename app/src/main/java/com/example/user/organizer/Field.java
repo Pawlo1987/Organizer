@@ -16,6 +16,7 @@ public class Field implements Parcelable{
     String geo_long;
     String geo_lat;
     String address;
+    String user_id;
 
     public Field() {
     }//Field
@@ -23,7 +24,7 @@ public class Field implements Parcelable{
     public Field(String id, String city_id, String name,
                  String phone, String light_status, String coating_id,
                  String shower_status, String roof_status, String geo_long,
-                 String geo_lat, String address) {
+                 String geo_lat, String address, String user_id) {
         this.id = id;
         this.city_id = city_id;
         this.name = name;
@@ -35,8 +36,8 @@ public class Field implements Parcelable{
         this.geo_long = geo_long;
         this.geo_lat = geo_lat;
         this.address = address;
+        this.user_id = user_id;
     }//Field
-
 
     protected Field(Parcel in) {
         id = in.readString();
@@ -50,6 +51,7 @@ public class Field implements Parcelable{
         geo_long = in.readString();
         geo_lat = in.readString();
         address = in.readString();
+        user_id = in.readString();
     }
 
     public static final Creator<Field> CREATOR = new Creator<Field>() {
@@ -82,5 +84,6 @@ public class Field implements Parcelable{
         dest.writeString(geo_long);
         dest.writeString(geo_lat);
         dest.writeString(address);
+        dest.writeString(user_id);
     }
 }//Field

@@ -410,6 +410,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
                     String geo_long = params[8];
                     String geo_lat = params[9];
                     String address = params[10];
+                    String user_id = params[11];
 
                     // формируем строку для отправки на сервер
                     String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8")
@@ -422,7 +423,8 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
                             + "&" + URLEncoder.encode("roof_status", "utf8") + "=" + URLEncoder.encode(roof_status, "utf8")
                             + "&" + URLEncoder.encode("geo_long", "utf8") + "=" + URLEncoder.encode(geo_long, "utf8")
                             + "&" + URLEncoder.encode("geo_lat", "utf8") + "=" + URLEncoder.encode(geo_lat, "utf8")
-                            + "&" + URLEncoder.encode("address", "utf8") + "=" + URLEncoder.encode(address, "utf8");
+                            + "&" + URLEncoder.encode("address", "utf8") + "=" + URLEncoder.encode(address, "utf8")
+                            + "&" + URLEncoder.encode("user_id", "utf8") + "=" + URLEncoder.encode(user_id, "utf8");
 
                     return workWithServer(postData);
                 } catch (IOException e) {

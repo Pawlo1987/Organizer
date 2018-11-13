@@ -62,6 +62,7 @@ public class AuthorizationActivity extends AppCompatActivity {
         if(idAuthUser != null){
             Intent intent = new Intent(context, NavigationDrawerLogInActivity.class);
             intent.putExtra("idAuthUser", idAuthUser);
+            intent.putExtra("notificationServiceFlag", false);
             startActivity(intent);
             finish();
         }//if

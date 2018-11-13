@@ -447,6 +447,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
                     String time = params[5];
                     String date = params[6];
                     String message_id = params[7];
+                    String notice = params[8];
 
                     // формируем строку для отправки на сервер
                     String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8")
@@ -456,7 +457,8 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
                             + "&" + URLEncoder.encode("field_id", "utf8") + "=" + URLEncoder.encode(field_id, "utf8")
                             + "&" + URLEncoder.encode("time", "utf8") + "=" + URLEncoder.encode(time, "utf8")
                             + "&" + URLEncoder.encode("date", "utf8") + "=" + URLEncoder.encode(date, "utf8")
-                            + "&" + URLEncoder.encode("message_id", "utf8") + "=" + URLEncoder.encode(message_id, "utf8");
+                            + "&" + URLEncoder.encode("message_id", "utf8") + "=" + URLEncoder.encode(message_id, "utf8")
+                            + "&" + URLEncoder.encode("notice", "utf8") + "=" + URLEncoder.encode(notice, "utf8");
 
                     return workWithServer(postData);
                 } catch (IOException e) {

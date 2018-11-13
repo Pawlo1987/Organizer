@@ -87,7 +87,7 @@ public class LeaveEventDialog extends DialogFragment {
 
     }//onCreateDialog
 
-    //подтверждение выхода из участия в тренеровки
+    //отказ от участия в тренеровки
     private void leaveEvent(){
         //Ищем id по двум значениям в таблице participants
         String id = dbUtilities.getIdByTwoValues("participants", "event_id", event_id,
@@ -97,11 +97,12 @@ public class LeaveEventDialog extends DialogFragment {
         List<Event> listEvent = new ArrayList<>();
         listEvent = dbUtilities.getListEvents(event_id, user_id);
 
+        //увеомление для организатора
         dbUtilities.insertIntoNotifications(event_id,
-              dbUtilities.searchValueInColumn("events","id","user_id",event_id),    //увеомление для организатора
+              dbUtilities.searchValueInColumn("events","id","user_id",event_id),
               dbUtilities.getIdByValue("cities","name",listEvent.get(0).getCityName()),
               dbUtilities.getIdByValue("fields","name",listEvent.get(0).getFieldName()),
-              listEvent.get(0).getEventTime(), listEvent.get(0).getEventData(), "3"
+              listEvent.get(0).getEventTime(), listEvent.get(0).getEventData(), "3", user_id
         );
 
         //удаления записи из БД( удаление записи из таблицы participants по id)

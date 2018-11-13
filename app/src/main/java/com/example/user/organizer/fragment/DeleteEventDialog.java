@@ -102,7 +102,7 @@ public class DeleteEventDialog extends DialogFragment {
                         "user_id", idParticipants),    //увеомление для организатора
                  dbUtilities.getIdByValue("cities","name",listEvent.get(0).getCityName()),
                  dbUtilities.getIdByValue("fields","name",listEvent.get(0).getFieldName()),
-                 listEvent.get(0).getEventTime(), listEvent.get(0).getEventData(), "4"
+                 listEvent.get(0).getEventTime(), listEvent.get(0).getEventData(), "4", " "
             );
             dbUtilities.deleteRowById("participants",idParticipants);
         }//foreach

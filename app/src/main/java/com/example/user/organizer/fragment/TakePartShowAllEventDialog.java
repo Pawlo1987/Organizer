@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 
 import com.example.user.organizer.DBUtilities;
+import com.example.user.organizer.Event;
 
 //---------------------- Фрагмент с диалогом принять участие -------------------
 public class TakePartShowAllEventDialog extends DialogFragment {
@@ -94,7 +95,14 @@ public class TakePartShowAllEventDialog extends DialogFragment {
     }//onCreateDialog
 
     private void takeInPart(String event_id, String user_id) {
-        dbUtilities.insertIntoParticipants(event_id,user_id);
+        Event event = dbUtilities.getListEvents(event_id,"").get(0);
+        //увеомление для организатора
+        dbUtilities.insertIntoNotifications(event_id,
+                event.getEventUserId(),
+                dbUtilities.getIdByValue("cities","name",event.getCityName()),
+                dbUtilities.getIdByValue("fields", "name",event.getFieldName()),
+                event.getEventTime(),event.getEventData(), "5", user_id
+        );
         Intent intent = new Intent();
         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
     }//takeInPart

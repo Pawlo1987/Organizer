@@ -57,7 +57,7 @@ public class NotificationService extends Service {
                                 notification.getId()
                         );//deleteRowByValue
 
-                        Utils.sleep(1000);
+                        Utils.sleep(3000);
                     }//foreach
 
                     //задержка перед формирование следующего файла
@@ -68,8 +68,15 @@ public class NotificationService extends Service {
     }//someWork
 
     private void sendNotification(com.example.user.organizer.Notification notification) {
-        String messageText = String.format("%s %s в %s,\n в городе %s на поле %s",
-                notification.getMessage_id(),
+        String messageText = String.format("%s%s %s в %s,\n в городе %s на поле %s",
+                !notification.getNotice().equals(" ") ?//здесь указывается имя учасника покидающего собвтие
+                        dbUtilities.searchValueInColumn(
+                                "users",
+                                "id",
+                                "name",
+                                notification.getNotice()
+                        )+" ":"",
+                notification.getMessage(),
                 notification.getDate(),
                 notification.getTime(),
                 notification.getCity_id(),
@@ -77,16 +84,34 @@ public class NotificationService extends Service {
 
         Notification.Builder nBuilder = new Notification.Builder(this)
                 .setContentText(messageText)
-                .setContentTitle(notification.getMessage_id())
+                .setContentTitle(notification.getMessage())
                 .setSmallIcon(R.drawable.file)
-                .setStyle((new Notification.BigTextStyle()
-                        .bigText(messageText)))
+                .setStyle(new Notification.BigTextStyle()
+                        .bigText(messageText))
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.file));
 
         // 3-я часть  Click on notification
-//        Intent intent = new Intent(this, NavigationDrawerLogInActivity.class);
-                Intent intent = new Intent();
-        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intent = new Intent(this, NavigationDrawerLogInActivity.class);
+        intent.putExtra("idAuthUser", idAuthUser);
+        intent.putExtra("notice", notification.getNotice());
+        intent.putExtra("title", notification.getMessage());
+        intent.putExtra("eventId", notification.getEvent_id());
+        intent.putExtra("notificationServiceFlag", true);
+        intent.putExtra("messageText", messageText);
+        intent.putExtra("messageId",
+                dbUtilities.getIdByValue(
+                        "notificationmessages",
+                        "message",
+                        notification.getMessage()
+                )//getIdByValue
+        );// intent.putExtra
+        PendingIntent pIntent =
+                PendingIntent.getActivity(
+                        this,
+                        0,
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
 
         nBuilder.setContentIntent(pIntent);
         Notification notif = nBuilder.build();

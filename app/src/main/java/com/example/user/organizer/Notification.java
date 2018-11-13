@@ -12,11 +12,12 @@ public class Notification implements Parcelable {
     String field_id;
     String time;
     String date;
-    String message_id;
+    String message;
+    String notice;
 
     public Notification(String id, String event_id, String user_id,
                         String city_id, String field_id, String time,
-                        String date, String message_id) {
+                        String date, String message, String notice) {
         this.id = id;
         this.event_id = event_id;
         this.user_id = user_id;
@@ -24,7 +25,8 @@ public class Notification implements Parcelable {
         this.field_id = field_id;
         this.time = time;
         this.date = date;
-        this.message_id = message_id;
+        this.message = message;
+        this.notice = notice;
     }
 
     protected Notification(Parcel in) {
@@ -35,7 +37,8 @@ public class Notification implements Parcelable {
         field_id = in.readString();
         time = in.readString();
         date = in.readString();
-        message_id = in.readString();
+        message = in.readString();
+        notice = in.readString();
     }
 
     @Override
@@ -47,7 +50,8 @@ public class Notification implements Parcelable {
         dest.writeString(field_id);
         dest.writeString(time);
         dest.writeString(date);
-        dest.writeString(message_id);
+        dest.writeString(message);
+        dest.writeString(notice);
     }
 
     @Override
@@ -88,7 +92,9 @@ public class Notification implements Parcelable {
     public String getDate() {return date;}
     public void setDate(String date) {this.date = date;}
 
-    public String getMessage_id() {return message_id;}
-    public void setMessage_id(String message_id) {this.message_id = message_id;}
+    public String getMessage() {return message;}
+    public void setMessage(String message_id) {this.message = message_id;}
 
+    public String getNotice() {return notice;}
+    public void setNotice(String notice) {this.notice = notice;}
 }//Notification

@@ -1,6 +1,7 @@
 package com.example.user.organizer;
 
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,6 +9,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.user.organizer.fragment.AboutUserInfoDialog;
 import com.example.user.organizer.fragment.AdvertisingAndInformationFragment;
@@ -25,6 +28,11 @@ import com.example.user.organizer.fragment.ShowAuthUserEventsFragment;
 import com.example.user.organizer.fragment.ShowFieldCatalogFragment;
 import com.example.user.organizer.inteface.NavigationDrawerInterface;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
 //--------Боковое меню и управление им( посути основная активность)
 public class NavigationDrawerLogInActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, NavigationDrawerInterface {
@@ -33,6 +41,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
     User user;
     String idAuthUser;                  //id Авторизированого пользователя
     String userInfo;
+    boolean notificationServiceFlag;
 
     //параметр для вызова диалога "aboutUserInfoDialog"
     final String ID_ABOUT_USER_INFO_DIALOG = "aboutUserInfoDialog";
@@ -52,7 +61,15 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer_log_in);
+
         idAuthUser = getIntent().getStringExtra("idAuthUser");
+
+        notificationServiceFlag =
+                getIntent().getBooleanExtra("notificationServiceFlag",false);
+
+        //проверка флага notificationServiceFlag
+        //если активность вызваннна после NotificationService
+        if(notificationServiceFlag) checkNotificationMessage();
 
         dbUtilities = new DBUtilities(getBaseContext());
 
@@ -138,10 +155,127 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         );
 
         navigationView.setNavigationItemSelectedListener(this);
-
+        dbUtilities.getListEvents("", idAuthUser);
         //Запуск сервиса следящего за обновления информации в БД
         startServiceWatchingForDb();
     }//onCreate
+
+    //проверка сообщения после NotificationService
+    private void checkNotificationMessage() {
+        int messageId = Integer.parseInt(getIntent().getStringExtra("messageId"));
+        String messageText = getIntent().getStringExtra("messageText");
+        String title = getIntent().getStringExtra(" title");
+        switch(messageId){
+            case 1:
+                alertDialogTwoButton(title, messageText, messageId);
+                break;
+            case 2:
+                alertDialogOneButton(title, messageText);
+                break;
+            case 3:
+                alertDialogOneButton(title, messageText);
+                break;
+            case 4:
+                alertDialogOneButton(title, messageText);
+                break;
+            case 5:
+                alertDialogTwoButton(title, messageText, messageId);
+                break;
+        }
+    }//checkNotificationMessage
+
+    //AlertDialog с одной кнопкой
+    private void alertDialogOneButton(String title, String messageText) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title)
+                .setMessage(messageText)
+//                .setIcon(R.drawable.ic_android_cat)
+                .setCancelable(false)
+                .setNegativeButton("ОК",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }//alertDialogOneButton
+
+    //AlertDialog с двумя кнопками
+    private void alertDialogTwoButton(String title, String messageText, int messageId) {
+        String eventId = getIntent().getStringExtra("eventId");
+        AlertDialog.Builder ad;
+        String button1String = "Подтвердить";
+        String button2String = "Отказатся";
+
+        ad = new AlertDialog.Builder(this);
+        ad.setTitle(title);  // заголовок
+        ad.setMessage(messageText); // сообщение
+        ad.setPositiveButton(button1String, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                if(messageId == 5) dbUtilities.insertIntoParticipants(
+                        eventId,
+                        getIntent().getStringExtra("notice")
+                );
+            }
+        });
+        ad.setNegativeButton(button2String, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                if(messageId == 1) { leaveEvent(eventId); }
+            }
+        });
+        ad.setCancelable(true);
+        ad.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            public void onCancel(DialogInterface dialog) {
+                Toast.makeText(getApplicationContext(), "Вы ничего не выбрали",
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+        ad.show();
+    }//alertDialogTwoButton
+
+    //отказатся от участия в событии
+    private void leaveEvent(String eventId) {
+        //Ищем id по двум значениям в таблице participants
+        String id = dbUtilities.getIdByTwoValues("participants", "event_id", eventId,
+                "user_id", idAuthUser);
+
+        //получаем данные для уведомления
+        List<Event> listEvent = new ArrayList<>();
+        listEvent = dbUtilities.getListEvents(eventId, idAuthUser);
+
+        //увеомление для организатора
+        dbUtilities.insertIntoNotifications(eventId,
+                dbUtilities.searchValueInColumn("events","id","user_id",eventId),
+                dbUtilities.getIdByValue("cities","name",listEvent.get(0).getCityName()),
+                dbUtilities.getIdByValue("fields","name",listEvent.get(0).getFieldName()),
+                listEvent.get(0).getEventTime(), listEvent.get(0).getEventData(), "3",
+                idAuthUser
+        );
+
+        //удаления записи из БД( удаление записи из таблицы participants по id)
+        dbUtilities.deleteRowById("participants", id);
+    }//leaveEvent
+
+    private void alertDialogTimeOut(String messageText) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Автоматическое закрытие окна");
+        builder.setMessage(messageText);
+        builder.setCancelable(true);
+
+        final AlertDialog dlg = builder.create();
+
+        dlg.show();
+
+        final Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                dlg.dismiss(); // when the task active then close the dialog
+                timer.cancel(); // also just top the timer thread, otherwise,
+                // you may receive a crash report
+            }
+        }, 3000); // через 5 секунд (5000 миллисекунд), the task will be active.
+    }//alertDialogTimeOut
 
     private void startServiceWatchingForDb() {
         Intent intent = new Intent(this, NotificationService.class);

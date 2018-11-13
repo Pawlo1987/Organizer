@@ -248,9 +248,9 @@ public class DBUtilities{
 
     //обращяемся к БД на сервер для создания нового записи в таблицу notification
     public void insertIntoNotifications(String event_id, String user_id, String city_id, String field_id, String time,
-                                String date, String message_id) {
+                                String date, String message_id, String notice) {
         try(BackgroundWorker bg = new BackgroundWorker()){
-            bg.execute("insertIntoNotifications", event_id, user_id, city_id, field_id, time, date, message_id);
+            bg.execute("insertIntoNotifications", event_id, user_id, city_id, field_id, time, date, message_id, notice);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
@@ -414,7 +414,7 @@ public class DBUtilities{
     }//insertIntoNotes
 
     // получение списка новостей из определенного города из базы
-    public List<Note> getSomeNotesfromDB(String cityName) {
+    public List<Note> getSomeNotesFromDB(String cityName) {
         List<Note> notes = new ArrayList<>();
 
         //получаем id города
@@ -456,7 +456,7 @@ public class DBUtilities{
             e.printStackTrace();
         }//try-catch
         return notes;
-    }//getSomeNotesfromDB
+    }//getSomeNotesFromDB
 
     // получение списка имен полей по признаку город
     public List<String> getSomeFieldsFromDB(String cityName) {
@@ -530,12 +530,15 @@ public class DBUtilities{
                 JSONObject jListMessage = jResult.getJSONObject("message");
                 List<String> messageList = getListFromJSON(jListMessage);
 
+                JSONObject jListNotice = jResult.getJSONObject("notice");
+                List<String> noticeList = getListFromJSON(jListNotice);
+
                 int n = idList.size();
 
                 for (int i = 0; i <n ; i++) {
                     listNotification.add(new Notification(idList.get(i),eventList.get(i),
                             userList.get(i),cityList.get(i),fieldList.get(i),timeList.get(i),
-                            dateList.get(i),messageList.get(i)));
+                            dateList.get(i),messageList.get(i),noticeList.get(i)));
                 }//fori
 
             }else{

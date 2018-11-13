@@ -408,7 +408,7 @@ public class EditEventActivity extends AppCompatActivity {
                 dbUtilities.insertIntoParticipants(eventId, user_id);
 
                 //добавление новой записи в таблицу notifications
-                dbUtilities.insertIntoNotifications(eventId, user_id, city_id, field_id, time, date, "1");
+                dbUtilities.insertIntoNotifications(eventId, user_id, city_id, field_id, time, date, "1"," ");
             }//foreach
         }//if
 

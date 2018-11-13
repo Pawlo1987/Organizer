@@ -218,7 +218,7 @@ public class AdvertisingAndInformationFragment extends Fragment {
             notes = dbUtilities.getAllNotes();
         }else{
             //получаем записи новостей из БД по определенному городу
-            notes = dbUtilities.getSomeNotesfromDB(cityName);
+            notes = dbUtilities.getSomeNotesFromDB(cityName);
         }//if-else
 
         Log.d("FOOTBALL", notes.toString());

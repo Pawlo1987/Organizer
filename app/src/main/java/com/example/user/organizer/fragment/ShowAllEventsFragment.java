@@ -4,37 +4,39 @@ package com.example.user.organizer.fragment;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
+
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
-import android.widget.TextView;
 
 import com.example.user.organizer.DBUtilities;
-import com.example.user.organizer.Event;
 import com.example.user.organizer.R;
 import com.example.user.organizer.ShowAllEventsRecyclerAdapter;
+import com.example.user.organizer.inteface.CallDialogsAllEvents;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ShowAllEventsFragment extends Fragment {
+public class ShowAllEventsFragment extends Fragment
+        implements CallDialogsAllEvents {
 
     RecyclerView rvMainShAlEvAc;
+
     // адаптер для отображения recyclerView
     ShowAllEventsRecyclerAdapter showAllEventsRecyclerAdapter;
     DBUtilities dbUtilities;
-    GridView gvMainShAlEvAc;
-    List<Event> eventsList = new ArrayList<>(); //коллекция событий
     Context context;
 
     String idAuthUser;                 //авторизированный пользователь
 
+    AboutEventShowAllEventDialog aboutEventShowAllEventDialog =
+            new AboutEventShowAllEventDialog(); // диалог подтверждения выхода из приложения
+
+    TakePartShowAllEventDialog takePartShowAllEventDialog =
+            new TakePartShowAllEventDialog(); // диалог подтверждения выхода из приложения
+
+    final String ID_ABOUT_DIALOG = "aboutEventShowAllEventDialog";  //параметр для вызова диалога "about"
+    final String ID_TAKEPART_DIALOG = "takePartShowAllEventDialog";  //параметр для вызова диалога "takePart"
 
     // Метод onAttach() вызывается в начале жизненного цикла фрагмента, и именно здесь
     // мы можем получить контекст фрагмента, в качестве которого выступает класс MainActivity.
@@ -46,11 +48,9 @@ public class ShowAllEventsFragment extends Fragment {
         // прочитать данные, переданные из активности (из точки вызова)
         idAuthUser = getArguments().getString("idAuthUser");
 
-        //получаем коллекцию событий
-        eventsList = dbUtilities.getListEvents("");
-
         // создаем адаптер, передаем в него курсор
-        showAllEventsRecyclerAdapter = new ShowAllEventsRecyclerAdapter(context, eventsList, idAuthUser);
+        showAllEventsRecyclerAdapter = new ShowAllEventsRecyclerAdapter(this, context, idAuthUser);
+
         super.onAttach(context);
     } // onAttach
 
@@ -67,4 +67,29 @@ public class ShowAllEventsFragment extends Fragment {
 
         return result;
     } // onCreateView
+
+    @Override
+    public void aboutDialog(Context context, String message) {
+        Bundle args = new Bundle();    // объект для передачи параметров в диалог
+        args.putString("message", message);
+        aboutEventShowAllEventDialog.setArguments(args);
+
+        // отображение диалогового окна
+        aboutEventShowAllEventDialog.show(((AppCompatActivity)context).
+                getSupportFragmentManager(), ID_ABOUT_DIALOG);
+    }//aboutDialog
+
+    @Override
+    public void takePart(Context context, String eventId, boolean userTakeInPart, String message) {
+        Bundle args = new Bundle();    // объект для передачи параметров в диалог
+        args.putString("message", message);
+        args.putBoolean("userTakeInPart", userTakeInPart);
+        args.putString("event_id", eventId);
+        args.putString("user_id", idAuthUser);
+        takePartShowAllEventDialog.setArguments(args);
+
+        // отображение диалогового окна
+        takePartShowAllEventDialog.show(((AppCompatActivity)context).
+                getSupportFragmentManager(), ID_TAKEPART_DIALOG);
+    }//takePart
 }

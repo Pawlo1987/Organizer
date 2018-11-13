@@ -2,22 +2,19 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import com.example.user.organizer.fragment.AboutEventShowAllEventDialog;
-import com.example.user.organizer.fragment.DeleteEventDialog;
-import com.example.user.organizer.fragment.LeaveEventDialog;
+import com.example.user.organizer.inteface.CallDialogsAuthUserEvents;
 
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
@@ -35,6 +32,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
     List<Event> eventsList = new ArrayList<>(); //коллекция событий
     Context context;
     DBUtilities dbUtilities;
+    CallDialogsAuthUserEvents callDialogsAuthUserEvents;
     String idAuthUser;         //Авторизированный пользователь
 
     String eventId;
@@ -49,32 +47,34 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
     String eventPhone;
     String eventUserId;
 
-    //параметр для вызова диалога "about"
-    final String ID_ABOUT_DIALOG = "aboutEventShowAllEventDialog";
-    //параметр для вызова диалога "leave"
-    final String ID_LEAVE_DIALOG = "leaveEventShowAuthUserEventDialog";
-    //параметр для вызова диалога "delete"
-    final String ID_DELETE_DIALOG = "deleteEventShowAuthUserEventDialog";
-
-    AboutEventShowAllEventDialog aboutEventShowAllEventDialog =
-            new AboutEventShowAllEventDialog(); // диалог подтверждения выхода из приложения
-
-    LeaveEventDialog leaveEventDialog =
-            new LeaveEventDialog(); // диалог подтверждения покинуть событие
-
-    DeleteEventDialog deleteEventDialog =
-            new DeleteEventDialog(); // диалог подтверждения удалить событие
-
     //конструктор
-    public ShowAuthUserEventsRecyclerAdapter(Context context, String idAuthUser) {
+    public ShowAuthUserEventsRecyclerAdapter(CallDialogsAuthUserEvents callDialogsAuthUserEvents,
+                                             Context context, String idAuthUser) {
         this.inflater = LayoutInflater.from(context);
         this.context = context;
         this.idAuthUser = idAuthUser;
         dbUtilities = new DBUtilities(context);
+        //получение интерфеса из класса Фрагмента
+        //для обработки нажатия элементов RecyclerAdapter
+        this.callDialogsAuthUserEvents = callDialogsAuthUserEvents;
 
         //получаем коллекцию событий
         eventsList = dbUtilities.getListEventsForAuthUser("", idAuthUser);
     } // advertisingAndInformationRecyclerAdapter
+
+    public ShowAuthUserEventsRecyclerAdapter(Context context) {
+        this.context = context;
+    }//ShowAuthUserEventsRecyclerAdapter
+
+    // метод для обновления адаптера
+    // после внесения изменения в базу данных
+    public void updateEventList(){
+        eventsList.clear();
+
+        //получаем коллекцию событий
+        eventsList = dbUtilities.getListEventsForAuthUser("", idAuthUser);
+        notifyDataSetChanged();
+    }
 
     //создаем новую разметку(View) путем указания разметки
     @Override
@@ -106,11 +106,11 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
 
     //Создаем класс ViewHolder с помощью которого мы получаем ссылку на каждый элемент
     //отдельного пункта списка
-    public class ViewHolder extends RecyclerView.ViewHolder
-            implements PopupMenu.OnMenuItemClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder{
         final TextView tvDateShAuUsEvReAd, tvTimeShAuUsEvReAd, tvCityShAuUsEvReAd,
                        tvFieldShAuUsEvReAd, tvStatusShAuUsEvReAd;
-        ImageView ivArrowShAuUsEvReAd;
+        ImageView ivArrowShAuUsEvReAd, ivDeleteEventShAuUsEvReAd;
+        CardView cvMainShAuUsEvReAd;
 
         ViewHolder(View view){
             super(view);
@@ -121,6 +121,49 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
             tvFieldShAuUsEvReAd = view.findViewById(R.id.tvFieldShAuUsEvReAd);
             tvStatusShAuUsEvReAd = view.findViewById(R.id.tvStatusShAuUsEvReAd);
             ivArrowShAuUsEvReAd = view.findViewById(R.id.ivArrowShAuUsEvReAd);
+            ivDeleteEventShAuUsEvReAd = view.findViewById(R.id.ivDeleteEventShAuUsEvReAd);
+            cvMainShAuUsEvReAd = view.findViewById(R.id.cvMainShAuUsEvReAd);
+
+            cvMainShAuUsEvReAd.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            cvMainShAuUsEvReAd.setCardBackgroundColor(Color.argb(255,255,255,255));
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            cvMainShAuUsEvReAd.setCardBackgroundColor(Color.argb(255,170,170,170));
+                            break;
+                        default:
+                            cvMainShAuUsEvReAd.setCardBackgroundColor(Color.argb(255,170,170,170));
+                            break;
+
+                    }//switch
+                    return false;
+                }//onTouch
+            });//setOnTouchListener
+
+            cvMainShAuUsEvReAd.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    //получаем данные о нажатом событии
+                    event = eventsList.get(getAdapterPosition());
+                    eventId = event.eventId;
+                    eventCityName = event.cityName;
+                    eventFieldName = event.fieldName;
+                    eventDate = event.eventData;
+                    showEventDate = dateShowFormat(eventDate);
+                    eventTime = event.eventTime;
+                    eventDuration = event.eventDuration;
+                    eventPrice = event.eventPrice;
+                    eventPhone = event.eventPhone;
+                    eventUserId = event.eventUserId;
+
+                    //выбран пункт редактировать события
+                    editEvent();
+                    return true;
+                }//onLongClick
+            });//setOnLongClickListener
 
             //слушатель события нажатия стрелки
             ivArrowShAuUsEvReAd.setOnClickListener(new View.OnClickListener() {
@@ -142,21 +185,14 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
 
                     //выбран пункт подробная информация
                     aboutEvent();
-                }//onClick
-            });
 
-            //слушатель события нажатого меню
-            view.setOnClickListener(new View.OnClickListener() {
+                }//onClick
+            });//setOnClickListener
+
+            //слушатель события нажатия стрелки
+            ivDeleteEventShAuUsEvReAd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    PopupMenu popup = new PopupMenu(view.getContext(), view);
-                    popup.inflate(
-                            (tvStatusShAuUsEvReAd.getText().toString().equals("Организатор"))
-                                    ?(R.menu.rva_show_auth_user_event_organize_popup_menu)
-                                    :(R.menu.rva_show_auth_user_event_participant_popup_menu)
-                    );
-                    popup.setOnMenuItemClickListener(ShowAuthUserEventsRecyclerAdapter.ViewHolder.this);
-                    popup.show();
 
                     //получаем данные о нажатом событии
                     event = eventsList.get(getAdapterPosition());
@@ -168,46 +204,26 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
                     eventTime = event.eventTime;
                     eventDuration = event.eventDuration;
                     eventPrice = event.eventPrice;
-                    eventPassword = event.eventPassword;
                     eventPhone = event.eventPhone;
                     eventUserId = event.eventUserId;
-                    //TODO -- надо доделать обновление адаптера
-                    notifyDataSetChanged();
-                }
+
+                    view.setFocusable(true);
+                    if(tvStatusShAuUsEvReAd.getText().toString().equals("Организатор"))
+                         deleteEvent();//выбран пункт удалить событие
+                    else leaveEvent();
+
+                }//onClick
+
             });
+
         } // ViewHolder
-
-        //обработчик выбраного пункта меню
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.item_leave_event_show_auth_user_rva:      //выбран пункт покинуть событие
-                    leaveEvent();
-                    break;
-                case R.id.item_delete_event_show_auth_user_rva:    //выбран пункт удалить событие
-                    deleteEvent();
-                    break;
-                case R.id.item_edit_event_show_auth_user_rva:    //выбран пункт редактировать событие
-                    editEvent();
-                    break;
-                case R.id.item_about_event_show_auth_user_rva:    //выбран пункт подробная информация
-                    aboutEvent();
-                    break;
-            }//switch
-
-            return false;
-        }//onMenuItemClick
 
         //подробная информация
         private void aboutEvent() {
             String message = fullInfoAboutEvent();
-            Bundle args = new Bundle();    // объект для передачи параметров в диалог
-            args.putString("message", message);
-            aboutEventShowAllEventDialog.setArguments(args);
 
-            // отображение диалогового окна
-            aboutEventShowAllEventDialog.show(((AppCompatActivity)context).
-                    getSupportFragmentManager(), ID_ABOUT_DIALOG);
+            //через интерфейс СallDialogsAuthUserEvents
+            callDialogsAuthUserEvents.aboutDialog(context, message);
         }//aboutEvent
 
         //редактировать событие
@@ -229,31 +245,17 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         // Удалить событие
         private void deleteEvent() {
             String message = fullInfoAboutEvent();
-            Bundle args = new Bundle();    // объект для передачи параметров в диалог
-            args.putString("message", message);
-            args.putString("event_id", eventId);
-            deleteEventDialog.setArguments(args);
 
-            // отображение диалогового окна
-            deleteEventDialog.show(((AppCompatActivity)context).
-                    getSupportFragmentManager(), ID_DELETE_DIALOG);
+            //через интерфейс СallDialogsAuthUserEvents
+            callDialogsAuthUserEvents.deleteDialog(context, message, eventId);
         }//deleteEvent
 
         //покинуть событие
         private void leaveEvent() {
             String message = fullInfoAboutEvent();
-            Bundle args = new Bundle();    // объект для передачи параметров в диалог
-            args.putString("message", message);
-            args.putString("event_id", eventId);
-            args.putString("user_id", idAuthUser);
-            leaveEventDialog.setArguments(args);
 
-            // отображение диалогового окна
-            leaveEventDialog.show(((AppCompatActivity)context).
-                    getSupportFragmentManager(), ID_LEAVE_DIALOG);
-
-            //получаем коллекцию событий
-            eventsList = dbUtilities.getListEventsForAuthUser("", idAuthUser);
+            //через интерфейс СallDialogsAuthUserEvents
+            callDialogsAuthUserEvents.leaveDialog(context, message, eventId);
         }//leaveEvent
 
         //строка с полной информацией о событии

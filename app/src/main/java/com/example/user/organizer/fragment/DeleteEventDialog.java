@@ -1,15 +1,16 @@
 package com.example.user.organizer.fragment;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 
 import com.example.user.organizer.DBUtilities;
-import com.example.user.organizer.inteface.CustomInterface;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class DeleteEventDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         // получить ссылку на активность, вызвавшую диалог
-        FragmentActivity current = getActivity();
+        Activity current = getActivity();
         AlertDialog.Builder builder = new AlertDialog.Builder(current);
 
         // прочитать данные, переданные из активности (из точки вызова)
@@ -39,8 +40,12 @@ public class DeleteEventDialog extends DialogFragment {
                 .setMessage(message)
 //                .setIcon(R.drawable.exlamation)
                 // лямбда-выражение на клик кнопки "Да"
-                .setPositiveButton("Подтверждаю",
-                        (dialog, whichButton) -> deleteEvent(event_id))
+                .setPositiveButton("Подтверждаю", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteEvent(event_id);
+                    }
+                })
                 .setNegativeButton("Не подтверждаю", null) // не назначаем слушателя кликов по кнопке "Нет"
                 .setCancelable(false)           // запрет закрытия диалога кнопкой Назад
                 .create();
@@ -61,5 +66,9 @@ public class DeleteEventDialog extends DialogFragment {
 
         //удалил собития
         dbUtilities.deleteRowById("events", event_id);
+
+        Intent intent = new Intent();
+        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
     }//deleteEvent
+
 }//DeleteEventDialog

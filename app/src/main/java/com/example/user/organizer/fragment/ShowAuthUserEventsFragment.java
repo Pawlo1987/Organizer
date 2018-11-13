@@ -1,8 +1,11 @@
 package com.example.user.organizer.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +14,11 @@ import android.view.ViewGroup;
 import com.example.user.organizer.DBUtilities;
 import com.example.user.organizer.R;
 import com.example.user.organizer.ShowAuthUserEventsRecyclerAdapter;
+import com.example.user.organizer.inteface.CallDialogsAuthUserEvents;
 
 //-----------Фрагмент выводит активные события авторизированного пользователя---------------------
-public class ShowAuthUserEventsFragment extends Fragment {
+public class ShowAuthUserEventsFragment extends Fragment
+implements CallDialogsAuthUserEvents {
     RecyclerView rvMainShAuUsEvAc;
 
     // адаптер для отображения recyclerView
@@ -23,6 +28,23 @@ public class ShowAuthUserEventsFragment extends Fragment {
     Context context;
     String idAuthUser;
 
+    private static final int REQUEST_POS = 1;
+
+    //параметр для вызова диалога "about"
+    final String ID_ABOUT_DIALOG = "aboutEventShowAllEventDialog";
+    //параметр для вызова диалога "leave"
+    final String ID_LEAVE_DIALOG = "leaveEventShowAuthUserEventDialog";
+    //параметр для вызова диалога "delete"
+    final String ID_DELETE_DIALOG = "deleteEventShowAuthUserEventDialog";
+
+    AboutEventShowAllEventDialog aboutEventShowAllEventDialog =
+            new AboutEventShowAllEventDialog(); // диалог подтверждения выхода из приложения
+
+    LeaveEventDialog leaveEventDialog =
+            new LeaveEventDialog(); // диалог подтверждения покинуть событие
+
+    DeleteEventDialog deleteEventDialog =
+            new DeleteEventDialog(); // диалог подтверждения удалить событие
 
     // Метод onAttach() вызывается в начале жизненного цикла фрагмента, и именно здесь
     // мы можем получить контекст фрагмента, в качестве которого выступает класс MainActivity.
@@ -35,11 +57,14 @@ public class ShowAuthUserEventsFragment extends Fragment {
         idAuthUser = getArguments().getString("idAuthUser");
 
         // создаем адаптер, передаем в него курсор
+        // параметр this в данном случае используется для передачи интерефеса CallDialogsAuthUserEvents
+        // в адаптер
         showAuthUserEventsRecyclerAdapter
-                = new ShowAuthUserEventsRecyclerAdapter(context, idAuthUser);
+                = new ShowAuthUserEventsRecyclerAdapter(this, context, idAuthUser);
 
         super.onAttach(context);
     } // onAttach
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,5 +79,64 @@ public class ShowAuthUserEventsFragment extends Fragment {
 
         return result;
     } // onCreateView
+
+    // точка выхода из DialogFragment при положительных
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_POS:
+                    showAuthUserEventsRecyclerAdapter.updateEventList();
+                    break;
+            }//switch
+        }//if
+    }//onActivityResult
+
+    //Метод имплеметируемые интерфейсом CallDialogsAuthUserEvents
+    @Override
+    public void leaveDialog(Context context, String message, String eventId) {
+            Bundle args = new Bundle();    // объект для передачи параметров в диалог
+            args.putString("message", message);
+            args.putString("event_id", eventId);
+            args.putString("user_id", idAuthUser);
+            leaveEventDialog.setArguments(args);
+
+        // Возврат результата выполнения из DialogFragment во Fragment минуя Activity
+        // ссылка (https://habrahabr.ru/post/259805/)
+        leaveEventDialog.setTargetFragment(this, REQUEST_POS);
+
+        // Точка вызова отображение диалогового окна
+        leaveEventDialog.show(getFragmentManager(), ID_LEAVE_DIALOG);
+
+    }
+
+    //Метод имплеметируемые интерфейсом CallDialogsAuthUserEvents
+    @Override
+    public void deleteDialog(Context context, String message, String eventId) {
+        Bundle args = new Bundle();    // объект для передачи параметров в диалог
+        args.putString("message", message);
+        args.putString("event_id", eventId);
+        deleteEventDialog.setArguments(args);
+
+        // Возврат результата выполнения из DialogFragment во Fragment минуя Activity
+        // ссылка (https://habrahabr.ru/post/259805/)
+        deleteEventDialog.setTargetFragment(this, REQUEST_POS);
+
+        // Точка вызова отображение диалогового окна
+        deleteEventDialog.show(getFragmentManager(), ID_DELETE_DIALOG);
+    }
+
+    //Метод имплеметируемые интерфейсом CallDialogsAuthUserEvents
+    @Override
+    public void aboutDialog(Context context, String message) {
+        Bundle args = new Bundle();    // объект для передачи параметров в диалог
+        args.putString("message", message);
+        aboutEventShowAllEventDialog.setArguments(args);
+
+         // отображение диалогового окна
+         aboutEventShowAllEventDialog.show(((AppCompatActivity)context).
+                getSupportFragmentManager(), ID_ABOUT_DIALOG);
+    }
 
 }

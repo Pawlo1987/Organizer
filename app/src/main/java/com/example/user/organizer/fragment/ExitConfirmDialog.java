@@ -17,14 +17,14 @@ import com.example.user.organizer.inteface.CustomInterface;
 public class ExitConfirmDialog extends DialogFragment {
 
     //инициализация интерфейса
-    CustomInterface CustomInterface;
+    CustomInterface customInterface;
     Context context;
 
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
         this.context = context;
-        CustomInterface = (CustomInterface) context;
+        customInterface = (CustomInterface) context;
 
     } // onAttach
 
@@ -44,7 +44,7 @@ public class ExitConfirmDialog extends DialogFragment {
                     .setMessage("Вы уверены?")
 //                .setIcon(R.drawable.exlamation)
                     // лямбда-выражение на клик кнопки "Да"
-                    .setPositiveButton("Да", (dialog, whichButton) -> CustomInterface.signOut())
+                    .setPositiveButton("Да", (dialog, whichButton) -> customInterface.signOut())
                     .setNegativeButton("Нет", null) // не назначаем слушателя кликов по кнопке "Нет"
                     .setCancelable(false)           // запрет закрытия диалога кнопкой Назад
                     .create();
@@ -54,7 +54,7 @@ public class ExitConfirmDialog extends DialogFragment {
                     .setMessage("Вы уверены?")
 //                .setIcon(R.drawable.exlamation)
                     // лямбда-выражение на клик кнопки "Да"
-                    .setPositiveButton("Да", (dialog, whichButton) -> CustomInterface.closeApp())
+                    .setPositiveButton("Да", (dialog, whichButton) -> customInterface.closeApp())
                     .setNegativeButton("Нет", null) // не назначаем слушателя кликов по кнопке "Нет"
                     .setCancelable(false)           // запрет закрытия диалога кнопкой Назад
                     .create();

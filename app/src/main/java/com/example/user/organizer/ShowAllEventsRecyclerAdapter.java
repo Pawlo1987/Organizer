@@ -17,7 +17,9 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.example.user.organizer.fragment.AboutEventShowAllEventDialog;
+import com.example.user.organizer.fragment.ShowAllEventsFragment;
 import com.example.user.organizer.fragment.TakePartShowAllEventDialog;
+import com.example.user.organizer.inteface.CallDialogsAllEvents;
 
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
@@ -35,6 +37,7 @@ public class ShowAllEventsRecyclerAdapter extends
     Event event = new Event();
     List<Event> eventsList = new ArrayList<>(); //коллекция событий
     DBUtilities dbUtilities;
+    CallDialogsAllEvents callDialogsAllEvents;
     Context context;
     String idAuthUser;         //Авторизированный пользователь
 
@@ -49,23 +52,28 @@ public class ShowAllEventsRecyclerAdapter extends
     String eventPhone;
     String eventUserId;
 
-    AboutEventShowAllEventDialog aboutEventShowAllEventDialog =
-            new AboutEventShowAllEventDialog(); // диалог подтверждения выхода из приложения
-
-    TakePartShowAllEventDialog takePartShowAllEventDialog =
-            new TakePartShowAllEventDialog(); // диалог подтверждения выхода из приложения
-
-    final String ID_ABOUT_DIALOG = "aboutEventShowAllEventDialog";  //параметр для вызова диалога "about"
-    final String ID_TAKEPART_DIALOG = "takePartShowAllEventDialog";  //параметр для вызова диалога "takePart"
-
     //конструктор
-    public ShowAllEventsRecyclerAdapter(Context context, List<Event> eventsList, String idAuthUser) {
+    public ShowAllEventsRecyclerAdapter(CallDialogsAllEvents callDialogsAllEvents,
+                                        Context context, String idAuthUser) {
         this.inflater = LayoutInflater.from(context);
-        this.eventsList = eventsList;
+        //получение интерфеса из класса Фрагмента
+        //для обработки нажатия элементов RecyclerAdapter
+        this.callDialogsAllEvents = callDialogsAllEvents;
         this.context = context;
         this.idAuthUser = idAuthUser;
         dbUtilities = new DBUtilities(context);
+        this.eventsList = dbUtilities.getListEvents("");
     } // ShowAllEventsRecyclerAdapter
+
+    // метод для обновления адаптера
+    // после внесения изменения в базу данных
+    public void updateEventList(){
+        eventsList.clear();
+
+        //получаем коллекцию событий
+        eventsList = dbUtilities.getListEvents("");
+        notifyDataSetChanged();
+    }//updateEventList
 
     //создаем новую разметку(View) путем указания разметки
     @Override
@@ -93,8 +101,7 @@ public class ShowAllEventsRecyclerAdapter extends
 
     //Создаем класс ViewHolder с помощью которого мы получаем ссылку на каждый элемент
     //отдельного пункта списка и подключаем слушателя события нажатия меню
-    public class ViewHolder extends RecyclerView.ViewHolder
-            implements PopupMenu.OnMenuItemClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder{
         final TextView tvDateShAlEvReAd, tvTimeShAlEvReAd,
                 tvCityShAlEvReAd, tvFieldShAlEvReAd;
         CardView cvMainShAlEvAc;
@@ -128,25 +135,6 @@ public class ShowAllEventsRecyclerAdapter extends
                     return false;
                 }//onTouch
             });//setOnTouchListener
-
-//            ivArrowShAlEvReAd.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    switch (event.getAction()) {
-//                        case MotionEvent.ACTION_DOWN:
-//                            ivArrowShAlEvReAd.setColorFilter(Color.argb(255,170,170,170));
-//                            break;
-//                        case MotionEvent.ACTION_UP:
-//                            ivArrowShAlEvReAd.setColorFilter(Color.argb(255,255,255,255));
-//                            break;
-//                        default:
-//                            ivArrowShAlEvReAd.setColorFilter(R.color.colorAccent);
-//                            break;
-//
-//                    }//switch
-//                    return false;
-//                }//onTouch
-//            });//setOnTouchListener
 
             cvMainShAlEvAc.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -194,25 +182,9 @@ public class ShowAllEventsRecyclerAdapter extends
             });
         } // ViewHolder
 
-        //обработчик выбраного пункта меню
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.item_take_part_show_all_rva:      //выбран пункт принять участие
-                    takePart();
-                    break;
-                case R.id.item_about_event_show_all_rva:    //выбран пункт подробная информация
-                    aboutEvent();
-                    break;
-            }//switch
-            return false;
-        }//onMenuItemClick
-
         //Вызов диалога для принятия участия в событии
         private void takePart() {
-
             String message;     //строка которую передаем в диалог в поле сообщения
-
             //принимает ли авторизированный пользователь участие в данном событии
             boolean userTakeInPart = dbUtilities.isTakingPart(eventId, idAuthUser);
 
@@ -223,28 +195,16 @@ public class ShowAllEventsRecyclerAdapter extends
                 message = fullInfoAboutEvent();
             }//if-else
 
-            Bundle args = new Bundle();    // объект для передачи параметров в диалог
-            args.putString("message", message);
-            args.putBoolean("userTakeInPart", userTakeInPart);
-            args.putString("event_id", eventId);
-            args.putString("user_id", idAuthUser);
-            takePartShowAllEventDialog.setArguments(args);
-
-            // отображение диалогового окна
-            takePartShowAllEventDialog.show(((AppCompatActivity)context).
-                    getSupportFragmentManager(), ID_TAKEPART_DIALOG);
+            //через интерфейс callDialogsAllEvents
+            callDialogsAllEvents.takePart(context, eventId, userTakeInPart, message);
         }//takePart
 
         //Вызов диалога для подробной информации о событии
         private void aboutEvent() {
             String message = fullInfoAboutEvent();
-            Bundle args = new Bundle();    // объект для передачи параметров в диалог
-            args.putString("message", message);
-            aboutEventShowAllEventDialog.setArguments(args);
 
-            // отображение диалогового окна
-            aboutEventShowAllEventDialog.show(((AppCompatActivity)context).
-                    getSupportFragmentManager(), ID_ABOUT_DIALOG);
+            //через интерфейс callDialogsAllEvents
+            callDialogsAllEvents.aboutDialog(context, message);
         }//aboutEvent
 
         //строка с полной информацией о событии

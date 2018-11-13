@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/darker_gray"
     android:orientation="vertical"
     tools:context="com.example.user.organizer.activity.ShowAllEventActivity">
 
@@ -20,8 +21,8 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvMainShAlEvAc"
-        app:layoutManager="LinearLayoutManager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:layoutManager="LinearLayoutManager" />
 
 </LinearLayout>

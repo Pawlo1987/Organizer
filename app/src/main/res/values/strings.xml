@@ -36,10 +36,8 @@
     <string name="tvPasswordCrEv">Пароль</string>
     <string name="btnConfirmCrEv">Создать</string>
     <string name="tvHeaderShAlEvFr">Все активные события</string>
-    <string name="tvFirstLineShAlEvReAd">Назначено </string>
-    <string name="tvSecondLineShAlEvReAd"> в </string>
-    <string name="tvThirdLineShAlEvReAd">в городе</string>
-    <string name="tvFourthLineShAlEvReAd">на поле</string>
+    <string name="tvFirstLineShAlEvReAd">Дата и время: </string>
+    <string name="tvSecondLineShAlEvReAd">Место: </string>
     <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -122,5 +120,7 @@
     <string name="item_about_field_catalog_rva">подробная информация</string>
     <string name="show_field_catalog">Каталог полей</string>
     <string name="btnCheckConMaAc">ПРОВЕРКА СОЕДИНЕНИЯ!</string>
+    <string name="tvTypeShAlEvReAd">Тренеровка</string>
+    <string name="tvThirdLineShAlEvReAd">Город:</string>
 
 </resources>

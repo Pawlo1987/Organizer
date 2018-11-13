@@ -1,5 +1,6 @@
 package com.example.user.organizer;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -97,6 +98,7 @@ public class ShowAllEventsRecyclerAdapter extends
         final TextView tvDateShAlEvReAd, tvTimeShAlEvReAd,
                 tvCityShAlEvReAd, tvFieldShAlEvReAd;
         LinearLayout llMainShAlEvReAd;
+        ImageView ivImageShAlEvReAd;
 
         ViewHolder(View view){
             super(view);
@@ -106,19 +108,39 @@ public class ShowAllEventsRecyclerAdapter extends
             tvCityShAlEvReAd = view.findViewById(R.id.tvCityShAlEvReAd);
             tvFieldShAlEvReAd = view.findViewById(R.id.tvFieldShAlEvReAd);
             llMainShAlEvReAd = view.findViewById(R.id.llMainShAlEvReAd);
+            ivImageShAlEvReAd = view.findViewById(R.id.ivImageShAlEvReAd);
 
             view.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
-                            view.setBackgroundColor(Color.GRAY);
+                            view.setBackgroundColor(Color.argb(255,135,135,135));
                             break;
                         case MotionEvent.ACTION_UP:
-                            view.setBackgroundColor(Color.WHITE);
+                            view.setBackgroundColor(Color.argb(255,170,170,170));
                             break;
                         default:
-                            view.setBackgroundColor(Color.WHITE);
+                            view.setBackgroundColor(Color.argb(255,170,170,170));
+                            break;
+
+                    }//switch
+                    return false;
+                }//onTouch
+            });//setOnTouchListener
+
+            ivImageShAlEvReAd.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            ivImageShAlEvReAd.setImageResource(R.drawable.football_ball11);
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            ivImageShAlEvReAd.setImageResource(R.drawable.football_ball1);
+                            break;
+                        default:
+                            ivImageShAlEvReAd.setImageResource(R.drawable.football_ball1);
                             break;
 
                     }//switch
@@ -147,30 +169,33 @@ public class ShowAllEventsRecyclerAdapter extends
                 }//onLongClick
             });//setOnLongClickListener
 
-//            //слушатель события нажатого меню
-//            view.setOnClickListener(new View.OnClickListener() {
-//
-//                @Override
-//                public void onClick(View view) {
+            //слушатель события нажатого меню
+            ivImageShAlEvReAd.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
 //                    PopupMenu popup = new PopupMenu(view.getContext(), view);
 //                    popup.inflate(R.menu.rva_show_all_event_popup_menu);
 //                    popup.setOnMenuItemClickListener(ViewHolder.this);
 //                    popup.show();
-//
-//
-//                    //получаем данные о нажатом событии
-//                    event = eventsList.get(getAdapterPosition());
-//                    eventId = event.eventId;
-//                    eventCityName = event.cityName;
-//                    eventFieldName = event.fieldName;
-//                    eventData = event.eventData;
-//                    eventTime = event.eventTime;
-//                    eventDuration = event.eventDuration;
-//                    eventPrice = event.eventPrice;
-//                    eventPhone = event.eventPhone;
-//                    eventUserId = event.eventUserId;
-//                }//onClick
-//            });
+
+
+                    //получаем данные о нажатом событии
+                    event = eventsList.get(getAdapterPosition());
+                    eventId = event.eventId;
+                    eventCityName = event.cityName;
+                    eventFieldName = event.fieldName;
+                    eventData = event.eventData;
+                    eventTime = event.eventTime;
+                    eventDuration = event.eventDuration;
+                    eventPrice = event.eventPrice;
+                    eventPhone = event.eventPhone;
+                    eventUserId = event.eventUserId;
+
+                    //выбран пункт принять участие
+                    takePart();
+                }//onClick
+            });
         } // ViewHolder
 
         //обработчик выбраного пункта меню

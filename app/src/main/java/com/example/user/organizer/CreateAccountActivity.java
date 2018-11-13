@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +52,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
+
         context = getBaseContext();
         dbUtilities = new DBUtilities(context);
 
@@ -101,8 +103,15 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnF
 
         //применяем регулярное выражения для правельности ввода номера телефона
         dbUtilities.inputFilterForPhoneNumber(etPhoneCrAcAc);
-
-        etPhoneCrAcAc.setOnFocusChangeListener(this);
+        //для появления и исчезновения первой скобки при наборе телефоного номера
+        //при наведениии фокуса на поле ввода номера
+        etPhoneCrAcAc.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus&&(etPhoneCrAcAc.length()<14))etPhoneCrAcAc.setText("");
+                if(hasFocus&&etPhoneCrAcAc.length()==0)etPhoneCrAcAc.setText("(");
+            }
+        });
 
         //инициализация коллекции для спинера
         spListCity = new ArrayList<>();
@@ -163,20 +172,9 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnF
         }//if-if-else
     }//CreateNewAccount
 
-    //вернутся в активность авторизации
-    private void turnBack() {
-        finish();
-    }//turnBack
 
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btnCreateCrAcAc:            //выполнить операцию
                 createNewAccount();
-                break;
-            case R.id.btnBackCrAcAc:               //отменить операцию
-                turnBack();
-                break;
-        }//switch
     }//onClick
 
     //проверка ввода номера телефона

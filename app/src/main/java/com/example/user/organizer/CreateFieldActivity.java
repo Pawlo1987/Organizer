@@ -93,8 +93,15 @@ public class CreateFieldActivity extends AppCompatActivity implements View.OnFoc
 
         //применяем регулярное выражения для правельности ввода номера телефона
         dbUtilities.inputFilterForPhoneNumber(etPhoneCrFi);
-
-        etPhoneCrFi.setOnFocusChangeListener(this);
+        //для появления и исчезновения первой скобки при наборе телефоного номера
+        //при наведениии фокуса на поле ввода номера
+        etPhoneCrFi.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus&&(etPhoneCrFi.length()<14))etPhoneCrFi.setText("");
+                if(hasFocus&&etPhoneCrFi.length()==0)etPhoneCrFi.setText("(");
+            }
+        });
 
         //setEnabled - параметр для редактирования поля EditText
         etGeolatCrFi.setEnabled(false);

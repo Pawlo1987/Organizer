@@ -1235,7 +1235,7 @@ public class DBUtilities {
         editText.setFilters(
                 new InputFilter[] { new PartialRegexInputFilter(regex)}
         );
-        editText.setText("(");
+//        editText.setText("(");
         editText.addTextChangedListener(
                 new TextWatcher() {
                     @Override

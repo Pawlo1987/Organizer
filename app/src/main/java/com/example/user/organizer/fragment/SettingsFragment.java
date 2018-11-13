@@ -164,8 +164,15 @@ public class SettingsFragment extends Fragment implements SettingsInterface, Vie
 
         //применяем регулярное выражения для правельности ввода номера телефона
         dbUtilities.inputFilterForPhoneNumber(etChangePhoneSeFr);
-
-        etChangePhoneSeFr.setOnFocusChangeListener(this);
+        //для появления и исчезновения первой скобки при наборе телефоного номера
+        //при наведениии фокуса на поле ввода номера
+        etChangePhoneSeFr.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus&&(etChangePhoneSeFr.length()<14))etChangePhoneSeFr.setText("");
+                if(hasFocus&&etChangePhoneSeFr.length()==0)etChangePhoneSeFr.setText("(");
+            }
+        });
 
         //инициализация коллекции для спинера
         spListCity = new ArrayList<>();

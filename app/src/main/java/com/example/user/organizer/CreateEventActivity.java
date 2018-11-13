@@ -102,8 +102,15 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnFoc
 
         //применяем регулярное выражения для правельности ввода номера телефона
         dbUtilities.inputFilterForPhoneNumber(etPhoneCrEv);
-
-        etPhoneCrEv.setOnFocusChangeListener(this);
+        //для появления и исчезновения первой скобки при наборе телефоного номера
+        //при наведениии фокуса на поле ввода номера
+        etPhoneCrEv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus&&(etPhoneCrEv.length()<14))etPhoneCrEv.setText("");
+                if(hasFocus&&etPhoneCrEv.length()==0)etPhoneCrEv.setText("(");
+            }
+        });
 
         //инициализация коллекции для спинера
         spListField = new ArrayList<>();

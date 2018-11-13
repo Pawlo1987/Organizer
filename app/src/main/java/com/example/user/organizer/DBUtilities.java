@@ -907,10 +907,10 @@ public class DBUtilities{
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
             if(jResult.getString("error").toString().equals("")){
-                //выводим текст с положительным ответом о создании нового пользователя
+                //выводим текст с положительным ответом
                 Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
             }else{
-                //выводим текст с отрецательным ответом о создании нового пользователя
+                //выводим текст с отрецательным ответом
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
@@ -919,4 +919,27 @@ public class DBUtilities{
         }//try-catch
     }//updateEventsTable
 
+    //обновляем запись в таблице "fields" по id
+    public void updateFieldsTable(String id, String city_id, String name, String phone,
+                                  String light_status, String coating_id, String shower_status,
+                                  String roof_status, String geo_long, String geo_lat, String address,
+                                  String user_id) {
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("updateFieldsTable", id, city_id, name, phone, light_status, coating_id,
+                    shower_status, roof_status, geo_long, geo_lat, address, user_id);
+
+            String resultdb = bg.get();
+            JSONObject jResult = new JSONObject(resultdb);
+            if(jResult.getString("error").toString().equals("")){
+                //выводим текст с положительным ответом
+                Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
+            }else{
+                //выводим текст с отрецательным ответом
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }//if-else
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
+    }
 }//DBUtilities

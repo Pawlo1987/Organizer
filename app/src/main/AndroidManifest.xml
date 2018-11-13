@@ -2,21 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.user.organizer">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <!--
         Гугл-карты используют OpenGL ES версии 2.
         На девайсах, которые это не поддерживают,
         карта просто не отобразится. Поэтому ставим ограничение.
-        -->
+    -->
     <uses-feature
         android:glEsVersion="0x00020000"
-        android:required="true">
-    </uses-feature>
+        android:required="true"></uses-feature>
 
     <application
         android:allowBackup="true"
@@ -63,7 +62,8 @@
 
         <activity
             android:name=".FieldMapsActivity"
-            android:label="@string/title_activity_maps"/>
+            android:label="@string/title_activity_maps" />
+        <activity android:name=".EditFieldActivity"></activity>
     </application>
 
 </manifest>

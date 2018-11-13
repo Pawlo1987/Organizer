@@ -1,6 +1,7 @@
 package com.example.user.organizer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -155,19 +156,10 @@ public class ShowFieldCatalogRecyclerAdapter extends
                 field = fieldList.get(getAdapterPosition());
                 //если в данном событии авторизированный пользователь создатель поля
                 if(field.user_id.equals(idAuthUser)) {
-//                    eventId = event.eventId;
-//                    eventCityName = event.cityName;
-//                    eventFieldName = event.fieldName;
-//                    eventDate = event.eventData;
-//                    showEventDate = dateShowFormat(eventDate);
-//                    eventTime = event.eventTime;
-//                    eventDuration = event.eventDuration;
-//                    eventPrice = event.eventPrice;
-//                    eventPhone = event.eventPhone;
-//                    eventUserId = event.eventUserId;
-//
-//                    //выбран пункт редактировать события
-//                    editEvent();
+                    Intent intent = new Intent(context, EditFieldActivity.class);
+                    intent.putExtra("idAuthUser", idAuthUser);
+                    intent.putExtra("field_id", field.id);
+                    context.startActivity(intent);
                 }else {
                     Toast.makeText(context, "Нет прав для редактирования!", Toast.LENGTH_SHORT).show();
                 }//if-else

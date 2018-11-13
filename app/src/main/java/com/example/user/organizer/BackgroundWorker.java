@@ -296,6 +296,43 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
                     return "IO:" + e.getMessage();
                 } // try-catch
 
+            case "updateFieldsTable":
+                try {
+                    // параметры для передачи на сервер (для обновления записи таблицы поля по id)
+                    String id = params[1];
+                    String city_id = params[2];
+                    String name = params[3];
+                    String phone = params[4];
+                    String light_status = params[5];
+                    String coating_id = params[6];
+                    String shower_status = params[7];
+                    String roof_status = params[8];
+                    String geo_long = params[9];
+                    String geo_lat = params[10];
+                    String address = params[11];
+                    String user_id = params[12];
+
+                    // формируем строку для отправки на сервер
+                    String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8")
+                            + "&" + URLEncoder.encode("id", "utf8") + "=" + URLEncoder.encode(id, "utf8")
+                            + "&" + URLEncoder.encode("city_id", "utf8") + "=" + URLEncoder.encode(city_id, "utf8")
+                            + "&" + URLEncoder.encode("name", "utf8") + "=" + URLEncoder.encode(name, "utf8")
+                            + "&" + URLEncoder.encode("phone", "utf8") + "=" + URLEncoder.encode(phone, "utf8")
+                            + "&" + URLEncoder.encode("light_status", "utf8") + "=" + URLEncoder.encode(light_status, "utf8")
+                            + "&" + URLEncoder.encode("coating_id", "utf8") + "=" + URLEncoder.encode(coating_id, "utf8")
+                            + "&" + URLEncoder.encode("shower_status", "utf8") + "=" + URLEncoder.encode(shower_status, "utf8")
+                            + "&" + URLEncoder.encode("roof_status", "utf8") + "=" + URLEncoder.encode(roof_status, "utf8")
+                            + "&" + URLEncoder.encode("geo_long", "utf8") + "=" + URLEncoder.encode(geo_long, "utf8")
+                            + "&" + URLEncoder.encode("geo_lat", "utf8") + "=" + URLEncoder.encode(geo_lat, "utf8")
+                            + "&" + URLEncoder.encode("address", "utf8") + "=" + URLEncoder.encode(address, "utf8")
+                            + "&" + URLEncoder.encode("user_id", "utf8") + "=" + URLEncoder.encode(user_id, "utf8");
+
+                    return workWithServer(postData);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return "IO:" + e.getMessage();
+                } // try-catch
+
             case "insertIntoUsers":
                 try {
                     // параметры для передачи на сервер (для создания новой записи пользователя)

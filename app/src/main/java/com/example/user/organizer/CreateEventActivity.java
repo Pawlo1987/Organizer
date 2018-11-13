@@ -238,8 +238,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
     //обработка нажатия клавиши создания нового города
     private void createNewCity() {
-        Intent intent = new Intent(this, CreateCityActivity.class);
-        startActivity(intent);
+
     }//createNewCity
 
     //Создать новое событие

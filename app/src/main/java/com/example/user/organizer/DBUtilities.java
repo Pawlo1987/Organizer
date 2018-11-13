@@ -28,6 +28,14 @@ public class DBUtilities {
         db.insert(table, null,  cv);
     }//insertInto
 
+    //поиск user._id по user.login
+    public int findIdbyLogin(String login){
+        String query = "SELECT user._id FROM user WHERE user.login = \"" + login + "\"";
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToPosition(0); // переходим в курсоре в нулевую позицию
+        return cursor.getInt(0);
+    }//insertInto
+
     //заполнить коллекцию(List) данные для отображения в Spinner
     public List<String> fillList(String query) {
         List<String> list = new ArrayList<>();
@@ -62,7 +70,7 @@ public class DBUtilities {
 
         //удаляем элемент
         db.delete("employees","_id = " + _id, null);
-    } // open
+    } // remove
 
     // закрытие подключения к БД
     public void close(){

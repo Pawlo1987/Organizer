@@ -2,11 +2,9 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 //-------Активность для вывода(просмотра) всех событий--------------
 
@@ -40,5 +38,6 @@ public class ShowAllEventActivity extends AppCompatActivity {
         rvMainShAlEvAc = (RecyclerView) findViewById(R.id.rvMainShAlEvAc);
 
         rvMainShAlEvAc.setAdapter(showAllEventsRecyclerAdapter);
-    }
-}
+    }//onCreate
+
+}//ShowAllEventActivity

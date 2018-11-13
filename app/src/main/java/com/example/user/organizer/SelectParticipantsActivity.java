@@ -1,35 +1,38 @@
 package com.example.user.organizer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
-import android.preference.EditTextPreference;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.FilterQueryProvider;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+
+//-------Активность для выбора участников для события-----------------
 
 public class SelectParticipantsActivity extends AppCompatActivity {
 
-    String query;   //запрос
-    String filter = "";  //фильтрующее слово для бинарного поиска
-    RecyclerView rvUserSePaAc;
-    int spPos;      //позиция спинера
+    String query;                   //запрос
+    String filter = "";             //фильтрующее слово для бинарного поиска
+    RecyclerView rvUserSePaAc;      //RecyclerView для учасников
+    int spPos;                      //позиция спинера
+    List<String> loginUserList;       //коллекция логинов с выбранными игроками
+    List<Integer> idUserList;       //коллекция id-ов с выбранными игроками
 
     EditText edBinarySePaAc; //Строка для бинарного поиска
 
     // адаптер для отображения recyclerView
-    SelectParticipantsRecyclerAdapter SelectParticipantsRecyclerAdapter;
+    com.example.user.organizer.SelectParticipantsRecyclerAdapter SelectParticipantsRecyclerAdapter;
     DBUtilities dbUtilities;
 
     // поля для доступа к записям БД
@@ -49,6 +52,10 @@ public class SelectParticipantsActivity extends AppCompatActivity {
         context = getBaseContext();
         dbUtilities = new DBUtilities(context);
         dbUtilities.open();
+
+        //инициализация коллекции для выбора участников
+        loginUserList = new ArrayList<>();
+        idUserList = new ArrayList<>();
 
         edBinarySePaAc = (EditText) findViewById(R.id.edBinarySePaAc);
         spCitySePaAc = (Spinner) findViewById(R.id.spCitySePaAc);
@@ -128,7 +135,8 @@ public class SelectParticipantsActivity extends AppCompatActivity {
         selectUserCursor =  dbUtilities.getDb().rawQuery(query, null);
 
         // создаем адаптер, передаем в него курсор
-        SelectParticipantsRecyclerAdapter = new SelectParticipantsRecyclerAdapter(context, selectUserCursor, filter);
+        SelectParticipantsRecyclerAdapter
+                = new SelectParticipantsRecyclerAdapter(context, selectUserCursor, filter, loginUserList);
         // RecycerView для отображения таблицы users БД
         rvUserSePaAc = (RecyclerView) findViewById(R.id.rvUserSePaAc);
 
@@ -153,5 +161,29 @@ public class SelectParticipantsActivity extends AppCompatActivity {
 
         spCitySePaAc.setAdapter(spAdapterCity);
     }//buildCitySpinner
+
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btnConfirmSePaAc:            //кнопка подтвердить выбор
+                confirmSelect();
+                break;
+            case R.id.btnCancelSePaAc:             //кнопка отменить выбор
+                cancelSelect();
+                break;
+        }//switch
+    }//onClick
+
+    //возврат к предедыщему меню
+    private void cancelSelect() {
+
+    }//cancelSelect
+
+    //сохранить и передать выборанных игроков
+    private void confirmSelect() {
+        for (String s : loginUserList) {
+            idUserList.add(dbUtilities.findIdbyLogin(s));
+        }
+        Log.d("myLog", idUserList.toString());
+    }//confirmSelect
 
 }//SelectParticipantsActivity

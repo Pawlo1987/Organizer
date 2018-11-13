@@ -20,6 +20,28 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/btnConfirmSePaAc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClick"
+            android:text="@string/btnConfirmSePaAc" />
+
+        <Button
+            android:id="@+id/btnCancelSePaAc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClick"
+            android:text="@string/btnCancelSePaAc" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
         <TextView
             android:id="@+id/tvCitySePaAc"
             android:layout_width="match_parent"
@@ -60,25 +82,5 @@
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
     </ScrollView>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btnConfirmSePaAc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/btnConfirmSePaAc" />
-
-        <Button
-            android:id="@+id/btnCancelSePaAc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/btnCancelSePaAc" />
-    </LinearLayout>
 
 </LinearLayout>

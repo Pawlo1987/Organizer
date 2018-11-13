@@ -2,14 +2,14 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
+import java.util.List;
 
 import static android.view.View.GONE;
 
@@ -20,13 +20,15 @@ public class SelectParticipantsRecyclerAdapter extends RecyclerView.Adapter<Sele
     private Cursor selectUserCursor;
     private String filter;
     DBUtilities dbUtilities;
+    List<String> loginUserList;     //коллекция логинов участников для добавления в событие
 
     //конструктор
-    SelectParticipantsRecyclerAdapter(Context context, Cursor selectUserCursor, String filter) {
+    SelectParticipantsRecyclerAdapter(Context context, Cursor selectUserCursor, String filter, List<String> loginUserList) {
         this.inflater = LayoutInflater.from(context);
         this.selectUserCursor = selectUserCursor;
         this.filter = filter;
         dbUtilities = new DBUtilities(context);
+        this.loginUserList = loginUserList;
     } // SelectParticipantsRecyclerAdapter
 
     //создаем новую разметку(View) путем указания разметки
@@ -58,6 +60,19 @@ public class SelectParticipantsRecyclerAdapter extends RecyclerView.Adapter<Sele
             holder.tvLoginSePaReAd.setVisibility(GONE);
             holder.tvDefCitySePaReAd.setVisibility(GONE);
         }//if-else
+
+        //слушатель событий при нажатии на CheckBox
+        holder.cbSePaReAd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(holder.cbSePaReAd.isChecked()){
+                    loginUserList.add(login);
+                }else{
+                    loginUserList.remove(login);
+                }//if-else
+            }//onClick
+        });//setOnClickListener
+
     } // onBindViewHolder
 
     //получаем количество элементов объекта(курсора)

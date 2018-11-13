@@ -717,7 +717,115 @@ public class DBUtilities{
         }//try-catch
 
         return fieldList;
-    }//getListEvents
+    }//getListField
+
+    //получение коллекции городов
+    public List<City> getListCity(String cityId) {
+        List<City> cityList = new ArrayList<>();
+
+        //обращаемся к базе для получения списка необходимых полей таблицы
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("getListCity", cityId);
+
+            String resultdb = bg.get();
+            Log.d("FOOTBALL", resultdb);
+            JSONObject jResult = new JSONObject(resultdb);
+
+            if(jResult.getString("error").toString().equals("")){
+                JSONObject jListId = jResult.getJSONObject("id");
+                List<String> listId = getListFromJSON(jListId);
+
+                JSONObject jListName = jResult.getJSONObject("name");
+                List<String> listName = getListFromJSON(jListName);
+
+                int n = listId.size();
+
+                for (int i = 0; i <n ; i++) {
+                    cityList.add(new City(listId.get(i), listName.get(i)));
+                }//fori
+
+            }else{
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }//if-else
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
+
+        return cityList;
+    }//getListCity
+
+    //получение коллекции покрытий полей
+    public List<Coating> getListCoating(String coatingId) {
+        List<Coating> coatingList = new ArrayList<>();
+
+        //обращаемся к базе для получения списка необходимых полей таблицы
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("getListCoating", coatingId);
+
+            String resultdb = bg.get();
+            Log.d("FOOTBALL", resultdb);
+            JSONObject jResult = new JSONObject(resultdb);
+
+            if(jResult.getString("error").toString().equals("")){
+                JSONObject jListId = jResult.getJSONObject("id");
+                List<String> listId = getListFromJSON(jListId);
+
+                JSONObject jListType = jResult.getJSONObject("type");
+                List<String> listType = getListFromJSON(jListType);
+
+                int n = listId.size();
+
+                for (int i = 0; i <n ; i++) {
+                    coatingList.add(new Coating(listId.get(i), listType.get(i)));
+                }//fori
+
+            }else{
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }//if-else
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
+
+        return coatingList;
+    }//getListCoating
+
+    //получение коллекции пользователей
+    public List<User> getListUser(String userId) {
+        List<User> userList = new ArrayList<>();
+
+        //обращаемся к базе для получения списка необходимых полей таблицы
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("getListUser", userId);
+
+            String resultdb = bg.get();
+            Log.d("FOOTBALL", resultdb);
+            JSONObject jResult = new JSONObject(resultdb);
+
+            if(jResult.getString("error").toString().equals("")){
+                JSONObject jListId = jResult.getJSONObject("id");
+                List<String> listId = getListFromJSON(jListId);
+
+                JSONObject jListName = jResult.getJSONObject("name");
+                List<String> listName = getListFromJSON(jListName);
+
+                int n = listId.size();
+
+                for (int i = 0; i <n ; i++) {
+                    userList.add(new User(listId.get(i), listName.get(i)));
+                }//fori
+
+            }else{
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }//if-else
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
+
+        return userList;
+    }//getListUser
 
     //получение коллекции событий для авторизированого пользователя
     public List<Event> getListEvents(String eventId, String idAuthUser) {
@@ -942,4 +1050,5 @@ public class DBUtilities{
             e.printStackTrace();
         }//try-catch
     }
+
 }//DBUtilities

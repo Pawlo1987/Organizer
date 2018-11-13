@@ -246,6 +246,51 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
                     return "IO:" + e.getMessage();
                 } // try-catch
 
+            case "getListUser":
+                try {
+                    // параметры для передачи на сервер (для получения списка пользователей)
+                    String userId = params[1];
+
+                    // формируем строку для отправки на сервер
+                    String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8")
+                            + "&" + URLEncoder.encode("userId", "utf8") + "=" + URLEncoder.encode(userId, "utf8");
+
+                    return workWithServer(postData);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return "IO:" + e.getMessage();
+                } // try-catch
+
+            case "getListCoating":
+                try {
+                    // параметры для передачи на сервер (для получения списка покрытий полей)
+                    String coatingId = params[1];
+
+                    // формируем строку для отправки на сервер
+                    String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8")
+                            + "&" + URLEncoder.encode("coatingId", "utf8") + "=" + URLEncoder.encode(coatingId, "utf8");
+
+                    return workWithServer(postData);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return "IO:" + e.getMessage();
+                } // try-catch
+
+            case "getListCity":
+                try {
+                    // параметры для передачи на сервер (для получения списка городов)
+                    String cityId = params[1];
+
+                    // формируем строку для отправки на сервер
+                    String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8")
+                            + "&" + URLEncoder.encode("cityId", "utf8") + "=" + URLEncoder.encode(cityId, "utf8");
+
+                    return workWithServer(postData);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return "IO:" + e.getMessage();
+                } // try-catch
+
             case "getListEvents":
                 try {
                     // параметры для передачи на сервер (для получения списка событий для авторизированого пользователя)

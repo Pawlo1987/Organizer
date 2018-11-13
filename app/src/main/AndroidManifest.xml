@@ -15,7 +15,7 @@
     -->
     <uses-feature
         android:glEsVersion="0x00020000"
-        android:required="true"></uses-feature>
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -63,7 +63,8 @@
         <activity
             android:name=".FieldMapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".EditFieldActivity"></activity>
+        <activity android:name=".EditFieldActivity" />
+        <activity android:name=".ShowFieldCatalogBeforeAuthActivity"></activity>
     </application>
 
 </manifest>

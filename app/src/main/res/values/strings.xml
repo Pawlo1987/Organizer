@@ -126,5 +126,9 @@
     <string name="tvGeoInputMethodCrFi">Геопозиция</string>
     <string name="btnSelectGeoposCrFi">на карте</string>
     <string name="btnGeoSelect">OK</string>
+    <string name="btnLocalDbFieldMaAc">Каталог футбольных полей</string>
+    <string name="btnPreCreateFieldMaAc">Создание футбольного поля</string>
+    <string name="btnExitMaAc">Завершить приложение</string>
+    <string name="btnAuthorizationMaAc">Авторизация</string>
 
 </resources>

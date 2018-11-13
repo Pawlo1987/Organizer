@@ -39,6 +39,42 @@ public class Field implements Parcelable{
         this.user_id = user_id;
     }//Field
 
+    public String getId() {return id;}
+    public void setId(String id) {this.id = id;}
+
+    public String getCity_id() {return city_id;}
+    public void setCity_id(String city_id) {this.city_id = city_id;}
+
+    public String getName() {return name;}
+    public void setName(String name) {this.name = name;}
+
+    public String getPhone() {return phone;}
+    public void setPhone(String phone) {this.phone = phone;}
+
+    public String getLight_status() {return light_status;}
+    public void setLight_status(String light_status){this.light_status = light_status;}
+
+    public String getCoating_id() {return coating_id;}
+    public void setCoating_id(String coating_id) {this.coating_id = coating_id;}
+
+    public String getShower_status() {return shower_status;}
+    public void setShower_status(String shower_status) {this.shower_status = shower_status;}
+
+    public String getRoof_status() {return roof_status;}
+    public void setRoof_status(String roof_status) {this.roof_status = roof_status;}
+
+    public String getGeo_long() {return geo_long;}
+    public void setGeo_long(String geo_long) {this.geo_long = geo_long;}
+
+    public String getGeo_lat() {return geo_lat;}
+    public void setGeo_lat(String geo_lat) {this.geo_lat = geo_lat;}
+
+    public String getAddress() {return address;}
+    public void setAddress(String address) {this.address = address;}
+
+    public String getUser_id() {return user_id;}
+    public void setUser_id(String user_id) {this.user_id = user_id;}
+
     protected Field(Parcel in) {
         id = in.readString();
         city_id = in.readString();

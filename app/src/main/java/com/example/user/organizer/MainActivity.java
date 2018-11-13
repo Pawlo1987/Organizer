@@ -1,8 +1,11 @@
 package com.example.user.organizer;
 
 
+import android.app.FragmentTransaction;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -15,17 +18,24 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.user.organizer.fragment.AdvertisingAndInformationFragment;
+import com.example.user.organizer.fragment.ExitConfirmDialog;
+import com.example.user.organizer.fragment.ShowAuthUserEventsFragment;
+import com.example.user.organizer.fragment.ShowFieldCatalogFragment;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 //-------Главная Активность----------------
 public class MainActivity extends AppCompatActivity {
 
     DBUtilities dbUtilities;
+    DBLocalUtilities dbLocalUtilities;
     //кнопка проверки соединения
     Button btnCheckConMaAc;
+    //кнопка авторизации
+    Button btnAuthorizationMaAc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,33 +43,134 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         btnCheckConMaAc = (Button) findViewById(R.id.btnCheckConMaAc);
-        btnCheckConMaAc.setEnabled(false);
+        btnAuthorizationMaAc = (Button) findViewById(R.id.btnAuthorizationMaAc);
         dbUtilities = new DBUtilities(this);
+        dbLocalUtilities = new DBLocalUtilities(this);
+        dbLocalUtilities.open();
 
         if (!dbUtilities.isConnection()) {
-            btnCheckConMaAc.setEnabled(true);
+            btnCheckConMaAc.setVisibility(View.VISIBLE);
+            btnAuthorizationMaAc.setVisibility(View.GONE);
             Toast.makeText(this, "Проблема с подключением!", Toast.LENGTH_LONG).show();
         }else{
-            Intent intent = new Intent(this, AuthorizationActivity.class);
-            startActivity(intent);
+            btnCheckConMaAc.setVisibility(View.GONE);
+            btnAuthorizationMaAc.setVisibility(View.VISIBLE);
+            reserveFieldData();
         }//if-else
-
     }//onCreate
 
-    //Завершить приложение
-    public void finishApp(){
-        finish();
-    }
+    //резервируем данные о футбольных полях
+    private void reserveFieldData() {
+        //получаем коллекцию пользователей
+        List<User> userList = dbUtilities.getListUser("");
+        //получаем коллекцию городов
+        List<City> cityList = dbUtilities.getListCity("");
+        //получаем коллекцию покрытий
+        List<Coating> coatingList = dbUtilities.getListCoating("");
+        //получаем коллекцию полей
+        List<Field> fieldList = dbUtilities.getListField("");
+
+        for (User user : userList) {
+            ContentValues cv = new ContentValues();
+            cv.put("id",user.getId());
+            cv.put("name", user.getName());
+
+            //добваить данные через объект ContentValues(cv), в таблицу "users"
+            dbLocalUtilities.insertInto(cv, "users");
+        }//for "users"
+
+        for (City city : cityList) {
+            ContentValues cv = new ContentValues();
+            cv.put("id",city.getId());
+            cv.put("name", city.getName());
+
+            //добваить данные через объект ContentValues(cv), в таблицу "cities"
+            dbLocalUtilities.insertInto(cv, "cities");
+        }//for "cities"
+
+        for (Coating coating : coatingList) {
+            ContentValues cv = new ContentValues();
+            cv.put("id",coating.getId());
+            cv.put("name", coating.getType());
+
+            //добваить данные через объект ContentValues(cv), в таблицу "coatings"
+            dbLocalUtilities.insertInto(cv, "coatings");
+        }//for "coatings"
+
+        for (Field field : fieldList) {
+            ContentValues cv = new ContentValues();
+            cv.put("id",field.getId());
+            cv.put("city_id", field.getCity_id());
+            cv.put("name", field.getName());
+            cv.put("phone", field.getPhone());
+            cv.put("light_status", field.getLight_status());
+            cv.put("coating_id", field.getCoating_id());
+            cv.put("shower_status", field.getShower_status());
+            cv.put("roof_status", field.getRoof_status());
+            cv.put("geo_long", field.getGeo_long());
+            cv.put("geo_lat", field.getGeo_lat());
+            cv.put("address", field.getAddress());
+            cv.put("user_id", field.getUser_id());
+
+            //добваить данные через объект ContentValues(cv), в таблицу "coatings"
+            dbLocalUtilities.insertInto(cv, "fields");
+        }//for "fields"
+    }//reserveFieldData
 
     public void onClick(View view) {
+
+        switch (view.getId()) {
+            case R.id.btnCheckConMaAc:
+                checkConnection(view);
+                break;
+
+            case R.id.btnAuthorizationMaAc:
+                authorization(view);
+                break;
+
+            case R.id.btnLocalDbFieldMaAc:
+                showFieldCatalog();
+                break;
+
+            case R.id.btnPreCreateFieldMaAc:
+                break;
+
+            case R.id.btnExitMaAc:
+                finish();
+                break;
+        }//switch
+
+    }//onClick
+
+    //показать каталог полей
+    private void showFieldCatalog() {
+        Intent intent = new Intent(this, ShowFieldCatalogBeforeAuthActivity.class);
+        startActivity(intent);
+    }//showFieldCatalog
+
+    private void authorization(View view) {
         if (!dbUtilities.isConnection()) {
-//            Toast.makeText(this, "Проблема с подключением к Базе Данных!", Toast.LENGTH_LONG).show();
+            btnCheckConMaAc.setVisibility(View.VISIBLE);
+            btnAuthorizationMaAc.setVisibility(View.GONE);
             Snackbar.make(view, "\t\t\t\t\t\t\t\t\t\tБАЗА ДАННЫХ НЕ ОТВЕЧАЕТ!", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }else{
-            btnCheckConMaAc.setEnabled(false);
+            btnCheckConMaAc.setVisibility(View.GONE);
+            btnAuthorizationMaAc.setVisibility(View.VISIBLE);
+            reserveFieldData();
             Intent intent = new Intent(this, AuthorizationActivity.class);
             startActivity(intent);
         }//if-else
-    }//onClick
+    }//authorization
+
+    private void checkConnection(View view) {
+        if (!dbUtilities.isConnection()) {
+            Snackbar.make(view, "\t\t\t\t\t\t\t\t\t\tБАЗА ДАННЫХ НЕ ОТВЕЧАЕТ!", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }else{
+            btnCheckConMaAc.setVisibility(View.GONE);
+            btnAuthorizationMaAc.setVisibility(View.VISIBLE);
+            reserveFieldData();
+        }//if-else
+    }//checkConnection
 }//MainActivity

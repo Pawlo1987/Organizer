@@ -3,16 +3,58 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="50dp"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.user.organizer.MainActivity">
-
 
     <Button
         android:id="@+id/btnCheckConMaAc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/btnCheckConMaAc"
-        android:onClick="onClick"/>
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="50dp"
+        android:onClick="onClick"
+        android:text="@string/btnCheckConMaAc" />
+
+    <Button
+        android:id="@+id/btnAuthorizationMaAc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="50dp"
+        android:onClick="onClick"
+        android:text="@string/btnAuthorizationMaAc" />
+
+    <Button
+        android:id="@+id/btnLocalDbFieldMaAc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="50dp"
+        android:onClick="onClick"
+        android:text="@string/btnLocalDbFieldMaAc" />
+
+    <Button
+        android:id="@+id/btnPreCreateFieldMaAc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="50dp"
+        android:onClick="onClick"
+        android:text="@string/btnPreCreateFieldMaAc" />
+
+    <Button
+        android:id="@+id/btnExitMaAc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="50dp"
+        android:onClick="onClick"
+        android:text="@string/btnExitMaAc" />
+
 </LinearLayout>

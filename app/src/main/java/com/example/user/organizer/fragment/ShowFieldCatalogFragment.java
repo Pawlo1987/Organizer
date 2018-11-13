@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.user.organizer.DBLocalUtilities;
 import com.example.user.organizer.DBUtilities;
 import com.example.user.organizer.Field;
 import com.example.user.organizer.FieldMapsActivity;
@@ -31,10 +32,12 @@ public class ShowFieldCatalogFragment extends Fragment {
     ShowFieldCatalogRecyclerAdapter showFieldCatalogRecyclerAdapter;
     Button btnMapShFiCaFr;
     DBUtilities dbUtilities;
+    DBLocalUtilities dbLocalUtilities;
 
     List<Field> fieldList = new ArrayList<>(); //коллекция полей
     Context context;
 
+    boolean connection;                // статус подключения к сети
     String idAuthUser;                 //авторизированный пользователь
 
     // Метод onAttach() вызывается в начале жизненного цикла фрагмента, и именно здесь
@@ -69,12 +72,16 @@ public class ShowFieldCatalogFragment extends Fragment {
         //чтоб не проверять из какого пакета активити в каждом из случаев
         this.context = context;
         dbUtilities = new DBUtilities(context);
+        dbLocalUtilities = new DBLocalUtilities(context);
+        dbLocalUtilities.open();
 
         // прочитать данные, переданные из активности (из точки вызова)
         idAuthUser = getArguments().getString("idAuthUser");
+        connection = getArguments().getBoolean("connection");
 
         //получаем коллекцию полей
-        fieldList = dbUtilities.getListField("");
+        if(connection) fieldList = dbUtilities.getListField("");
+        else fieldList = dbLocalUtilities.getFieldList();
 
         // создаем адаптер, передаем в него курсор
         showFieldCatalogRecyclerAdapter = new ShowFieldCatalogRecyclerAdapter(context, fieldList, idAuthUser);
@@ -93,6 +100,7 @@ public class ShowFieldCatalogFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), FieldMapsActivity.class);
                 intent.putExtra("mapStatus", 0);
+                intent.putExtra("connection", connection);
                 startActivity(intent);
             }
         });

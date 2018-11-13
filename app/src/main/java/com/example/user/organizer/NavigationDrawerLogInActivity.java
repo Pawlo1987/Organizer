@@ -31,7 +31,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
     User user;
     String idAuthUser;                  //id Авторизированого пользователя
 
-    final String ID_EXIT_DIALOG = "dialogExitConfirm";          //пааметр для вызова диалога "выход"
+    final String ID_EXIT_DIALOG = "dialogExitConfirm";          //параметр для вызова диалога "выход"
     private ExitConfirmDialog exitConfirmDialog; // диалог подтверждения выхода из приложения
     ShowAllEventsFragment showAllEventsFragment;
     ShowFieldCatalogFragment showFieldCatalogFragment;
@@ -54,11 +54,15 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         advertisingAndInformationFragment = new AdvertisingAndInformationFragment();
 
         Bundle args = new Bundle();    // объект для передачи параметров в диалог
-        args.putString("idAuthUser", idAuthUser);     //завершить работу приложения
+        //передаем данные об  авторизированном пользователе
+        args.putString("idAuthUser", idAuthUser);
         showAuthUserEventsFragment.setArguments(args);
         showAllEventsFragment.setArguments(args);
-        showFieldCatalogFragment.setArguments(args);
         advertisingAndInformationFragment.setArguments(args);
+
+        // + фрагмент showFieldCatalogFragment считыват данные с сервера
+        args.putBoolean("connection", true);
+        showFieldCatalogFragment.setArguments(args);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

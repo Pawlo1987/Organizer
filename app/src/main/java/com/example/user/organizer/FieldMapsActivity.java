@@ -53,11 +53,13 @@ public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCal
 
 //    ActionBar actionBar;                //стрелка НАЗАД
     Location location;              //переменая для хранения данных о локации
+    boolean connection;                // статус подключения к сети
 
     private GoogleMap mMap;
     List<Field> fieldList = new ArrayList<>();      //коллекция для хранения данных о полях
     Context context;
     DBUtilities dbUtilities;
+    DBLocalUtilities dbLocalUtilities;
     private LocationManager locationManager;
 
     @Override
@@ -71,6 +73,8 @@ public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCal
 //        actionBar.setDisplayHomeAsUpEnabled(true);
 
         dbUtilities = new DBUtilities(context);
+        dbLocalUtilities = new DBLocalUtilities(getApplicationContext());
+        dbLocalUtilities.open();
         spListField = new ArrayList<>();
         spListCity = new ArrayList<>();
         spMapCity = (Spinner) findViewById(R.id.spMapCity);
@@ -80,6 +84,7 @@ public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCal
         llStatus0 = (LinearLayout) findViewById(R.id.llStatus0);
         llStatus1 = (LinearLayout) findViewById(R.id.llStatus1);
         mapStatus = getIntent().getIntExtra("mapStatus", 0);
+        connection = getIntent().getBooleanExtra("connection", false);
 
         //mapStatus - цель вызваной активности
         //(для просмотра полей статус - 0 или для выбора точки расположения поля)
@@ -134,7 +139,8 @@ public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCal
         mapFragment.getMapAsync(this);
 
         //получаем коллекцию полей
-        fieldList = dbUtilities.getListField("");
+        if(connection) fieldList = dbUtilities.getListField("");
+        else fieldList = dbLocalUtilities.getFieldList();
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
     }//onCreate
 

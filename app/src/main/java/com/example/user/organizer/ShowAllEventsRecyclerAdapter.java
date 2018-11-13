@@ -1,7 +1,9 @@
 package com.example.user.organizer;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,6 +48,7 @@ public class ShowAllEventsRecyclerAdapter extends
     String eventPhone;
     String eventUserId;
     String cityId;
+    final String[] value = new String[1];   //строка изъятая из alertDialog при проверке пароля
 
     //конструктор
     public ShowAllEventsRecyclerAdapter(AllEventsInterface allEventsInterface,
@@ -214,9 +218,22 @@ public class ShowAllEventsRecyclerAdapter extends
             }else{
                 message = fullInfoAboutEvent();
             }//if-else
+            if(!userTakeInPart) {
+                //берем пароль из БД
+                String password = dbUtilities.searchValueInColumn(
+                        "events","id","password",eventId);
 
-            //через интерфейс allEventsInterface
-            allEventsInterface.callDialogTakePart(context, eventId, userTakeInPart, message);
+                //если пароль не пустой запрос пароля через alertDialog
+                if(!password.equals("")) alertDialogEditText(context, password, userTakeInPart, eventId, message);
+                else {
+                    //через интерфейс allEventsInterface
+                    allEventsInterface.callDialogTakePart(context, eventId, userTakeInPart, message);
+                }
+
+            }else {
+                //через интерфейс allEventsInterface
+                allEventsInterface.callDialogTakePart(context, eventId, userTakeInPart, message);
+            }
         }//callDialogTakePart
 
         //Вызов диалога для подробной информации о событии
@@ -246,4 +263,53 @@ public class ShowAllEventsRecyclerAdapter extends
         }//fullInfoAboutEvent
     } // class ViewHolder
 
+    //AlertDialog Для потверждения пароля если событие запароленно
+    private void alertDialogEditText(Context context, String password, boolean userTakeInPart, String eventId, String message) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        alert.setTitle("Событие запаролено!");
+        alert.setMessage("Введите пожалуйста пароль!");
+        alert.setIcon(R.drawable.icon_information);
+        final EditText input = new EditText(context);
+        alert.setView(input);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                value[0] = String.valueOf(input.getText());
+                checkPassword(context, password, value[0], userTakeInPart, eventId, message);
+                // Do something with value!
+            }
+        });
+        alert.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+        alert.show();
+    }//alertDialogEditText
+
+    //проверка пароля если событие запароленно
+    private void checkPassword(Context context, String password, String value, boolean userTakeInPart, String eventId, String message) {
+        if(password.equals(value)) {
+            //через интерфейс allEventsInterface
+            allEventsInterface.callDialogTakePart(context, eventId, userTakeInPart, message);
+        }else{
+            alertDialogOneButton();
+        }
+    }//checkPassword
+
+    //если пароль неверный сообщение оповещающие об этом
+    private void alertDialogOneButton() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Ошибка!")
+                    .setMessage("Неверный пароль!")
+                    .setIcon(R.drawable.icon_information)
+                    .setCancelable(false)
+                    .setNegativeButton("ОК",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+            AlertDialog alert = builder.create();
+            alert.show();
+    }//alertDialogOneButton
 }//ShowAllEventsRecyclerAdapter

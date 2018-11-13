@@ -6,12 +6,10 @@ import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.example.user.organizer.inteface.CallDialogsAuthUserEvents;
@@ -92,7 +90,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         // получение данных
         holder.tvCityShAuUsEvReAd.setText(eventShow.cityName); //город
         holder.tvFieldShAuUsEvReAd.setText(eventShow.fieldName);//поле
-        holder.tvDateShAuUsEvReAd.setText(dateShowFormat(eventShow.eventData)); // Дата
+//        holder.tvDateShAuUsEvReAd.setText(dateShowFormat(eventShow.eventData)); // Дата
         holder.tvTimeShAuUsEvReAd.setText(eventShow.eventTime); //Время
         holder.tvStatusShAuUsEvReAd.setText(
                 (eventShow.eventUserStatus.equals("0"))?"Участник":"Организатор"

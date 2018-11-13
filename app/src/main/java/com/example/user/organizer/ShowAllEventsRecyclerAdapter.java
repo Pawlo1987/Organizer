@@ -2,23 +2,15 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import com.example.user.organizer.fragment.AboutEventShowAllEventDialog;
-import com.example.user.organizer.fragment.ShowAllEventsFragment;
-import com.example.user.organizer.fragment.TakePartShowAllEventDialog;
 import com.example.user.organizer.inteface.CallDialogsAllEvents;
 
 import java.text.DateFormatSymbols;
@@ -91,7 +83,7 @@ public class ShowAllEventsRecyclerAdapter extends
         // получение данных
         holder.tvCityShAlEvReAd.setText(eventShow.cityName); //город
         holder.tvFieldShAlEvReAd.setText(eventShow.fieldName);//поле
-        holder.tvDateShAlEvReAd.setText(dateShowFormat(eventShow.eventData)); // Дата
+//        holder.tvDateShAlEvReAd.setText(dateShowFormat(eventShow.eventData)); // Дата
         holder.tvTimeShAlEvReAd.setText(eventShow.eventTime); //Время
     } // onBindViewHolder
 

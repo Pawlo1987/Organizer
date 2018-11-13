@@ -1,7 +1,10 @@
 package com.example.user.organizer.fragment;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -15,11 +18,37 @@ import com.example.user.organizer.inteface.CustomInterface;
 public class TakePartShowAllEventDialog extends DialogFragment {
     DBUtilities dbUtilities;
 
+    // Метод onAttach() вызывается в начале жизненного цикла фрагмента, и именно здесь
+    // мы можем получить контекст фрагмента, в качестве которого выступает класс MainActivity.
+    //onAttach(Context) не вызовется до API 23 версии вместо этого будет вызван onAttach(Activity),
+    //коий устарел с 23 API
+    //Так что вызовем onAttachToContext
+    @TargetApi(23)
     @Override
-    public void onAttach(Context context){
+    public void onAttach(Context context) {
         super.onAttach(context);
+        onAttachToContext(context);
+    }//onAttach
+
+    //устарел с 23 API
+    //Так что вызовем onAttachToContext
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            onAttachToContext(activity);
+        }//if
+    }//onAttach
+
+    //Вызовется в момент присоединения фрагмента к активити
+    protected void onAttachToContext(Context context) {
+        //здесь всегда есть контекст и метод всегда вызовется.
+        //тут можно кастовать контест к активити.
+        //но лучше к реализуемому ею интерфейсу
+        //чтоб не проверять из какого пакета активити в каждом из случаев
         dbUtilities = new DBUtilities(context);
-    } // onAttach
+    }//onAttachToContext
 
     @NonNull // создание диалога
     public Dialog onCreateDialog(Bundle savedInstanceState) {

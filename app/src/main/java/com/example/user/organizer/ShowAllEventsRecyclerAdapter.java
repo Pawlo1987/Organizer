@@ -99,6 +99,7 @@ public class ShowAllEventsRecyclerAdapter extends
         holder.tvFieldShAlEvReAd.setText(eventShow.fieldName);//поле
         holder.tvDateShAlEvReAd.setText(dbUtilities.dateShowFormat(eventShow.eventData)); // Дата
         holder.tvTimeShAlEvReAd.setText(eventShow.eventTime); //Время
+        holder.tvIdEventShAlEvReAd.setText(eventShow.eventId); //id
 
         //опредиляемся с цветом CardView взависимости от роли пользователя в собитии
         int color;
@@ -122,7 +123,7 @@ public class ShowAllEventsRecyclerAdapter extends
     //Создаем класс ViewHolder с помощью которого мы получаем ссылку на каждый элемент
     //отдельного пункта списка и подключаем слушателя события нажатия меню
     public class ViewHolder extends RecyclerView.ViewHolder{
-        final TextView tvDateShAlEvReAd, tvTimeShAlEvReAd,
+        final TextView tvDateShAlEvReAd, tvTimeShAlEvReAd, tvIdEventShAlEvReAd,
                 tvCityShAlEvReAd, tvFieldShAlEvReAd;
         CardView cvMainShAlEvAc;
         ImageView ivArrowShAlEvReAd, ivParticipantsShAlEvReAd;
@@ -133,6 +134,7 @@ public class ShowAllEventsRecyclerAdapter extends
 
             llMainShAlEvReAd = view.findViewById(R.id.llMainShAlEvReAd);
             tvDateShAlEvReAd = view.findViewById(R.id.tvDateShAlEvReAd);
+            tvIdEventShAlEvReAd = view.findViewById(R.id.tvIdEventShAlEvReAd);
             tvTimeShAlEvReAd = view.findViewById(R.id.tvTimeShAlEvReAd);
             tvCityShAlEvReAd = view.findViewById(R.id.tvCityShAlEvReAd);
             tvFieldShAlEvReAd = view.findViewById(R.id.tvFieldShAlEvReAd);

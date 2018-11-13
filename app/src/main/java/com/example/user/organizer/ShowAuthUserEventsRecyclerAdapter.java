@@ -1,15 +1,19 @@
 package com.example.user.organizer;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,6 +40,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
     DBUtilities dbUtilities;
     AuthUserEventsInterface authUserEventsInterface;
     String idAuthUser;         //Авторизированный пользователь
+    final String[] value = new String[1];   //строка изъятая из alertDialog пароля
 
     String eventId;
     String eventCityName;
@@ -103,6 +108,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         holder.tvFieldShAuUsEvReAd.setText(eventShow.fieldName);//поле
         holder.tvDateShAuUsEvReAd.setText(dbUtilities.dateShowFormat(eventShow.eventData)); // Дата
         holder.tvTimeShAuUsEvReAd.setText(eventShow.eventTime); //Время
+        holder.tvIdEventShAlEvReAd.setText(eventShow.eventId); //id
         holder.tvStatusShAuUsEvReAd.setText(
                 (eventShow.eventUserStatus.equals("0"))?"Участник":"Организатор"
         ); // Статус игрока
@@ -130,8 +136,8 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
     //Создаем класс ViewHolder с помощью которого мы получаем ссылку на каждый элемент
     //отдельного пункта списка
     public class ViewHolder extends RecyclerView.ViewHolder{
-        final TextView tvDateShAuUsEvReAd, tvTimeShAuUsEvReAd, tvCityShAuUsEvReAd,
-                       tvFieldShAuUsEvReAd, tvStatusShAuUsEvReAd, tvExecutionStatusShAuUsEvReAd;
+        final TextView tvDateShAuUsEvReAd, tvTimeShAuUsEvReAd, tvCityShAuUsEvReAd, tvIdEventShAlEvReAd,
+                       tvFieldShAuUsEvReAd, tvStatusShAuUsEvReAd, tvExecutionStatusShAuUsEvReAd, tvEditPasShAuUsEvReAd;
         ImageView ivArrowShAuUsEvReAd, ivDeleteEventShAuUsEvReAd, ivParticipantsShAuUsEvReAd;
         CardView cvMainShAuUsEvReAd;
         LinearLayout llMainShAuUsEvReAd;
@@ -139,7 +145,9 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         ViewHolder(View view){
             super(view);
             llMainShAuUsEvReAd = view.findViewById(R.id.llMainShAuUsEvReAd);
+            tvEditPasShAuUsEvReAd = view.findViewById(R.id.tvEditPasShAuUsEvReAd);
             tvDateShAuUsEvReAd = view.findViewById(R.id.tvDateShAuUsEvReAd);
+            tvIdEventShAlEvReAd = view.findViewById(R.id.tvIdEventShAlEvReAd);
             tvTimeShAuUsEvReAd = view.findViewById(R.id.tvTimeShAuUsEvReAd);
             tvCityShAuUsEvReAd = view.findViewById(R.id.tvCityShAuUsEvReAd);
             tvFieldShAuUsEvReAd = view.findViewById(R.id.tvFieldShAuUsEvReAd);
@@ -200,6 +208,24 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
                 }//if-else
                 return true;
             });//setOnLongClickListener
+
+            //слушатель нажатия "пароль"
+            tvEditPasShAuUsEvReAd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //проверка завершилось ли событие
+                    boolean status = dbUtilities.getEventExecutionStatus(eventsList.get(getAdapterPosition()).eventData,
+                            eventsList.get(getAdapterPosition()).getEventTime());
+                    //если в данном событии авторизированный пользователь организатор
+                    if(eventsList.get(getAdapterPosition()).eventUserStatus.equals("1") && status) {
+                        alertDialogEditText(context,
+                                eventsList.get(getAdapterPosition()).eventPassword,
+                                eventsList.get(getAdapterPosition()).eventId);
+                    }else {
+                        Toast.makeText(context, "Нет прав для редактирования!", Toast.LENGTH_SHORT).show();
+                    }//if-else
+                }
+            });//tvEditPasShAuUsEvReAd.setOnClickListener
 
             //слушатель события нажатия человечка
             ivParticipantsShAuUsEvReAd.setOnClickListener(new View.OnClickListener() {
@@ -332,4 +358,29 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         }//fullInfoAboutEvent
 
     } // class ViewHolder
+
+    //AlertDialog Для редактирования пароля
+    private void alertDialogEditText(Context context, String password, String eventId) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        alert.setTitle("Измените пароль!");
+        alert.setMessage("Введите пароль!");
+        alert.setIcon(R.drawable.icon_information);
+        final EditText input = new EditText(context);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        input.setText(password);
+        alert.setView(input);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                value[0] = String.valueOf(input.getText());
+                dbUtilities.updateOneColumnTable(eventId,"password",value[0],"events");
+                // Do something with value!
+            }
+        });
+        alert.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+        alert.show();
+    }//alertDialogEditText
 }//ShowAuthUserEventsRecyclerAdapter

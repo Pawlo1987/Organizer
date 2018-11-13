@@ -120,11 +120,11 @@ public class AdvertisingAndInformationFragment extends Fragment {
                 if (spCityAdAnInAc.getItemAtPosition(position).equals("ВСЕ ГОРОДА")){
                     // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
                     query = "SELECT head, date, cities.name FROM infonotes " +
-                            "INNER JOIN cities ON cities._id = infonotes.city;";
+                            "INNER JOIN cities ON cities._id = infonotes.city_id;";
                 }else {
                     // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
                     query = "SELECT head, date, cities.name FROM infonotes " +
-                            "INNER JOIN cities ON cities._id = infonotes.city WHERE cities.name = \"" +
+                            "INNER JOIN cities ON cities._id = infonotes.city_id WHERE cities.name = \"" +
                             spCityAdAnInAc.getItemAtPosition(position) + "\";";
                 }//if-else
 
@@ -140,7 +140,7 @@ public class AdvertisingAndInformationFragment extends Fragment {
 
         // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
         query = "SELECT head, date, cities.name FROM infonotes " +
-                "INNER JOIN cities ON cities._id = infonotes.city;";
+                "INNER JOIN cities ON cities._id = infonotes.city_id;";
 
         buildUserRecyclerView(query);     //Строим RecyclerView
 
@@ -174,7 +174,7 @@ public class AdvertisingAndInformationFragment extends Fragment {
         //обновим список после обновления
         // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
         String query = "SELECT head, date, cities.name FROM infonotes " +
-                "INNER JOIN cities ON cities._id = infonotes.city;";
+                "INNER JOIN cities ON cities._id = infonotes.city_id;";
 
         buildUserRecyclerView(query);     //Строим RecyclerView
     }//onActivityResult
@@ -184,7 +184,7 @@ public class AdvertisingAndInformationFragment extends Fragment {
         cv.put("head", head);
         cv.put("note", note);
         cv.put("date", date);
-        cv.put("city", city);
+        cv.put("city_id", city);
 
         //добваить данные через объект ContentValues(cv), в таблицу "infonotes"
         dbUtilities.insertInto(cv, "infonotes");

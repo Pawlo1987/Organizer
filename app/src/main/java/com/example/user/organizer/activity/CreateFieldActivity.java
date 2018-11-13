@@ -125,13 +125,14 @@ public class CreateFieldActivity extends AppCompatActivity {
     public void createNewField() {
 
         ContentValues cv = new ContentValues();
-        cv.put("city", spListCity.indexOf(spCityCrFi.getSelectedItem()) + 1);
+        cv.put("city_id", spListCity.indexOf(spCityCrFi.getSelectedItem()) + 1);
         cv.put("name", etNameCrFi.getText().toString());
-        cv.put("light", (spLightCrFi.getSelectedItem().toString() == "Нет") ? 0 : 1);
-        cv.put("coating", spListCoating.indexOf(spCoatingCrFi.getSelectedItem()) + 1);
-        cv.put("shower", (spShowerCrFi.getSelectedItem().toString() == "Нет") ? 0 : 1);
-        cv.put("roof", (spRoofCrFi.getSelectedItem().toString() == "Нет") ? 0 : 1);
-        cv.put("geolocation", etGeolocationCrFi.getText().toString());
+        cv.put("light_id", (spLightCrFi.getSelectedItem().toString() == "Нет") ? 1 : 2);
+        cv.put("coating_id", spListCoating.indexOf(spCoatingCrFi.getSelectedItem()) + 1);
+        cv.put("shower_id", (spShowerCrFi.getSelectedItem().toString() == "Нет") ? 1 : 2);
+        cv.put("roof_id", (spRoofCrFi.getSelectedItem().toString() == "Нет") ? 1 : 2);
+        cv.put("geo_long", etGeolocationCrFi.getText().toString());
+        cv.put("geo_lat", etGeolocationCrFi.getText().toString());
         cv.put("address", etAddressCrFi.getText().toString());
         //добваить данные через объект ContentValues(cv), в таблицу "field"
         dbUtilities.insertInto(cv, "fields");

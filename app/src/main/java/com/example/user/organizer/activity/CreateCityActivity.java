@@ -70,7 +70,7 @@ public class CreateCityActivity extends AppCompatActivity {
 
         ContentValues cv = new ContentValues();
         cv.put("name", etCityNameCrCi.getText().toString());
-        cv.put("region", spListRegion.indexOf(spRegionCrCi.getSelectedItem()) + 1);
+        cv.put("region_id", spListRegion.indexOf(spRegionCrCi.getSelectedItem()) + 1);
 
         //добваить данные через объект ContentValues(cv), в таблицу "cities"
         dbUtilities.insertInto(cv, "cities");

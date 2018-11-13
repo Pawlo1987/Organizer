@@ -83,8 +83,8 @@ public class CreateAccountActivity extends AppCompatActivity {
         cv.put("login", etLoginCrAcAc.getText().toString());
         cv.put("password", etPasswordCrAcAc.getText().toString());
         cv.put("name", etNameCrAcAc.getText().toString());
-        cv.put("phone_number", etPhoneCrAcAc.getText().toString());
-        cv.put("def_city", spListCity.indexOf(spDefCityCrAcAc.getSelectedItem()) + 1);
+        cv.put("phone", etPhoneCrAcAc.getText().toString());
+        cv.put("city_id", spListCity.indexOf(spDefCityCrAcAc.getSelectedItem()) + 1);
         cv.put("email", etEmailCrAcAc.getText().toString());
 
         //добваить данные через объект ContentValues(cv), в таблицу "user"

@@ -33,9 +33,9 @@ public class ShowAllEventActivity extends AppCompatActivity {
         dbUtilities = new DBUtilities(context);
         dbUtilities.open();
         // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
-        String query = "SELECT cities.name as cities, fields.name as fields, events.date as date, " +
-                "events.starttime as time FROM events INNER JOIN cities ON cities._id = events.city " +
-                "INNER JOIN fields ON fields._id = events.field;";
+        String query = "SELECT cities.name, fields.name, events.date, " +
+                "events.time FROM events INNER JOIN cities ON cities._id = events.city_id " +
+                "INNER JOIN fields ON fields._id = events.field_id;";
         eventsCursor =  dbUtilities.getDb().rawQuery(query, null);
 
         // создаем адаптер, передаем в него курсор

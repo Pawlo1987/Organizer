@@ -31,3 +31,16 @@ SELECT name FROM region;
 
 --данные для спинера coating
 SELECT type FROM coating;
+
+SELECT events._id FROM events WHERE events.user_id = 7
+UNION
+Select events._id FROM participants INNER JOIN events ON events._id =     participants.event_id WHERE participants.user_id = 7;
+
+SELECT cities.name, fields.name, events.date, events.time FROM events 
+INNER JOIN fields ON fields._id = events.field_id 
+INNER JOIN cities ON cities._id = events.city_id 
+WHERE events.user_id = 7 UNION SELECT cities.name, fields.name, events.date, events.time FROM participants
+INNER JOIN events ON events._id = participants.event_id 
+INNER JOIN fields ON fields._id = events.field_id 
+INNER JOIN cities ON cities._id = events.city_id 
+WHERE participants.user_id = 7

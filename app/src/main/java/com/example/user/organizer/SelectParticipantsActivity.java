@@ -89,11 +89,11 @@ public class SelectParticipantsActivity extends AppCompatActivity {
                 if (spCitySePaAc.getItemAtPosition(position).equals("ВСЕ ГОРОДА")){
                     // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
                     query = "SELECT users.name, users.login, cities.name FROM users INNER JOIN " +
-                            "cities ON cities._id = users.def_city;";
+                            "cities ON cities._id = users.city_id;";
                 }else {
                     // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
                     query = "SELECT users.name, users.login, cities.name FROM users INNER JOIN " +
-                            "cities ON cities._id = users.def_city WHERE cities.name = \"" +
+                            "cities ON cities._id = users.city_id WHERE cities.name = \"" +
                             spCitySePaAc.getItemAtPosition(position) + "\";";
                 }//if-else
 
@@ -116,11 +116,11 @@ public class SelectParticipantsActivity extends AppCompatActivity {
                 if (spCitySePaAc.getItemAtPosition(spPos).equals("ВСЕ ГОРОДА")){
                     // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
                     query = "SELECT users.name, users.login, cities.name FROM users INNER JOIN " +
-                            "cities ON cities._id = users.def_city;";
+                            "cities ON cities._id = users.city_id;";
                 }else {
                     // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
                     query = "SELECT users.name, users.login, cities.name FROM users INNER JOIN " +
-                            "cities ON cities._id = users.def_city WHERE cities.name = \"" +
+                            "cities ON cities._id = users.city_id WHERE cities.name = \"" +
                             spCitySePaAc.getItemAtPosition(spPos) + "\";";
                 }//if-else
                 filter = edBinarySePaAc.getText().toString();

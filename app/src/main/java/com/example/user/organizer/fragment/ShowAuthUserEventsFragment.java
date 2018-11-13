@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,14 @@ import com.example.user.organizer.DBUtilities;
 import com.example.user.organizer.R;
 import com.example.user.organizer.ShowAuthUserEventsRecyclerAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ShowAuthUserEventsFragment extends Fragment {
     RecyclerView rvMainShAuUsEvAc;
+
+    //колличество events._id в статусе организатора
+    int orgStatus;
 
     // адаптер для отображения recyclerView
     ShowAuthUserEventsRecyclerAdapter showAuthUserEventsRecyclerAdapter;
@@ -44,18 +51,31 @@ public class ShowAuthUserEventsFragment extends Fragment {
         dbUtilities = new DBUtilities(context);
         dbUtilities.open();
 
+        // 1. Данные о пользователе в роле организатора
         // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
-        String query = "SELECT cities.name as city, fields.name as field, events.date as date, " +
-                "events.starttime as starttime, participants.status as status, " +
-                "events._id as event_id FROM participants INNER JOIN events " +
-                "ON events._id = participants.eventnumber INNER JOIN fields " +
-                "ON fields._id = events.field INNER JOIN cities " +
-                "ON cities._id = events.city WHERE participants.user = \"" + idAuthUser + "\";";
+        String query = "SELECT events._id FROM events WHERE events.user_id = \"" + idAuthUser + "\";";
+        eventsCursor =  dbUtilities.getDb().rawQuery(query, null);
+
+        //кол-во событий в роли организатора
+        orgStatus = eventsCursor.getCount();
+
+        // 2. Объеденный запрос для получения данных об участии пользователя
+        // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
+        query = "SELECT cities.name, fields.name, events.date, events.time FROM events " +
+                "INNER JOIN fields ON fields._id = events.field_id " +
+                "INNER JOIN cities ON cities._id = events.city_id " +
+                "WHERE events.user_id = \"" +
+                 idAuthUser + "\" UNION SELECT cities.name, fields.name, events.date, events.time " +
+                "FROM participants " +
+                "INNER JOIN events ON events._id = participants.event_id " +
+                "INNER JOIN fields ON fields._id = events.field_id " +
+                "INNER JOIN cities ON cities._id = events.city_id " +
+                "WHERE participants.user_id = \"" + idAuthUser + "\";";
 
         eventsCursor =  dbUtilities.getDb().rawQuery(query, null);
 
         // создаем адаптер, передаем в него курсор
-        showAuthUserEventsRecyclerAdapter = new ShowAuthUserEventsRecyclerAdapter(context, eventsCursor);
+        showAuthUserEventsRecyclerAdapter = new ShowAuthUserEventsRecyclerAdapter(context, eventsCursor, orgStatus);
 
         super.onAttach(context);
     } // onAttach

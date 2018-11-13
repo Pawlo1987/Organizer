@@ -45,14 +45,14 @@ public class CreateEventActivity extends AppCompatActivity {
     Cursor creEvCursor;                  // курсор для чтения данных из БД
     Context context;
 
-    String authorizLogin = "user1";                // Логин авторизированого пользователя
+    String authorizLogin = "user1";      // Логин авторизированого пользователя
 
     ListView lvListOfParticipantsCrEv;   // ListView для выбранных выбранных участников
     List<String> spListField;            // Данные для спинера выбора поля
-    List<String> spListDuration;         // Данные для спинера выбора длительности события
+    List<Integer> spListDuration;        // Данные для спинера выбора длительности события
     List<String> spListCity;             // Данные для спинера выбора города
 
-    List<String> loginUserList;             //коллекция login-ов с выбранными игроками
+    List<String> loginUserList;          //коллекция login-ов с выбранными игроками
 
     EditText etPriceCrEv;                //Общая стоимость тренеровки
     EditText evPhoneCrEv;                //телефон организатора
@@ -60,9 +60,9 @@ public class CreateEventActivity extends AppCompatActivity {
     TextView tvDateCrEv;                 //Строка для отображения даты
     TextView tvStartTimeCrEv;            //Строка для отображения время
 
-    Spinner spFieldCrEv;                     //объект спинер выбора поля
-    Spinner spDurationCrEv;                  //объект спинер выбора длительности события
-    Spinner spCityCrEv;                      //объект спинер выбора города
+    Spinner spFieldCrEv;                 //объект спинер выбора поля
+    Spinner spDurationCrEv;              //объект спинер выбора длительности события
+    Spinner spCityCrEv;                  //объект спинер выбора города
 
     Calendar calendar = Calendar.getInstance();      // объект для работы с датой и временем
 
@@ -104,25 +104,28 @@ public class CreateEventActivity extends AppCompatActivity {
         //заполнить spListCity данные для отображения в Spinner
         spListCity = dbUtilities.fillList(query);
 
-        spCityCrEv.setAdapter(buildSpinner(spListCity));
+        spCityCrEv.setAdapter(buildSpinnerStr(spListCity));
 
         //заполнить spListField данные для отображения в Spinner
-        spListDuration = Arrays.asList(new String[]{ "30", "45", "60", "90", "120", "150", "180"});
+        int[] a = {30, 45, 60, 90, 120, 150, 180};
+        for (int i : a) {
+            spListDuration.add(i);
+        }//foreach
 
-        spDurationCrEv.setAdapter(buildSpinner(spListDuration));
+        spDurationCrEv.setAdapter(buildSpinnerInt(spListDuration));
 
         spCityCrEv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id){
                 //запрос для получения курсор с данными
-                query = "SELECT fields.name FROM fields INNER JOIN cities ON cities._id = fields.city" +
+                query = "SELECT fields.name FROM fields INNER JOIN cities ON cities._id = fields.city_id" +
                         " WHERE cities.name = \"" + spCityCrEv.getItemAtPosition(position) +"\";";
 
                 //заполнить spListField данные для отображения в Spinner
                 spListField = dbUtilities.fillList(query);
 
-                spFieldCrEv.setAdapter(buildSpinner(spListField));
+                spFieldCrEv.setAdapter(buildSpinnerStr(spListField));
             }//onItemSelected
 
             @Override
@@ -133,12 +136,30 @@ public class CreateEventActivity extends AppCompatActivity {
     }//onCreate
 
     //строим Spinner
-    private ArrayAdapter buildSpinner(List<String> list) {
+    private ArrayAdapter buildSpinnerStr(List<String> list) {
 
         ArrayAdapter<String> spinnerAdapter;
 
         //создание адаптера для спинера
         spinnerAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_spinner_item,
+                list
+        );
+
+        // назначение адапетра для списка
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        return spinnerAdapter;
+    }//buildCitySpinner
+
+    //строим Spinner
+    private ArrayAdapter buildSpinnerInt(List<Integer> list) {
+
+        ArrayAdapter<Integer> spinnerAdapter;
+
+        //создание адаптера для спинера
+        spinnerAdapter = new ArrayAdapter<Integer>(
                 this,
                 android.R.layout.simple_spinner_item,
                 list
@@ -295,41 +316,37 @@ public class CreateEventActivity extends AppCompatActivity {
 
         //делаем новую запись в таблицу с событиями
         ContentValues cv = new ContentValues();
-        cv.put("city", dbUtilities.findIdbySPObject(
+        cv.put("city_id", dbUtilities.findIdbySPObject(
                 spCityCrEv.getSelectedItem().toString(),    //Объект спинера(название города)
                 "cities",                                   //название таблицы
                 "name")                                     //название столбца
         );
-        cv.put("field", dbUtilities.findIdbySPObject(
+        cv.put("field_id", dbUtilities.findIdbySPObject(
                 spFieldCrEv.getSelectedItem().toString(),   //Объект спинера(название поля)
                 "fields",                                   //название таблицы
                 "name")                                     //название столбца
         );
         cv.put("date", eventDate);
-        cv.put("starttime", eventStartTime);
+        cv.put("time", eventStartTime);
         cv.put("duration", spDurationCrEv.getSelectedItem().toString());
         cv.put("price", etPriceCrEv.getText().toString());
         cv.put("password", evPasswordCrEv.getText().toString());
         cv.put("phone", evPhoneCrEv.getText().toString());
+        cv.put("user_id", dbUtilities.findIdbySPObject(
+                authorizLogin,   //Объект (название поля)
+                "users",                                   //название таблицы
+                "login")
+        );
 
         //добваить данные через объект ContentValues(cv), в таблицу "event"
         dbUtilities.insertInto(cv, "events");
 
-        //делаем новую запись в таблицу с участниками
-        //первая запись организатора
-        cv = new ContentValues();
-        cv.put("eventnumber", dbUtilities.tableSize("events"));
-        cv.put("user", authorizLogin);
-        cv.put("status", 0);
-
-        //добваить данные через объект ContentValues(cv), в таблицу "participants"
-        dbUtilities.insertInto(cv, "participants");
-
+        //добавляем участников в таблицу participants
         for (String loginUser : loginUserList) {
 
             cv = new ContentValues();
-            cv.put("eventnumber", dbUtilities.tableSize("events"));
-            cv.put("user", dbUtilities.findIdbySPObject(
+            cv.put("event_id", dbUtilities.tableSize("events"));
+            cv.put("user_id", dbUtilities.findIdbySPObject(
                     loginUser,
                     "users",
                     "login")

@@ -36,8 +36,8 @@
     <string name="tvPasswordCrEv">Пароль</string>
     <string name="btnConfirmCrEv">Создать</string>
     <string name="tvHeaderShAlEvFr">Все активные события</string>
-    <string name="tvFirstLineShAlEvReAd">Событие назначено на</string>
-    <string name="tvSecondLineShAlEvReAd">состоится в</string>
+    <string name="tvFirstLineShAlEvReAd">Назначено </string>
+    <string name="tvSecondLineShAlEvReAd"> в </string>
     <string name="tvThirdLineShAlEvReAd">в городе</string>
     <string name="tvFourthLineShAlEvReAd">на поле</string>
     <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
@@ -92,5 +92,7 @@
     <string name="news_line">Новости</string>
     <string name="exit_app">Завершить приложение</string>
     <string name="log_out">Выйти из аккаунта</string>
+    <string name="item_take_part_show_all_rva">принять участие</string>
+    <string name="item_about_event_show_all_rva">подробная информация</string>
 
 </resources>

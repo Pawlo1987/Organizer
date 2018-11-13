@@ -15,12 +15,14 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
     //поля класса advertisingAndInformationRecyclerAdapter
     private LayoutInflater inflater;
     private Cursor eventsCursor;
+    private int orgStatus;
     DBUtilities dbUtilities;
 
     //конструктор
-    public ShowAuthUserEventsRecyclerAdapter(Context context, Cursor eventsCursor) {
+    public ShowAuthUserEventsRecyclerAdapter(Context context, Cursor eventsCursor, int orgStatus) {
         this.inflater = LayoutInflater.from(context);
         this.eventsCursor = eventsCursor;
+        this.orgStatus = orgStatus;
         dbUtilities = new DBUtilities(context);
     } // advertisingAndInformationRecyclerAdapter
 
@@ -42,7 +44,9 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         holder.tvFieldShAuUsEvReAd.setText(eventsCursor.getString(1));//поле
         holder.tvDateShAuUsEvReAd.setText(eventsCursor.getString(2)); // Дата
         holder.tvTimeShAuUsEvReAd.setText(eventsCursor.getString(3)); //Время
-        holder.tvStatusShAuUsEvReAd.setText((eventsCursor.getInt(4) == 0)?"Организатор":"Участник"); // Статус игрока
+        holder.tvStatusShAuUsEvReAd.setText((orgStatus > 0)?"Организатор":"Участник"); // Статус игрока
+        orgStatus--;
+
     } // onBindViewHolder
 
     //получаем количество элементов объекта(курсора)

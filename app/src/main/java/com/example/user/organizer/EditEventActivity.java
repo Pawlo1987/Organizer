@@ -8,19 +8,26 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.example.user.organizer.fragment.SelectDurationDialog;
+import com.example.user.organizer.fragment.ShowListParticipantsDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,13 +36,23 @@ import java.util.List;
 
 //--Активность для редактирования события(переход на активность создание нового поля --------------
 //-- или нового города или активность для добавления нового участника в событие)-------
-public class EditEventActivity extends AppCompatActivity implements View.OnFocusChangeListener {
+public class EditEventActivity extends AppCompatActivity{
 
     // коды для идентификации активностей при получении результата
     public final int REQ_ADD_USER = 1001;
 
     //Параметр -- "ИМЯ КЛЮЧА"
     public static final String PAR_USERS = "select";
+
+    //параметр для вызова диалога "selectDurationDialog"
+    final String ID_SELECT_DURATION_DIALOG = "selectDurationDialog";
+    //параметр для вызова диалога "showListParticipantsDialog"
+    final String ID_SHOW_LIST_PARTICIPANTS_DIALOG = "showListParticipantsDialog";
+
+    SelectDurationDialog selectDurationDialog =
+            new SelectDurationDialog(); // диалог выбора длительности игры
+    ShowListParticipantsDialog showListParticipantsDialog =
+            new ShowListParticipantsDialog(); // диалог просмотра списка участиков
 
     DBUtilities dbUtilities;
     Context context;
@@ -45,9 +62,7 @@ public class EditEventActivity extends AppCompatActivity implements View.OnFocus
 
     boolean flChangeLoginUserList = false;      //  Поменялся список учасников
 
-    ListView lvListOfParticipantsCrEv;   // ListView для выбранных выбранных участников
     List<String> spListField;            // Данные для спинера выбора поля
-    List<Integer> spListDuration;        // Данные для спинера выбора длительности события
     List<String> spListCity;             // Данные для спинера выбора города
 
     List<String> loginUserList;          //коллекция login-ов с выбранными игроками
@@ -56,11 +71,8 @@ public class EditEventActivity extends AppCompatActivity implements View.OnFocus
     EditText etPriceCrEv;                //Общая стоимость тренеровки
     EditText etPhoneCrEv;                //телефон организатора
     EditText evPasswordCrEv;             //пароль для приватной тренировки
-    TextView tvDateCrEv;                 //Строка для отображения даты
-    TextView tvStartTimeCrEv;            //Строка для отображения время
 
     Spinner spFieldCrEv;                 //объект спинер выбора поля
-    Spinner spDurationCrEv;              //объект спинер выбора длительности события
     Spinner spCityCrEv;                  //объект спинер выбора города
 
     Calendar calendar = Calendar.getInstance();      // объект для работы с датой и временем
@@ -70,7 +82,13 @@ public class EditEventActivity extends AppCompatActivity implements View.OnFocus
     String showEventDate;                   // дата события для показа
     String eventDateForDB;                  // дата события для БД
     String eventStartTime;                  // Время начала события
-    TextInputLayout etPhoneLayout;
+    String[] durationMas;                   //массив двнных для выбора активности
+    int iDuration;                          //порядковый номер из массива длительности(результат)
+    Button btnDurationCrEv;              //кнопка для получения выбора длительности игры
+    ImageView ivShowListParticipants;    //картинка для просмотра списка участников
+    Button btnDateCrEv;                  //Кнопка установки даты
+    Button btnStartTimeCrEv;             //Кнопка установки время
+    TextView tvForResultCrEv;            //Строка для получения результатов из Dialog
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,16 +103,16 @@ public class EditEventActivity extends AppCompatActivity implements View.OnFocus
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         //привязка ресурсов к объектам
-        tvDateCrEv = (TextView) findViewById(R.id.tvDateCrEv);
-        tvStartTimeCrEv = (TextView) findViewById(R.id.tvStartTimeCrEv);
+        tvForResultCrEv = (TextView) findViewById(R.id.tvForResultCrEv);
+        btnDateCrEv = (Button) findViewById(R.id.btnDateCrEv);
+        btnStartTimeCrEv = (Button) findViewById(R.id.btnStartTimeCrEv);
         etPriceCrEv = (EditText) findViewById(R.id.etPriceCrEv);
         etPhoneCrEv = (EditText) findViewById(R.id.etPhoneCrEv);
         evPasswordCrEv = (EditText) findViewById(R.id.evPasswordCrEv);
         spCityCrEv = (Spinner) findViewById(R.id.spCityCrEv);
         spFieldCrEv = (Spinner) findViewById(R.id.spFieldCrEv);
-        spDurationCrEv = (Spinner) findViewById(R.id.spDurationCrEv);
-        lvListOfParticipantsCrEv = (ListView) findViewById(R.id.lvListOfParticipantsCrEv);
-        etPhoneLayout = (TextInputLayout) findViewById(R.id.etPhoneCrEvLayout);
+        btnDurationCrEv = (Button) findViewById(R.id.btnDurationCrEv);
+        ivShowListParticipants = (ImageView)findViewById(R.id.ivShowListParticipants);
 
         //применяем регулярное выражения для правельности ввода номера телефона
         dbUtilities.inputFilterForPhoneNumber(etPhoneCrEv);
@@ -103,7 +121,7 @@ public class EditEventActivity extends AppCompatActivity implements View.OnFocus
         etPhoneCrEv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus&&(etPhoneCrEv.length()<14))etPhoneCrEv.setText("");
+                if(!hasFocus&&(etPhoneCrEv.length()==0||etPhoneCrEv.length()==1))etPhoneCrEv.setText("");
                 if(hasFocus&&etPhoneCrEv.length()==0)etPhoneCrEv.setText("(");
             }
         });
@@ -111,7 +129,6 @@ public class EditEventActivity extends AppCompatActivity implements View.OnFocus
         //подготовка данных для редактирования
         intent = getIntent();
         eventId = intent.getStringExtra("id");
-        spDurationCrEv.setSelection(Integer.parseInt(intent.getStringExtra("duration")));
         etPriceCrEv.setText(intent.getStringExtra("price"));
         evPasswordCrEv.setText(intent.getStringExtra("password"));
         etPhoneCrEv.setText(intent.getStringExtra("phone"));
@@ -120,7 +137,6 @@ public class EditEventActivity extends AppCompatActivity implements View.OnFocus
 
         //инициализация коллекции для спинера
         spListField = new ArrayList<>();
-        spListDuration = new ArrayList<>();
         spListCity = new ArrayList<>();
 
         loginUserList = new ArrayList<>();
@@ -133,26 +149,10 @@ public class EditEventActivity extends AppCompatActivity implements View.OnFocus
         spCityCrEv.setAdapter(buildSpinnerStr(spListCity));
         spCityCrEv.setSelection(spListCity.indexOf(intent.getStringExtra("city_name")));
 
-        //заполнить spListField данные для отображения в Spinner
-        int[] a = {30, 45, 60, 90, 120, 150, 180};
-        for (int i : a) {
-            spListDuration.add(i);
-        }//foreach
-
-        spDurationCrEv.setAdapter(buildSpinnerInt(spListDuration));
-        spDurationCrEv.setSelection(spListDuration.indexOf(intent.getStringExtra("duration")));
-
-        //заполняем список учасников
-        //первое - получаем id учасников
-        idUserList = dbUtilities.getListValuesByValueAndHisColumn("participants","event_id",
-                eventId, "user_id");
-
-        for (String id : idUserList) {
-        //второе - получаем логины всех учасников заданнного события
-        loginUserList.add(dbUtilities.searchValueInColumn("users", "id","login", id));
-        }//foreach
-
-        fillLV();
+        //заполнить дынные для выбора длительности игры
+        durationMas = new String[]{"30", "45", "60", "90", "120", "150", "180"};
+        iDuration = 0;
+        btnDurationCrEv.setText("Длительность " + durationMas[iDuration] + " минут");
 
         spCityCrEv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -173,10 +173,41 @@ public class EditEventActivity extends AppCompatActivity implements View.OnFocus
 
             }//onNothingSelected
         });
+        //Следим за изменением результирующего TextView для получения результата после диалога
+        tvForResultCrEv.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                iDuration = Integer.parseInt(s.toString());
+                btnDurationCrEv.setText("Длительность " + durationMas[iDuration] + " минут");
+            }
+        });
+
+        //слушатель нажатия на картинку для просмотра списка участников
+        ivShowListParticipants.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle args = new Bundle();    // объект для передачи параметров в диалог
+                args.putStringArrayList("participantsLoginList", (ArrayList<String>) loginUserList);
+
+                showListParticipantsDialog.setArguments(args);
+                // Точка вызова отображение диалогового окна
+                showListParticipantsDialog.show( getSupportFragmentManager(), ID_SHOW_LIST_PARTICIPANTS_DIALOG);
+            }
+        });
 
         // установка значений даты и время из БД к данному событию
-        tvDateCrEv.setText(intent.getStringExtra("date"));
-        tvStartTimeCrEv.setText(intent.getStringExtra("time"));
+        btnDateCrEv.setText("Дата проведения "+intent.getStringExtra("date"));
+        btnStartTimeCrEv.setText("Время начала "+intent.getStringExtra("time"));
     }//onCreate
 
     //обработчик actionBar (стрелка сверху слева)
@@ -263,8 +294,8 @@ public class EditEventActivity extends AppCompatActivity implements View.OnFocus
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         eventDateForDB = simpleDateFormat.format(calendar.getTimeInMillis());
 
-        //установка текста в TextView
-        tvDateCrEv.setText(showEventDate);
+        //установка текста в btnDateCrEv
+        btnDateCrEv.setText("Дата проведения "+showEventDate.toString());
     } // setInitialDateTime
 
     // установка начальных времени
@@ -276,8 +307,8 @@ public class EditEventActivity extends AppCompatActivity implements View.OnFocus
                 // выводим это время в привычном представлении - дата и время
                 DateUtils.FORMAT_SHOW_TIME);
 
-        //установка текста в TextView
-        tvStartTimeCrEv.setText("Время " + eventStartTime);
+        //установка текста в btnStartTimeCrEv
+        btnStartTimeCrEv.setText("Время начала "+eventStartTime);
     } // setInitialDateTime
 
     // отображаем диалоговое окно для выбора даты - DatePickerDialog
@@ -317,15 +348,23 @@ public class EditEventActivity extends AppCompatActivity implements View.OnFocus
             case R.id.btnStartTimeCrEv:          //кнопка время начала
                 setTime24();
                 break;
+            case R.id.btnDurationCrEv:               //кнопка диалога выбора длительности
+                selectDuration();
+                break;
             case R.id.btnAddUserCrEv:                //кнопка добавить участника
                 addUser();
                 break;
             case R.id.btnConfirmCrEv:            //кнопка обновить
                 updateEvent();
-                finish();
                 break;
         }//switch
     }//onClick
+
+    //процедура вызова диалога для выбора длительности игры
+    private void selectDuration() {
+        // Точка вызова отображение диалогового окна
+        selectDurationDialog.show( getSupportFragmentManager(), ID_SELECT_DURATION_DIALOG);
+    }//selectDuration
 
     //-----------------------Метод для приема результатов из активностей----------------------------
     @Override
@@ -341,20 +380,10 @@ public class EditEventActivity extends AppCompatActivity implements View.OnFocus
             loginUserList.clear();
             loginUserList.addAll(data.getParcelableArrayListExtra(PAR_USERS));
             flChangeLoginUserList = true;
-            fillLV();   //Заполнение и вывод в ListView
         }
 
         Log.d("MyLog", loginUserList.toString());
     }//onActivityResult
-
-    //заполнение ListView
-    private void fillLV() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, loginUserList);
-
-        // присваиваем адаптер списку
-        lvListOfParticipantsCrEv.setAdapter(adapter);
-    }//fillLV
 
     //обработка нажатия клавиши добавить участника
     private void addUser() {
@@ -378,10 +407,10 @@ public class EditEventActivity extends AppCompatActivity implements View.OnFocus
     //обновление событие
     private void updateEvent() {
         if ( etPriceCrEv.getText().toString().equals("")
-                || etPhoneCrEv.getText().toString().equals("")
+                || etPhoneCrEv.length()<14
                 || evPasswordCrEv.getText().toString().equals("")
                 || spListField.size() == 0) {
-            Toast.makeText(this, "Есть пустые поля!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Ошибка или пустые поля!", Toast.LENGTH_SHORT).show();
         } else {
             //делаем новую запись в таблицу с событиями
             String city_id = dbUtilities.getIdByValue("cities", "name",
@@ -392,7 +421,7 @@ public class EditEventActivity extends AppCompatActivity implements View.OnFocus
             );
             String date = eventDateForDB;
             String time = eventStartTime;
-            String duration = spDurationCrEv.getSelectedItem().toString();
+            String duration = durationMas[iDuration];
             String price = etPriceCrEv.getText().toString();
             String password = evPasswordCrEv.getText().toString();
             String phone = etPhoneCrEv.getText().toString();
@@ -430,17 +459,9 @@ public class EditEventActivity extends AppCompatActivity implements View.OnFocus
                     dbUtilities.insertIntoNotifications(eventId, user_id, city_id, field_id, time, date, "1", " ");
                 }//foreach
             }//if
+            Intent intent = new Intent(this, NavigationDrawerLogInActivity.class);
+            intent.putExtra("idAuthUser", idAuthUser);
+            startActivity(intent);
         }
     }//updateEvent
-
-    //проверка ввода номера телефона
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-        if (v != etPhoneCrEv && etPhoneCrEv.getText().toString().isEmpty()) {
-            etPhoneLayout.setErrorEnabled(true);
-            etPhoneLayout.setError(getResources().getString(R.string.error_enter_phone));
-        } else {
-            etPhoneLayout.setErrorEnabled(false);
-        }
-    }//onFocusChange
 }//EditEventActivity

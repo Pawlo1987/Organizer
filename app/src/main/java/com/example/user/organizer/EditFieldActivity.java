@@ -19,7 +19,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditFieldActivity extends AppCompatActivity implements View.OnFocusChangeListener{
+public class EditFieldActivity extends AppCompatActivity{
     // коды для идентификации активностей при получении результата
     public final int REQ_SELECT_LOCATION = 1002;
 
@@ -49,7 +49,6 @@ public class EditFieldActivity extends AppCompatActivity implements View.OnFocus
     CheckBox cbShowerCrFi;
     CheckBox cbRoofCrFi;
     Switch swLocationCrFi;
-    TextInputLayout etPhoneCrFiLayout;
 
     private ArrayAdapter<String> spAdapterCity;    //Адаптер для спинера выбор города
     private ArrayAdapter<String> spAdapterCoating; //Адаптер для спинера выбор покрытия
@@ -84,7 +83,6 @@ public class EditFieldActivity extends AppCompatActivity implements View.OnFocus
         cbShowerCrFi = (CheckBox) findViewById(R.id.cbShowerCrFi);
         cbRoofCrFi = (CheckBox) findViewById(R.id.cbRoofCrFi);
         swLocationCrFi = (Switch) findViewById(R.id.swLocationCrFi);
-        etPhoneCrFiLayout = (TextInputLayout) findViewById(R.id.etPhoneCrFiLayout);
 
         //применяем регулярное выражения для правельности ввода номера телефона
         dbUtilities.inputFilterForPhoneNumber(etPhoneCrFi);
@@ -237,14 +235,4 @@ public class EditFieldActivity extends AppCompatActivity implements View.OnFocus
         startActivityForResult(intent, REQ_SELECT_LOCATION);
     }//geoPositionOnMap
 
-    //проверка ввода номера телефона
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-        if (v != etPhoneCrFi && etPhoneCrFi.getText().toString().isEmpty()) {
-            etPhoneCrFiLayout.setErrorEnabled(true);
-            etPhoneCrFiLayout.setError(getResources().getString(R.string.error_enter_phone));
-        } else {
-            etPhoneCrFiLayout.setErrorEnabled(false);
-        }
-    }//onFocusChange
 }//EditFieldActivity

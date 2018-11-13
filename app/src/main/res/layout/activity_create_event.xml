@@ -10,6 +10,13 @@
     android:focusableInTouchMode="true"
     tools:context="com.example.user.organizer.CreateEventActivity">
 
+    <!--объект для получения результатов после диалога-->
+    <TextView
+        android:id="@+id/tvForResultCrEv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,17 +26,35 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvCreateEventCrEv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:fontFamily="@font/delius_swash_caps"
+        android:text="@string/tvCreateEventCrEv"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tvCityCrEv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/tvCityCrEv" />
+            android:layout_weight="1.2"
+            android:text="@string/tvCityCrEv"
+            android:textSize="18sp" />
 
         <Spinner
             android:id="@+id/spCityCrEv"
@@ -41,7 +66,7 @@
             android:id="@+id/btnNewCityCrEv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.4"
             android:onClick="onClick"
             android:text="@string/btnNewCityCrEv" />
     </LinearLayout>
@@ -49,13 +74,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tvFieldCrEv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.2"
             android:text="@string/tvFieldCrEv"
             android:textSize="18sp" />
 
@@ -69,7 +98,7 @@
             android:id="@+id/btnNewFieldCrEv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.4"
             android:onClick="onClick"
             android:text="@string/btnNewFieldCrEv" />
 
@@ -78,15 +107,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tvDateCrEv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/tvDateCrEv"
-            android:textSize="18sp" />
 
         <Button
             android:id="@+id/btnDateCrEv"
@@ -101,15 +126,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tvStartTimeCrEv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/tvStartTimeCrEv"
-            android:textSize="18sp" />
 
         <Button
             android:id="@+id/btnStartTimeCrEv"
@@ -121,80 +142,46 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <Button
+        android:id="@+id/btnDurationCrEv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:onClick="onClick"
+        android:text="Button" />
 
-        <TextView
-            android:id="@+id/tvDurationCrEv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/tvDurationCrEv"
-            android:textSize="18sp" />
-
-        <Spinner
-            android:id="@+id/spDurationCrEv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-    </LinearLayout>
-
-    <LinearLayout
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tvPriceCrEv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/tvPriceCrEv"
-            android:textSize="18sp" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1">
 
         <EditText
             android:id="@+id/etPriceCrEv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:maxLength="4"
-            android:inputType="numberDecimal" />
+            android:hint="@string/etPriceCrEvHint"
+            android:inputType="numberDecimal"
+            android:maxLength="4" />
 
-    </LinearLayout>
+    </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvListOfParticipantsCrEv"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="@string/tvListOfParticipantsCrEv"
-                android:textSize="18sp" />
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ListView
-                    android:id="@+id/lvListOfParticipantsCrEv"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </ScrollView>
-
-        </LinearLayout>
 
         <Button
             android:id="@+id/btnAddUserCrEv"
@@ -204,73 +191,67 @@
             android:onClick="onClick"
             android:text="@string/btnAddUserCrEv" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tvPhoneCrEv"
+        <ImageView
+            android:id="@+id/ivShowListParticipants"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/tvPhoneCrEv"
-            android:textSize="18sp" />
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/etPhoneCrEvLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1">
-
-            <EditText
-                android:id="@+id/etPhoneCrEv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/hintEtPhone"
-                android:inputType="number|phone"
-                android:maxLength="10"
-                android:textSize="18sp" />
-
-        </android.support.design.widget.TextInputLayout>
+            android:layout_gravity="center"
+            android:layout_weight="5"
+            app:srcCompat="@android:drawable/ic_menu_view" />
 
     </LinearLayout>
 
-    <LinearLayout
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/etPhoneCrEvLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/tvPasswordCrEv"
+        <EditText
+            android:id="@+id/etPhoneCrEv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/tvPasswordCrEv"
-            android:textAlignment="viewStart"
+            android:hint="@string/hintEtPhone"
+            android:inputType="number|phone"
+            android:maxLength="10"
             android:textSize="18sp" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1">
 
         <EditText
             android:id="@+id/evPasswordCrEv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:maxLength="4"
+            android:hint="@string/etPasswordCrEvHint"
             android:inputType="numberDecimal"
+            android:maxLength="4"
             android:textSize="18sp" />
 
-    </LinearLayout>
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/btnConfirmCrEv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="5dp"
         android:onClick="onClick"
         android:text="@string/btnConfirmCrEv" />
 

@@ -30,7 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 
 //---------Активность для создания записи нового пользователя ---------------------------
-public class CreateAccountActivity extends AppCompatActivity implements View.OnFocusChangeListener {
+public class CreateAccountActivity extends AppCompatActivity{
 
     DBUtilities dbUtilities;
     Context context;
@@ -44,7 +44,6 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnF
     EditText etEmailCrAcAc;
     EditText etPhoneCrAcAc;
     Spinner spDefCityCrAcAc;                     //объект спинер
-    TextInputLayout etPhoneCrAcAcLayout;
 
     private ArrayAdapter<String> spAdapterCity;  //Адаптер для спинера
 
@@ -69,7 +68,6 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnF
         etEmailCrAcAc = (EditText) findViewById(R.id.etEmailCrAcAc);
         etPhoneCrAcAc = (EditText) findViewById(R.id.etPhoneCrAcAc);
         spDefCityCrAcAc = (Spinner) findViewById(R.id.spDefCityCrAcAc);
-        etPhoneCrAcAcLayout = (TextInputLayout) findViewById(R.id.etPhoneCrAcAcLayout);
 
         //фильтр для пароля
         etPasswordCrAcAc.addTextChangedListener(new TextWatcher() {
@@ -203,16 +201,5 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnF
     public void onClick(View view) {
                 createNewAccount();
     }//onClick
-
-    //проверка ввода номера телефона
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-        if (v != etPhoneCrAcAc && etPhoneCrAcAc.getText().toString().isEmpty()) {
-            etPhoneCrAcAcLayout.setErrorEnabled(true);
-            etPhoneCrAcAcLayout.setError(getResources().getString(R.string.error_enter_phone));
-        } else {
-            etPhoneCrAcAcLayout.setErrorEnabled(false);
-        }
-    }//onFocusChange
 
 }//CreateAccountActivity

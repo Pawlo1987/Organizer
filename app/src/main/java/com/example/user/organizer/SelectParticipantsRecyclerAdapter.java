@@ -47,7 +47,6 @@ public class SelectParticipantsRecyclerAdapter extends RecyclerView.Adapter<Sele
         participant = ShowUserList.get(position);
         String name = participant.getName();
         String login = participant.getLogin();
-        String city_id = participant.getCity_id();
 
         // получение данных
         //фильтрация элементов для бинарного поиска
@@ -55,13 +54,11 @@ public class SelectParticipantsRecyclerAdapter extends RecyclerView.Adapter<Sele
             holder.cbSePaReAd.setChecked(false);        // CheckBox выбор
             holder.tvNameSePaReAd.setText(name);        // имя user
             holder.tvLoginSePaReAd.setText(login);      // логин user
-            holder.tvCitySePaReAd.setText(city_id);  // город user
         }else {
             //setVisibility(GONE) отключаем ненужные элементы для просмотра
             holder.cbSePaReAd.setVisibility(GONE);
             holder.tvNameSePaReAd.setVisibility(GONE);
             holder.tvLoginSePaReAd.setVisibility(GONE);
-            holder.tvCitySePaReAd.setVisibility(GONE);
         }//if-else
 
         //слушатель событий при нажатии на CheckBox
@@ -87,7 +84,7 @@ public class SelectParticipantsRecyclerAdapter extends RecyclerView.Adapter<Sele
     //отдельного пункта списка
     public class ViewHolder extends RecyclerView.ViewHolder {
         final CheckBox cbSePaReAd;
-        final TextView tvNameSePaReAd, tvLoginSePaReAd, tvCitySePaReAd;
+        final TextView tvNameSePaReAd, tvLoginSePaReAd;
 
         ViewHolder(View view){
             super(view);
@@ -95,7 +92,6 @@ public class SelectParticipantsRecyclerAdapter extends RecyclerView.Adapter<Sele
             cbSePaReAd = (CheckBox) view.findViewById(R.id.cbSePaReAd);
             tvNameSePaReAd = (TextView) view.findViewById(R.id.tvNameSePaReAd);
             tvLoginSePaReAd = (TextView) view.findViewById(R.id.tvLoginSePaReAd);
-            tvCitySePaReAd = (TextView) view.findViewById(R.id.tvCitySePaReAd);
         } // ViewHolder
     } // class ViewHolder
 }//SelectParticipantsRecyclerAdapter

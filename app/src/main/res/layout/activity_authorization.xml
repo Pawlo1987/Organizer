@@ -23,18 +23,19 @@
                 android:id="@+id/tvLogIn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:padding="20dp"
+                android:layout_margin="20dp"
+                android:fontFamily="@font/delius_swash_caps"
                 android:text="@string/tvLogIn"
                 android:textAlignment="center"
                 android:textColor="@android:color/black"
-                android:textSize="30sp" />
+                android:textSize="30sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -53,9 +54,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
-                            android:maxLength="50"
                             android:hint="@string/etLogin"
                             android:inputType="textEmailAddress"
+                            android:maxLength="50"
                             android:textSize="24sp" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -79,8 +80,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
-                            android:maxLength="10"
                             android:hint="@string/etPassword"
+                            android:maxLength="10"
                             android:textSize="24sp" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -90,7 +91,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="20" />
+                        android:layout_weight="8" />
 
                 </LinearLayout>
 

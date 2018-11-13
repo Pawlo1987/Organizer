@@ -131,6 +131,7 @@ public class EditNewsNoteActivity extends AppCompatActivity implements Advertisi
         // Handle item selection
         switch (item.getItemId()) {
             case android.R.id.home:
+                setResult(RESULT_CANCELED);
                 onBackPressed();
                 return true;
             default:
@@ -210,17 +211,8 @@ public class EditNewsNoteActivity extends AppCompatActivity implements Advertisi
             case R.id.btnConfirmEdNeNoAc:            //кнопка подтвердить выбор
                 confirmSelect();
                 break;
-            case R.id.btnCancelEdNeNoAc:             //кнопка отменить выбор
-                cancelSelect();
-                break;
         }//switch
     }//onClick
-
-    //возврат к предедыщему меню
-    private void cancelSelect() {
-        setResult(RESULT_CANCELED);
-        finish();
-    }//cancelSelect
 
     //сохранить и передать выборанных игроков
     private void confirmSelect() {

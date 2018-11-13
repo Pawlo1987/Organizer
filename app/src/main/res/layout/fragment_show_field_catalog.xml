@@ -4,15 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/crop"
     android:orientation="vertical"
     tools:context="com.example.user.organizer.fragment.ShowAllEventsFragment">
+
+    <TextView
+        android:id="@+id/tvHeadShFiCaFr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:fontFamily="@font/delius_swash_caps"
+        android:text="@string/tvHeadShFiCaFr"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/btnMapShFiCaFr"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:onClick="onClickShFiCaFr"
         android:text="Поля на карте"
         tools:ignore="OnClick" />
@@ -21,6 +34,8 @@
         android:id="@+id/rvMainShFiCaFr"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
         app:layoutManager="LinearLayoutManager" />
 
 </LinearLayout>

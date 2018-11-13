@@ -9,6 +9,18 @@
     android:focusableInTouchMode="true"
     tools:context="com.example.user.organizer.fragment.SettingsFragment">
 
+    <TextView
+        android:id="@+id/tvHeadSeFr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:fontFamily="@font/delius_swash_caps"
+        android:text="@string/tvHeadSeFr"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

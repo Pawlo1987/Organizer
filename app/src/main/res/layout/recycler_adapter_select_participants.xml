@@ -18,19 +18,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textAlignment="center" />
 
     <TextView
         android:id="@+id/tvLoginSePaReAd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textAlignment="center" />
 
-    <TextView
-        android:id="@+id/tvCitySePaReAd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="TextView" />
 </LinearLayout>

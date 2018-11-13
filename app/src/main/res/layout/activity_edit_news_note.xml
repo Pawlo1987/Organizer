@@ -23,11 +23,13 @@
                 android:id="@+id/tvNewNoteEdNeNoAc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="20dp"
+                android:fontFamily="@font/delius_swash_caps"
                 android:text="@string/tvNewNoteEdNeNoAc"
                 android:textAlignment="center"
-                android:textColor="@android:color/background_dark"
-                android:textSize="30sp" />
+                android:textColor="@android:color/black"
+                android:textSize="30sp"
+                android:textStyle="bold"/>
 
             <Button
                 android:id="@+id/btnDeleteEdNeNoAc"
@@ -42,6 +44,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="30dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -75,7 +80,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -97,37 +105,39 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvHeadEdNeNoAc"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:layout_weight="1"
-                android:text="@string/tvHeadCrNeNoAc"
-                android:textAlignment="center"
-                android:textSize="18sp"
-                tools:ignore="DuplicateIds" />
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="10dp">
 
-            <EditText
-                android:id="@+id/etHeadEdNeNoAc"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="20dp"
-                android:gravity="top|left"
-                android:inputType="textMultiLine" />
+                <EditText
+                    android:id="@+id/etHeadEdNeNoAc"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="top|left"
+                    android:hint="@string/etHeadCrNeNoAcHint"
+                    android:inputType="textMultiLine" />
+
+            </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.0000001"
+                    android:layout_weight="1"
                     android:text="параметры шрифта"
                     android:textSize="18sp" />
 
@@ -135,38 +145,42 @@
                     android:id="@+id/spSize"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="200" />
+                    android:layout_weight="1" />
 
                 <Spinner
                     android:id="@+id/spStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="200" />
+                    android:layout_weight="1" />
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvMessEdNeNoAc"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="3"
-                android:text="@string/tvMessCrNeNoAc"
-                android:textAlignment="center"
-                android:textSize="18sp" />
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="10dp">
 
-            <EditText
-                android:id="@+id/etMessEdNeNoAc"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="20dp"
-                android:layout_weight="1"
-                android:gravity="top|left"
-                android:inputType="textMultiLine" />
+                <EditText
+                    android:id="@+id/etMessEdNeNoAc"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="top|left"
+                    android:hint="@string/etMessCrNeNoAcHint"
+                    android:inputType="textMultiLine" />
+
+            </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <Button
@@ -177,13 +191,6 @@
                     android:onClick="onClick"
                     android:text="@string/btnConfirmEdNeNoAc" />
 
-                <Button
-                    android:id="@+id/btnCancelEdNeNoAc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:onClick="onClick"
-                    android:text="@string/btnCancelCrNeNoAc" />
             </LinearLayout>
 
         </LinearLayout>

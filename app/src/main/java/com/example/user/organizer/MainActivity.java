@@ -3,6 +3,7 @@ package com.example.user.organizer;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import android.support.design.widget.Snackbar;
@@ -35,8 +36,13 @@ public class MainActivity extends AppCompatActivity {
         if (getIntent().getBooleanExtra("finish", false)) finish();
         setContentView(R.layout.activity_main);
 
+        //https://stackoverflow.com/questions/8438943/how-to-find-view-from-string-instead-of-r-id
+        //определение ресурса через стринг и привязка к разметке
+        Resources res = getResources();
+        int idRes = res.getIdentifier("btnAuthorizationMaAc", "id", this.getPackageName());
+        btnAuthorizationMaAc = (Button) findViewById(idRes);
+
         btnCheckConMaAc = (Button) findViewById(R.id.btnCheckConMaAc);
-        btnAuthorizationMaAc = (Button) findViewById(R.id.btnAuthorizationMaAc);
         dbUtilities = new DBUtilities(this);
         dbLocalUtilities = new DBLocalUtilities(this);
         dbLocalUtilities.open();

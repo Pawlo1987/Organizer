@@ -22,8 +22,9 @@
             android:id="@+id/spCityMain"
             style="@style/Platform.Widget.AppCompat.Spinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@android:color/holo_green_dark"
             android:textAlignment="center" />
 
     </android.support.design.widget.AppBarLayout>

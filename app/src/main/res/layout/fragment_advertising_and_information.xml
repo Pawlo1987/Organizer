@@ -12,10 +12,13 @@
         android:id="@+id/tvHeadAdAnInAc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:fontFamily="@font/delius_swash_caps"
         android:text="@string/tvHeadAdAnInAc"
         android:textAlignment="center"
-        android:textColor="@android:color/background_dark"
-        android:textSize="24sp" />
+        android:textColor="@android:color/black"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"

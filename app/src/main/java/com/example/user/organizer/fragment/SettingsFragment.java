@@ -40,7 +40,7 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 //-----------Фрагмент вызова настроек--------------------------
-public class SettingsFragment extends Fragment implements SettingsInterface, View.OnFocusChangeListener{
+public class SettingsFragment extends Fragment implements SettingsInterface{
 
     View view;
     // коды для идентификации активностей при получении результата
@@ -65,7 +65,6 @@ public class SettingsFragment extends Fragment implements SettingsInterface, Vie
     EditText etChangeEmailSeFr;     //поле ввода нового имейла
     EditText etChangePhoneSeFr;     //поле ввода нового номера телефона
     Spinner spChangeCitySeFr;      //spinner для нового города пользователя
-    TextInputLayout etChangePhoneSeFrLayout;
 
     List<String> spListCity;             // Данные для спинера выбора города
 
@@ -145,7 +144,6 @@ public class SettingsFragment extends Fragment implements SettingsInterface, Vie
         etChangePhoneSeFr.setText(user.getPhone());
         // привязка поля ввода нового города пользователя
         spChangeCitySeFr = view.findViewById(R.id.spChangeCitySeFr);
-        etChangePhoneSeFrLayout = (TextInputLayout) view.findViewById(R.id.etChangePhoneSeFrLayout);
 
         //фильтр для пароля
         etChangePasSeFr.addTextChangedListener(new TextWatcher() {
@@ -411,14 +409,4 @@ public class SettingsFragment extends Fragment implements SettingsInterface, Vie
                 getSupportFragmentManager(), ID_DELETE_PROFILE_DIALOG);
     }//callDialogDeleteProfile
 
-    //проверка ввода номера телефона
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-        if (v != etChangePhoneSeFr && etChangePhoneSeFr.getText().toString().isEmpty()) {
-            etChangePhoneSeFrLayout.setErrorEnabled(true);
-            etChangePhoneSeFrLayout.setError(getResources().getString(R.string.error_enter_phone));
-        } else {
-            etChangePhoneSeFrLayout.setErrorEnabled(false);
-        }
-    }//onFocusChange
 }//SettingsFragment

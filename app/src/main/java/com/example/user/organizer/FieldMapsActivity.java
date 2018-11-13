@@ -11,6 +11,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import android.support.v7.app.ActionBar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -49,6 +51,7 @@ public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCal
     int mapStatus;                  //статус для работы с картой(0-просмотр полей, 1-создание нового поля)
     Marker selectMarker;
 
+//    ActionBar actionBar;                //стрелка НАЗАД
     Location location;              //переменая для хранения данных о локации
 
     private GoogleMap mMap;
@@ -61,6 +64,12 @@ public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCal
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+//        //добавляем actionBar (стрелка сверху слева)
+//        actionBar = getSupportActionBar();
+//        actionBar.setHomeButtonEnabled(true);
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+
         dbUtilities = new DBUtilities(context);
         spListField = new ArrayList<>();
         spListCity = new ArrayList<>();
@@ -129,6 +138,19 @@ public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCal
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
     }//onCreate
 
+//    //обработчик actionBar (стрелка сверху слева)
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle item selection
+//        switch (item.getItemId()) {
+//            case android.R.id.home:
+//                onBackPressed();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }//switch
+//    }//onOptionsItemSelected
+
     //строим Spinner
     private ArrayAdapter buildSpinnerStr(List<String> list) {
 
@@ -158,8 +180,10 @@ public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCal
             mMap.addMarker(new MarkerOptions().position(latLng).title(field.name));
         }//foreach
 
-        //создание начального пустого маркера
-        selectMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(1,1)).title("Новое поле"));
+        if(mapStatus == 1) {
+            //создание начального пустого маркера
+            selectMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(1, 1)).title("Новое поле"));
+        }//if
 
         //кнопка для посика моей геопозиции
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -171,7 +195,7 @@ public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCal
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
             return;
-        }
+        }//if
         mMap.setMyLocationEnabled(true);
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -181,8 +205,10 @@ public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCal
                 myLongitude = latLng.longitude;
                 tvGeoLat.setText(String.valueOf(latLng.latitude));
                 tvGeoLong.setText(String.valueOf(latLng.longitude));
-                selectMarker.remove();
-                selectMarker = mMap.addMarker(new MarkerOptions().position(latLng).title("Новое поле"));
+                if(mapStatus == 1) {
+                    selectMarker.remove();
+                    selectMarker = mMap.addMarker(new MarkerOptions().position(latLng).title("Новое поле"));
+                }//if
             }//onMapClick
         });//setOnMapClickListener
     }//onMapReady

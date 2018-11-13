@@ -2,11 +2,13 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -34,6 +36,8 @@ public class SelectParticipantsActivity extends AppCompatActivity {
 
     Context context;
     String idAuthUser;                  //id Авторизированого пользователя
+    ActionBar actionBar;                //стрелка НАЗАД
+
 
     List<String> spListCity;            // Данные для спинера выбора города
     int spListCitySize;                 //разме листа (количество городов + 1(ВСЕ ГОРОДА))
@@ -44,6 +48,12 @@ public class SelectParticipantsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_participants);
+
+        //добавляем actionBar (стрелка сверху слева)
+        actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         idAuthUser = getIntent().getStringExtra("idAuthUser");
 
         context = getBaseContext();
@@ -109,6 +119,19 @@ public class SelectParticipantsActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
         });
     }//onCreate
+
+    //обработчик actionBar (стрелка сверху слева)
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }//switch
+    }//onOptionsItemSelected
 
     //Строим RecyclerView
     private void buildUserRecyclerView(String cityName, String filter) {

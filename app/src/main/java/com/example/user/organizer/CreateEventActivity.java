@@ -4,10 +4,14 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-//--Активность для создания нового события(переход на активность создание нового поля --------------
+//-- Активность для создания нового события(переход на активность создание нового поля --------------
 //-- или нового города или активность для добавления нового участника в событие)-------
 
 public class CreateEventActivity extends AppCompatActivity {
@@ -37,6 +41,8 @@ public class CreateEventActivity extends AppCompatActivity {
 
     DBUtilities dbUtilities;
     Context context;
+
+    ActionBar actionBar;                //стрелка НАЗАД
 
     String idAuthUser;                  //id Авторизированого пользователя
 
@@ -67,6 +73,11 @@ public class CreateEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
         idAuthUser = getIntent().getStringExtra("idAuthUser");
+
+        //добавляем actionBar (стрелка сверху слева)
+        actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         //привязка ресурсов к объектам
         tvDateCrEv = (TextView) findViewById(R.id.tvDateCrEv);
@@ -119,8 +130,21 @@ public class CreateEventActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
 
             }//onNothingSelected
-        });
+        });//setOnItemSelectedListener
     }//onCreate
+
+    //обработчик actionBar (стрелка сверху слева)
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }//switch
+    }//onOptionsItemSelected
 
     //строим Spinner
     private ArrayAdapter buildSpinnerStr(List<String> list) {

@@ -2,8 +2,10 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -19,6 +21,7 @@ public class CreateCityActivity extends AppCompatActivity {
     DBUtilities dbUtilities;
     Context context;
     List<String> spListRegion;            // Данные для спинера выбора региона
+    ActionBar actionBar;                //стрелка НАЗАД
 
     EditText etCityNameCrCi;
     Spinner spRegionCrCi;                     //объект спинер
@@ -28,6 +31,11 @@ public class CreateCityActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_city);
+
+        //добавляем actionBar (стрелка сверху слева)
+        actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         //привязка ресурсов к объектам
         etCityNameCrCi = (EditText) findViewById(R.id.etCityNameCrCi);
@@ -54,6 +62,19 @@ public class CreateCityActivity extends AppCompatActivity {
 
         spRegionCrCi.setAdapter(spAdapterRegion);
     }//onCreate
+
+    //обработчик actionBar (стрелка сверху слева)
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }//switch
+    }//onOptionsItemSelected
 
     //обработчик неажатия клавишы Создать запись пользователя
     public void createNewCity() {

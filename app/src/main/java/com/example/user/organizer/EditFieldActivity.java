@@ -2,8 +2,10 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -31,6 +33,7 @@ public class EditFieldActivity extends AppCompatActivity {
 
     String idAuthUser;      // id авторизированого пользователя
     String field_id;        // id редактируемого поля
+    ActionBar actionBar;                //стрелка НАЗАД
 
     EditText etNameCrFi;
     EditText etGeolatCrFi;
@@ -54,6 +57,11 @@ public class EditFieldActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_field);
+
+        //добавляем actionBar (стрелка сверху слева)
+        actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         context = getBaseContext();
         dbUtilities = new DBUtilities(context);
@@ -157,6 +165,19 @@ public class EditFieldActivity extends AppCompatActivity {
             });//setOnCheckedChangeListener
         }//if
     }//onCreate
+
+    //обработчик actionBar (стрелка сверху слева)
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }//switch
+    }//onOptionsItemSelected
 
     //-----------------------Метод для приема результатов из активностей----------------------------
     @Override

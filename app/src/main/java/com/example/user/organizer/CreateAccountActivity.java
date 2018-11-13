@@ -2,9 +2,11 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -23,6 +25,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     DBUtilities dbUtilities;
     Context context;
     List<String> spListCity;            // Данные для спинера выбора города
+    ActionBar actionBar;                //стрелка НАЗАД
 
     EditText etNameCrAcAc;
     EditText etLoginCrAcAc;
@@ -38,6 +41,11 @@ public class CreateAccountActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
+
+        //добавляем actionBar (стрелка сверху слева)
+        actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         //привязка ресурсов к объектам
         etNameCrAcAc = (EditText) findViewById(R.id.etNameCrAcAc);
@@ -69,6 +77,19 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         spDefCityCrAcAc.setAdapter(spAdapterCity);
     }//onCreate
+
+    //обработчик actionBar (стрелка сверху слева)
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }//switch
+    }//onOptionsItemSelected
 
     //обработчик нажатия клавишы Создать запись пользователя
     public void createNewAccount() {

@@ -3,9 +3,11 @@ package com.example.user.organizer;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -35,6 +37,7 @@ public class CreateFieldActivity extends AppCompatActivity {
     List<String> spListCoating;         // Данные для спинера выбора покрытие
 
     String idAuthUser;      // id авторизированого пользователя
+    ActionBar actionBar;                //стрелка НАЗАД
 
     EditText etNameCrFi;
     EditText etGeolatCrFi;
@@ -58,6 +61,11 @@ public class CreateFieldActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_field);
+
+        //добавляем actionBar (стрелка сверху слева)
+        actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         idAuthUser = getIntent().getStringExtra("idAuthUser");
 
@@ -152,6 +160,19 @@ public class CreateFieldActivity extends AppCompatActivity {
             });//setOnCheckedChangeListener
         }//if
     }//onCreate
+
+    //обработчик actionBar (стрелка сверху слева)
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }//switch
+    }//onOptionsItemSelected
 
     //-----------------------Метод для приема результатов из активностей----------------------------
     @Override

@@ -2,8 +2,10 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -26,6 +28,7 @@ public class CreateNewsNoteActivity extends AppCompatActivity {
 
     Calendar calendar = Calendar.getInstance();      // объект для работы с датой и временем
     String date;                                 // назначения дата записи
+    ActionBar actionBar;                //стрелка НАЗАД
 
     TextView tvDateCrNeNoAc;            // TextView для вывода даты
     EditText etHeadCrNeNoAc;            // EditText для заголовока
@@ -38,6 +41,12 @@ public class CreateNewsNoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_news_note);
+
+        //добавляем actionBar (стрелка сверху слева)
+        actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         idAuthUser = getIntent().getStringExtra("idAuthUser");
 
         context = getBaseContext();
@@ -53,6 +62,19 @@ public class CreateNewsNoteActivity extends AppCompatActivity {
         buildCitySpinner();     //строим Spinner City
 
     }//onCreate
+
+    //обработчик actionBar (стрелка сверху слева)
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }//switch
+    }//onOptionsItemSelected
 
     //строим Spinner City
     private void buildCitySpinner() {

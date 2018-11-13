@@ -118,7 +118,7 @@ public class CreateNewsNoteActivity extends AppCompatActivity {
     // установка даты записи
     private void setInitialDate() {
         //задаем дату в нужном формате для БД
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         date = simpleDateFormat.format(calendar.getTimeInMillis());
 
         //установка текста в TextView

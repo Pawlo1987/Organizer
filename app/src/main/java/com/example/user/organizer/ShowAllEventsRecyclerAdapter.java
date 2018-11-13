@@ -1,20 +1,15 @@
 package com.example.user.organizer;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -23,7 +18,11 @@ import android.widget.TextView;
 import com.example.user.organizer.fragment.AboutEventShowAllEventDialog;
 import com.example.user.organizer.fragment.TakePartShowAllEventDialog;
 
+import java.text.DateFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -42,7 +41,8 @@ public class ShowAllEventsRecyclerAdapter extends
     String eventId;
     String eventCityName;
     String eventFieldName;
-    String eventData;
+    String showEventDate;
+    String eventDate;
     String eventTime;
     String eventDuration;
     String eventPrice;
@@ -83,7 +83,7 @@ public class ShowAllEventsRecyclerAdapter extends
         // получение данных
         holder.tvCityShAlEvReAd.setText(eventShow.cityName); //город
         holder.tvFieldShAlEvReAd.setText(eventShow.fieldName);//поле
-        holder.tvDateShAlEvReAd.setText(eventShow.eventData); // Дата
+        holder.tvDateShAlEvReAd.setText(dateShowFormat(eventShow.eventData)); // Дата
         holder.tvTimeShAlEvReAd.setText(eventShow.eventTime); //Время
     } // onBindViewHolder
 
@@ -156,7 +156,8 @@ public class ShowAllEventsRecyclerAdapter extends
                     eventId = event.eventId;
                     eventCityName = event.cityName;
                     eventFieldName = event.fieldName;
-                    eventData = event.eventData;
+                    eventDate = event.eventData;
+                    showEventDate = dateShowFormat(eventDate);
                     eventTime = event.eventTime;
                     eventDuration = event.eventDuration;
                     eventPrice = event.eventPrice;
@@ -185,7 +186,8 @@ public class ShowAllEventsRecyclerAdapter extends
                     eventId = event.eventId;
                     eventCityName = event.cityName;
                     eventFieldName = event.fieldName;
-                    eventData = event.eventData;
+                    eventDate = event.eventData;
+                    showEventDate = dateShowFormat(eventDate);
                     eventTime = event.eventTime;
                     eventDuration = event.eventDuration;
                     eventPrice = event.eventPrice;
@@ -262,12 +264,37 @@ public class ShowAllEventsRecyclerAdapter extends
                             "Телефон %s",
                     eventCityName,
                     eventFieldName,
-                    eventData,
+                    eventDate,
                     eventTime,
                     eventDuration,
                     eventPrice,
                     eventPhone);
         }//fullInfoAboutEvent
     } // class ViewHolder
+
+    //приведение даты в формат вывода
+    private String dateShowFormat(String eventDate) {
+
+        //преобразуем StringToDate
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try { date = simpleDateFormat.parse(eventDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }//try-catch
+        //преобразуем DateToString в читабельный формат
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM YYYY", myDateFormatSymbols );
+        return  dateFormat.format(date);
+    } // dateShowFormat
+
+    //вспомагательный объект для формирования даты
+    private DateFormatSymbols myDateFormatSymbols = new DateFormatSymbols() {
+
+        @Override
+        public String[] getMonths() {
+            return new String[]{"января", "февраля", "марта", "апреля", "мая", "июня",
+                    "июля", "августа", "сентября", "октября", "ноября", "декабря"};
+        }
+    };//DateFormatSymbols
 
 }//ShowAllEventsRecyclerAdapter

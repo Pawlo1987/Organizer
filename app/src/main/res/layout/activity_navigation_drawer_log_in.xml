@@ -8,7 +8,7 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <!-- Разметка верхнего бара для меню-->
+        <!-- Разметка верхнего бара для меню-->
     <include
         layout="@layout/app_bar_navigation_drawer_log_in"
         android:layout_width="match_parent"

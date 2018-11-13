@@ -63,10 +63,10 @@ public class ShowAllEventsFragment extends Fragment {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
 
-        DividerItemDecoration itemDecoration = new DividerItemDecoration(context, layoutManager.getOrientation());
-        rvMainShAlEvAc.setHasFixedSize(true);
-        rvMainShAlEvAc.setLayoutManager(layoutManager);
-        rvMainShAlEvAc.addItemDecoration(itemDecoration);
+//        DividerItemDecoration itemDecoration = new DividerItemDecoration(context, layoutManager.getOrientation());
+//        rvMainShAlEvAc.setHasFixedSize(true);
+//        rvMainShAlEvAc.setLayoutManager(layoutManager);
+//        rvMainShAlEvAc.addItemDecoration(itemDecoration);
 
         //привязываем адаптер к recycler объекту
         rvMainShAlEvAc.setAdapter(showAllEventsRecyclerAdapter);

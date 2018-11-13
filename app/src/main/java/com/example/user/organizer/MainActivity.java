@@ -7,7 +7,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -53,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
     public void onClick(View view) {
         if (!dbUtilities.isConnection()) {
 //            Toast.makeText(this, "Проблема с подключением к Базе Данных!", Toast.LENGTH_LONG).show();
-            Snackbar.make(view, "\t\t\t\t\t\t\t\t\t\tБАЗА ДАННЫХ НЕ ОТВЕЧАЕТ!", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+//            Snackbar.make(view, "\t\t\t\t\t\t\t\t\t\tБАЗА ДАННЫХ НЕ ОТВЕЧАЕТ!", Snackbar.LENGTH_LONG)
+//                    .setAction("Action", null).show();
         }else{
             btnCheckConMaAc.setEnabled(false);
             Intent intent = new Intent(this, AuthorizationActivity.class);

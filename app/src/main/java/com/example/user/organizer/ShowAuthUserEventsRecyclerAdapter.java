@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -17,7 +18,11 @@ import com.example.user.organizer.fragment.AboutEventShowAllEventDialog;
 import com.example.user.organizer.fragment.DeleteEventDialog;
 import com.example.user.organizer.fragment.LeaveEventDialog;
 
+import java.text.DateFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 //-------Адаптера для вывода(просмотра) событий авторизированого пользователя--------------
@@ -34,6 +39,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
     String eventId;
     String eventCityName;
     String eventFieldName;
+    String showEventDate;
     String eventDate;
     String eventTime;
     String eventDuration;
@@ -85,7 +91,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         // получение данных
         holder.tvCityShAuUsEvReAd.setText(eventShow.cityName); //город
         holder.tvFieldShAuUsEvReAd.setText(eventShow.fieldName);//поле
-        holder.tvDateShAuUsEvReAd.setText(eventShow.eventData); // Дата
+        holder.tvDateShAuUsEvReAd.setText(dateShowFormat(eventShow.eventData)); // Дата
         holder.tvTimeShAuUsEvReAd.setText(eventShow.eventTime); //Время
         holder.tvStatusShAuUsEvReAd.setText(
                 (eventShow.eventUserStatus.equals("0"))?"Участник":"Организатор"
@@ -132,6 +138,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
                     eventCityName = event.cityName;
                     eventFieldName = event.fieldName;
                     eventDate = event.eventData;
+                    showEventDate = dateShowFormat(eventDate);
                     eventTime = event.eventTime;
                     eventDuration = event.eventDuration;
                     eventPrice = event.eventPrice;
@@ -168,7 +175,6 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         //подробная информация
         private void aboutEvent() {
             String message = fullInfoAboutEvent();
-            Log.d("MyLog", message);
             Bundle args = new Bundle();    // объект для передачи параметров в диалог
             args.putString("message", message);
             aboutEventShowAllEventDialog.setArguments(args);
@@ -197,7 +203,6 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         // Удалить событие
         private void deleteEvent() {
             String message = fullInfoAboutEvent();
-            Log.d("MyLog", message);
             Bundle args = new Bundle();    // объект для передачи параметров в диалог
             args.putString("message", message);
             args.putString("event_id", eventId);
@@ -211,7 +216,6 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         //покинуть событие
         private void leaveEvent() {
             String message = fullInfoAboutEvent();
-            Log.d("MyLog", message);
             Bundle args = new Bundle();    // объект для передачи параметров в диалог
             args.putString("message", message);
             args.putString("event_id", eventId);
@@ -237,7 +241,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
                             "Телефон %s",
                     eventCityName,
                     eventFieldName,
-                    eventDate,
+                    showEventDate,
                     eventTime,
                     eventDuration,
                     eventPrice,
@@ -245,5 +249,30 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         }//fullInfoAboutEvent
 
     } // class ViewHolder
+
+    //приведение даты в формат вывода
+    private String dateShowFormat(String eventDate) {
+
+        //преобразуем StringToDate
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try { date = simpleDateFormat.parse(eventDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }//try-catch
+        //преобразуем DateToString в читабельный формат
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM YYYY", myDateFormatSymbols );
+        return  dateFormat.format(date);
+    } // dateShowFormat
+
+    //вспомагательный объект для формирования даты
+    private DateFormatSymbols myDateFormatSymbols = new DateFormatSymbols() {
+
+        @Override
+        public String[] getMonths() {
+            return new String[]{"января", "февраля", "марта", "апреля", "мая", "июня",
+                    "июля", "августа", "сентября", "октября", "ноября", "декабря"};
+        }
+    };//DateFormatSymbols
 
 }//ShowAuthUserEventsRecyclerAdapter

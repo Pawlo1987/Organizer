@@ -190,7 +190,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
         //установка текста в TextView
         //задаем дату в нужном формате для БД
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         eventDateForDB = simpleDateFormat.format(calendar.getTimeInMillis());
 
         //установка текста в TextView

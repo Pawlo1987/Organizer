@@ -139,5 +139,8 @@
     <string name="btnChangeCitySeFr">Изменить город пользователя</string>
     <string name="btnDeleteProfileSeFr">Удалить аккаунт</string>
     <string name="btnSelectLogoNoNeNoAc">Выбрать логотип поста</string>
+    <string name="tvNewNoteEdNeNoAc">Редактируем запись</string>
+    <string name="btnConfirmEdNeNoAc">Принять</string>
+    <string name="btnDeleteEdNeNoAc">Удалить пост</string>
 
 </resources>

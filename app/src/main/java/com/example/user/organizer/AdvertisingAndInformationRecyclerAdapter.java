@@ -2,6 +2,7 @@ package com.example.user.organizer;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
@@ -125,6 +126,9 @@ public class AdvertisingAndInformationRecyclerAdapter extends RecyclerView.Adapt
     } // class ViewHolder
 
     private void editAdvertising(Note note) {
-
+        Intent intent = new Intent(context, EditNewsNoteActivity.class);
+        intent.putExtra("idAuthUser", idAuthUser);
+        intent.putExtra("note", note);
+        context.startActivity(intent);
     }//editAdvertising
 }//advertisingAndInformationRecyclerAdapter

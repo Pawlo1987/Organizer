@@ -176,7 +176,6 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
 
             case "getAllNotes":
                 try {
-
                     // формируем строку для отправки на сервер
                     String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8");
 
@@ -403,6 +402,37 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> implements
                             + "&" + URLEncoder.encode("geo_lat", "utf8") + "=" + URLEncoder.encode(geo_lat, "utf8")
                             + "&" + URLEncoder.encode("address", "utf8") + "=" + URLEncoder.encode(address, "utf8")
                             + "&" + URLEncoder.encode("user_id", "utf8") + "=" + URLEncoder.encode(user_id, "utf8");
+
+                    return workWithServer(postData);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return "IO:" + e.getMessage();
+                } // try-catch
+
+            case "updateNotesTable":
+                try {
+                    // параметры для передачи на сервер (для обновления записи таблицы поля по id)
+                    String id = params[1];
+                    String logo = params[2];
+                    String head = params[3];
+                    String user_id = params[4];
+                    String date = params[5];
+                    String city_id = params[6];
+                    String message = params[7];
+                    String tsizemessage = params[8];
+                    String tstylemessage = params[9];
+
+                    // формируем строку для отправки на сервер
+                    String postData = URLEncoder.encode("operation", "utf8") + "=" + URLEncoder.encode(operation, "utf8")
+                            + "&" + URLEncoder.encode("id", "utf8") + "=" + URLEncoder.encode(id, "utf8")
+                            + "&" + URLEncoder.encode("logo", "utf8") + "=" + URLEncoder.encode(logo, "utf8")
+                            + "&" + URLEncoder.encode("head", "utf8") + "=" + URLEncoder.encode(head, "utf8")
+                            + "&" + URLEncoder.encode("user_id", "utf8") + "=" + URLEncoder.encode(user_id, "utf8")
+                            + "&" + URLEncoder.encode("date", "utf8") + "=" + URLEncoder.encode(date, "utf8")
+                            + "&" + URLEncoder.encode("city_id", "utf8") + "=" + URLEncoder.encode(city_id, "utf8")
+                            + "&" + URLEncoder.encode("message", "utf8") + "=" + URLEncoder.encode(message, "utf8")
+                            + "&" + URLEncoder.encode("tsizemessage", "utf8") + "=" + URLEncoder.encode(tsizemessage, "utf8")
+                            + "&" + URLEncoder.encode("tstylemessage", "utf8") + "=" + URLEncoder.encode(tstylemessage, "utf8");
 
                     return workWithServer(postData);
                 } catch (IOException e) {

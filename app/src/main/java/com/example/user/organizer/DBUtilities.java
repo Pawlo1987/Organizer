@@ -179,6 +179,9 @@ public class DBUtilities{
 
             if(jResult.getString("error").toString().equals("")){
 
+                JSONObject jListId = jResult.getJSONObject("id");
+                List<String> idList = getListFromJSON(jListId);
+
                 JSONObject jListLogo = jResult.getJSONObject("logo");
                 List<String> logoList = getListFromJSON(jListLogo);
 
@@ -206,7 +209,8 @@ public class DBUtilities{
                 int n = headList.size();
 
                 for (int i = 0; i <n ; i++) {
-                    notes.add(new Note(logoList.get(i),headList.get(i),userList.get(i),dateList.get(i),
+                    notes.add(new Note(idList.get(i),logoList.get(i),headList.get(i),
+                            userList.get(i),dateList.get(i),
                             cityList.get(i),messList.get(i), tSizeMessageList.get(i),
                             tStyleMessageList.get(i)));
                 }//fori
@@ -446,6 +450,9 @@ public class DBUtilities{
 
             if(jResult.getString("error").toString().equals("")){
 
+                JSONObject jListId = jResult.getJSONObject("id");
+                List<String> idList = getListFromJSON(jListId);
+
                 JSONObject jListLogo = jResult.getJSONObject("logo");
                 List<String> logoList = getListFromJSON(jListLogo);
 
@@ -473,7 +480,8 @@ public class DBUtilities{
                 int n = headList.size();
 
                 for (int i = 0; i <n ; i++) {
-                    notes.add(new Note(logoList.get(i),headList.get(i),userList.get(i),dateList.get(i),
+                    notes.add(new Note(idList.get(i),logoList.get(i),headList.get(i),
+                            userList.get(i),dateList.get(i),
                             cityList.get(i),messList.get(i), tSizeMessageList.get(i),
                             tStyleMessageList.get(i)));
                 }//fori
@@ -1114,6 +1122,29 @@ public class DBUtilities{
         try(BackgroundWorker bg = new BackgroundWorker()){
             bg.execute("updateFieldsTable", id, city_id, name, phone, light_status, coating_id,
                     shower_status, roof_status, geo_long, geo_lat, address, user_id);
+
+            String resultdb = bg.get();
+            JSONObject jResult = new JSONObject(resultdb);
+            if(jResult.getString("error").toString().equals("")){
+                //выводим текст с положительным ответом
+                Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
+            }else{
+                //выводим текст с отрецательным ответом
+                Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
+            }//if-else
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }//try-catch
+    }
+
+    //обновляем запись в таблице "notes" по id
+    public void updateNotesTable(String id, String logo, String head, String user_id, String date,
+                                 String city_id, String message,
+                                 String tsizemessage, String tstylemessage) {
+        try(BackgroundWorker bg = new BackgroundWorker()){
+            bg.execute("updateNotesTable", id,  logo, head, user_id, date, city_id,
+                    message, tsizemessage, tstylemessage);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);

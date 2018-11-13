@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 //----------Объект новостная запись, для упаковки даннных записей--------
 public class Note implements Parcelable{
+    public String noteId;
     public String noteLogo;
     public String noteHead;
     public String noteUserId;
@@ -14,9 +15,10 @@ public class Note implements Parcelable{
     public String noteTextSizeMessage;
     public String noteTextStyleMessage;
 
-    public Note(String noteLogo, String noteHead, String noteUserId, String noteDate,
+    public Note(String noteId, String noteLogo, String noteHead, String noteUserId, String noteDate,
                 String noteCityName, String noteMessage, String noteTextSizeMessage,
                 String noteTextStyleMessage) {
+        this.noteId = noteId;
         this.noteLogo = noteLogo;
         this.noteHead = noteHead;
         this.noteUserId = noteUserId;
@@ -27,8 +29,8 @@ public class Note implements Parcelable{
         this.noteTextStyleMessage = noteTextStyleMessage;
     }
 
-
     protected Note(Parcel in) {
+        noteId = in.readString();
         noteLogo = in.readString();
         noteHead = in.readString();
         noteUserId = in.readString();
@@ -50,6 +52,9 @@ public class Note implements Parcelable{
             return new Note[size];
         }
     };
+
+    public String getNoteId() {return noteId;}
+    public void setNoteId(String noteId) {this.noteId = noteId;}
 
     public String getNoteLogo() {return noteLogo;}
     public void setNoteLogo(String noteLogo) {this.noteLogo = noteLogo;}
@@ -75,7 +80,6 @@ public class Note implements Parcelable{
     public String getNoteTextStyleMessage() {return noteTextStyleMessage;}
     public void setNoteTextStyleMessage(String noteTextStyleMessage) {this.noteTextStyleMessage = noteTextStyleMessage;}
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -83,6 +87,7 @@ public class Note implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(noteId);
         dest.writeString(noteLogo);
         dest.writeString(noteHead);
         dest.writeString(noteUserId);

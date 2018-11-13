@@ -64,8 +64,9 @@
             android:name=".FieldMapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".EditFieldActivity" />
-        <activity android:name=".ShowFieldCatalogBeforeAuthActivity"></activity>
+        <activity android:name=".ShowFieldCatalogBeforeAuthActivity" />
         <activity android:name=".SelectLogoActivity" />
+        <activity android:name=".EditNewsNoteActivity"></activity>
     </application>
 
 </manifest>

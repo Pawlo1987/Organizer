@@ -9,12 +9,12 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="tvCreateAccount">Новый Аккаунт</string>
-    <string name="tvNameCrAcAc">Имя</string>
-    <string name="tvLoginCrAcAc">Логин</string>
-    <string name="tvPasswordCrAcAc">Пароль</string>
-    <string name="tvConfirmPasswordCrAcAc">Потв. пароль</string>
-    <string name="tvEmailCrAcAc">e-mail</string>
+    <string name="tvCreateAccount">New Account</string>
+    <string name="etNameCrAcAcHint">Имя</string>
+    <string name="etLoginCrAcAcHint">Логин</string>
+    <string name="etPasswordCrAcAcHint">Пароль</string>
+    <string name="etConfirmPasswordCrAcAcHint">Потв. пароль</string>
+    <string name="etEmailCrAcAcHint">e-mail</string>
     <string name="tvPhoneCrAcAc">номер телефона</string>
     <string name="tvDefCityCrAcAc">город по умол.</string>
     <string name="btnCreateCrAcAc">Создать</string>
@@ -48,21 +48,21 @@
     <string name="btnAddUserCrEv">Добавить участника</string>
     <string name="tvCityCrEv">Город</string>
     <string name="btnNewCityCrEv">Создать Город</string>
-    <string name="tvCreateCity">Создать город</string>
-    <string name="tvCityNameCrCi">Название</string>
+    <string name="tvCreateCity">New City</string>
+    <string name="etCityNameCrCiHint">Название</string>
     <string name="tvRegionCrCi">Регион</string>
-    <string name="btnCreateCrCi">Создать город</string>
+    <string name="btnCreateCrCi">Создать</string>
     <string name="btnBackCrCi">Отмена</string>
-    <string name="tvCreateField">Создание поля</string>
+    <string name="tvCreateField">New Field</string>
     <string name="tvCityCrFi">Город</string>
     <string name="btnNewCityCrFi">Создать город</string>
-    <string name="tvNameCrFi">Название поля</string>
+    <string name="etNameCrFiHint">Название поля</string>
     <string name="tvLightCrFi">Освещение</string>
     <string name="tvCoatingCrFi">Покрытие</string>
     <string name="tvShowerCrFi">Душ</string>
     <string name="tvRoofCrFi">Крыша</string>
-    <string name="tvGeolatCrFi">Широта</string>
-    <string name="tvAddressCrFi">Адрес</string>
+    <string name="etGeolatCrFiHint">Широта</string>
+    <string name="etAddressCrFiHint">Адрес</string>
     <string name="btnCreateCrFi">Создать</string>
     <string name="btnBackCrFi">Отмена</string>
     <string name="tvCitySePaAc">Город</string>
@@ -112,7 +112,7 @@
     <string name="tvPasswordEdEv">Пароль</string>
     <string name="btnConfirmEdEv">Подтвердить</string>
     <string name="tvPhoneCrFi">Телефон</string>
-    <string name="tvGeolongCrFi">Долгота</string>
+    <string name="etGeolongCrFiHint">Долгота</string>
     <string name="tvFirstLineShFiCaReAd">Город</string>
     <string name="tvSecondLineShFiCaReAd">Назв.</string>
     <string name="tvThirdLineShFiCaReAd">Телефон</string>
@@ -143,10 +143,10 @@
     <string name="btnConfirmEdNeNoAc">Принять</string>
     <string name="btnDeleteEdNeNoAc">Удалить пост</string>
     <string name="create_new_event">Создать событие</string>
-    <string name="hintEtPhone">(XXX)XXX-XX-XX</string>
+    <string name="hintEtPhone">Номер телефона (XXX)XXX-XX-XX</string>
     <string name="error_enter_phone">формат (XXX)XXX-XX-XX</string>
-    <string name="hintEtPhoneCrFi">(XXX)XXX-XX-XX</string>
-    <string name="hintEtChangePhoneSeFr">(XXX)XXX-XX-XX</string>
-    <string name="hintEtPhoneCrAcAc">(XXX)XXX-XX-XX</string>
+    <string name="hintEtPhoneCrFi">Номер телефона (XXX)XXX-XX-XX</string>
+    <string name="hintEtChangePhoneSeFr">Номер телефона (XXX)XXX-XX-XX</string>
+    <string name="hintEtPhoneCrAcAc">Номер телефона (XXX)XXX-XX-XX</string>
 
 </resources>

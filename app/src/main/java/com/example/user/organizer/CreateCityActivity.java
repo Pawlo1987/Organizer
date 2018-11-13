@@ -92,20 +92,7 @@ public class CreateCityActivity extends AppCompatActivity {
         }//if (etCityNameCrCi.getText().toString().equals(""))
     }//CreateNewAccount
 
-    //вернутся в активность авторизации
-    private void turnBack() {
-        Intent intent = new Intent(this, CreateEventActivity.class);
-        startActivity(intent);
-    }//turnBack
-
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btnCreateCrCi:            //выполнить операцию
-                createNewCity();
-                break;
-            case R.id.btnBackCrCi:               //отменить операцию
-                turnBack();
-                break;
-        }//switch
+        createNewCity();
     }//onClick
 }//CreateCityActivity

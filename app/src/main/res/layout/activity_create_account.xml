@@ -24,160 +24,122 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
+                android:fontFamily="@font/delius_swash_caps"
                 android:text="@string/tvCreateAccount"
                 android:textAlignment="center"
                 android:textColor="@android:color/black"
-                android:textSize="24sp" />
+                android:textSize="30sp"
+                android:textStyle="bold" />
 
-            <LinearLayout
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tvNameCrAcAc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/tvNameCrAcAc"
-                    android:textSize="24sp" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_weight="1">
 
                 <EditText
                     android:id="@+id/etNameCrAcAc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:hint="@string/etNameCrAcAcHint"
                     android:inputType="textPersonName" />
 
-            </LinearLayout>
+            </android.support.design.widget.TextInputLayout>
 
-            <LinearLayout
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tvLoginCrAcAc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/tvLoginCrAcAc"
-                    android:textSize="24sp" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_weight="1">
 
                 <EditText
                     android:id="@+id/etLoginCrAcAc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:hint="@string/etLoginCrAcAcHint"
                     android:inputType="textPersonName" />
 
-            </LinearLayout>
+            </android.support.design.widget.TextInputLayout>
 
-            <LinearLayout
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tvPasswordCrAcAc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/tvPasswordCrAcAc"
-                    android:textSize="24sp" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_weight="1">
 
                 <EditText
                     android:id="@+id/etPasswordCrAcAc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tvConfirmPasswordCrAcAC"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/tvConfirmPasswordCrAcAc"
-                    android:textSize="24sp" />
+                    android:hint="@string/etPasswordCrAcAcHint" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_weight="1">
 
                 <EditText
                     android:id="@+id/etConfirmPasswordCrAcAc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tvEmailCrAcAc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/tvEmailCrAcAc"
-                    android:textSize="24sp" />
+                    android:hint="@string/etConfirmPasswordCrAcAcHint" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_weight="1">
 
                 <EditText
                     android:id="@+id/etEmailCrAcAc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:hint="@string/etEmailCrAcAcHint"
                     android:inputType="textEmailAddress" />
 
-            </LinearLayout>
+            </android.support.design.widget.TextInputLayout>
 
-            <LinearLayout
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/etPhoneCrAcAcLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
                 android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:layout_weight="1">
 
-                <TextView
-                    android:id="@+id/tvPhoneCrAcAc"
+                <EditText
+                    android:id="@+id/etPhoneCrAcAc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/tvPhoneCrAcAc"
-                    android:textSize="24sp" />
+                    android:hint="@string/hintEtPhoneCrAcAc"
+                    android:inputType="number|phone"
+                    android:maxLength="10" />
 
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/etPhoneCrAcAcLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_weight="1">
-
-                    <EditText
-                        android:id="@+id/etPhoneCrAcAc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_weight="1"
-                        android:hint="@string/hintEtPhoneCrAcAc"
-                        android:inputType="number|phone"
-                        android:maxLength="10" />
-
-                </android.support.design.widget.TextInputLayout>
-
-            </LinearLayout>
+            </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -186,7 +148,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/tvDefCityCrAcAc"
-                    android:textSize="24sp" />
+                    android:textSize="18sp" />
 
                 <Spinner
                     android:id="@+id/spDefCityCrAcAc"

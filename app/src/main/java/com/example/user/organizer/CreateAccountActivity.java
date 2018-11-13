@@ -108,8 +108,35 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnF
         etPhoneCrAcAc.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus&&(etPhoneCrAcAc.length()<14))etPhoneCrAcAc.setText("");
+                if(!hasFocus&&(etPhoneCrAcAc.length()==0||etPhoneCrAcAc.length()==1))etPhoneCrAcAc.setText("");
                 if(hasFocus&&etPhoneCrAcAc.length()==0)etPhoneCrAcAc.setText("(");
+            }
+        });
+
+        etPasswordCrAcAc.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(etPasswordCrAcAc.getText().toString().equals(
+                        etConfirmPasswordCrAcAc.getText().toString())){
+                    etPasswordCrAcAc.setTextColor(Color.BLACK);
+                    etConfirmPasswordCrAcAc.setTextColor(Color.BLACK);
+                }else{
+                    etPasswordCrAcAc.setTextColor(Color.RED);
+                    etConfirmPasswordCrAcAc.setTextColor(Color.RED);
+                }
+            }
+        });
+        etConfirmPasswordCrAcAc.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(etPasswordCrAcAc.getText().toString().equals(
+                        etConfirmPasswordCrAcAc.getText().toString())){
+                    etPasswordCrAcAc.setTextColor(Color.BLACK);
+                    etConfirmPasswordCrAcAc.setTextColor(Color.BLACK);
+                }else{
+                    etPasswordCrAcAc.setTextColor(Color.RED);
+                    etConfirmPasswordCrAcAc.setTextColor(Color.RED);
+                }
             }
         });
 
@@ -153,8 +180,8 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnF
                 || etPasswordCrAcAc.getText().toString().equals("")
                 || etConfirmPasswordCrAcAc.getText().toString().equals("")
                 || etEmailCrAcAc.getText().toString().equals("")
-                || etPhoneCrAcAc.getText().toString().equals("")) {
-            Toast.makeText(this, "Есть пустые поля!", Toast.LENGTH_SHORT).show();
+                || etPhoneCrAcAc.length()<14) {
+            Toast.makeText(this, "Ошибка или пустые поля!", Toast.LENGTH_SHORT).show();
         } else if (!etPasswordCrAcAc.getText().toString().equals(etConfirmPasswordCrAcAc.getText().toString())) {
             Toast.makeText(this, "Проверьте поля с паролями!", Toast.LENGTH_SHORT).show();
         } else {

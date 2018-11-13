@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -38,7 +39,6 @@ public class CreateFieldActivity extends AppCompatActivity implements View.OnFoc
     DBUtilities dbUtilities;
     Context context;
     List<String> spListCity;            // Данные для спинера выбора города
-    List<String> spListBoolean;         // Данные для спинера выбора освещение
     List<String> spListCoating;         // Данные для спинера выбора покрытие
 
     String idAuthUser;      // id авторизированого пользователя
@@ -52,15 +52,14 @@ public class CreateFieldActivity extends AppCompatActivity implements View.OnFoc
     EditText etPhoneCrFi;
 
     Spinner spCityCrFi;
-    Spinner spLightCrFi;
     Spinner spCoatingCrFi;
-    Spinner spShowerCrFi;
-    Spinner spRoofCrFi;
+    CheckBox cbLightCrFi;
+    CheckBox cbShowerCrFi;
+    CheckBox cbRoofCrFi;
     Switch swLocationCrFi;
     TextInputLayout etPhoneCrFiLayout;
 
     private ArrayAdapter<String> spAdapterCity;    //Адаптер для спинера выбор города
-    private ArrayAdapter<String> spAdapterBoolean; //Адаптер для спинера выбор ДУШ, ОСВЕЩЕНИЕ, КРЫША
     private ArrayAdapter<String> spAdapterCoating; //Адаптер для спинера выбор покрытия
 
     @Override
@@ -84,10 +83,10 @@ public class CreateFieldActivity extends AppCompatActivity implements View.OnFoc
         etAddressCrFi = (EditText) findViewById(R.id.etAddressCrFi);
         etPhoneCrFi = (EditText) findViewById(R.id.etPhoneCrFi);
         spCityCrFi = (Spinner) findViewById(R.id.spCityCrFi);
-        spLightCrFi = (Spinner) findViewById(R.id.spLightCrFi);
+        cbLightCrFi = (CheckBox) findViewById(R.id.cbLightCrFi);
         spCoatingCrFi = (Spinner) findViewById(R.id.spCoatingCrFi);
-        spShowerCrFi = (Spinner) findViewById(R.id.spShowerCrFi);
-        spRoofCrFi = (Spinner) findViewById(R.id.spRoofCrFi);
+        cbShowerCrFi = (CheckBox) findViewById(R.id.cbShowerCrFi);
+        cbRoofCrFi = (CheckBox) findViewById(R.id.cbRoofCrFi);
         swLocationCrFi = (Switch) findViewById(R.id.swLocationCrFi);
         etPhoneCrFiLayout = (TextInputLayout) findViewById(R.id.etPhoneCrFiLayout);
 
@@ -98,7 +97,7 @@ public class CreateFieldActivity extends AppCompatActivity implements View.OnFoc
         etPhoneCrFi.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus&&(etPhoneCrFi.length()<14))etPhoneCrFi.setText("");
+                if(!hasFocus&&(etPhoneCrFi.length()==0||etPhoneCrFi.length()==1))etPhoneCrFi.setText("");
                 if(hasFocus&&etPhoneCrFi.length()==0)etPhoneCrFi.setText("(");
             }
         });
@@ -109,15 +108,10 @@ public class CreateFieldActivity extends AppCompatActivity implements View.OnFoc
 
         //инициализация коллекции для спинера
         spListCity = new ArrayList<>();
-        spListBoolean = new ArrayList<>();
         spListCoating = new ArrayList<>();
 
         //заполнить spListCity данные для отображения в Spinner
         spListCity = dbUtilities.getStrListTableFromDB("cities", "name");
-
-        //заполнить spListBooleanInt данные для отображения в Spinner
-        spListBoolean.add("Нет");
-        spListBoolean.add("Есть");
 
         //заполнить spListCoating данные для отображения в Spinner
         spListCoating = dbUtilities.getStrListTableFromDB("coatings", "type");
@@ -145,20 +139,6 @@ public class CreateFieldActivity extends AppCompatActivity implements View.OnFoc
         spAdapterCoating.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spCoatingCrFi.setAdapter(spAdapterCoating);
-
-        //создание адаптера для спинера
-        spAdapterBoolean = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_spinner_item,
-                spListBoolean
-        );
-
-        // назначение адапетра для списка
-        spAdapterBoolean.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spLightCrFi.setAdapter(spAdapterBoolean);
-        spShowerCrFi.setAdapter(spAdapterBoolean);
-        spRoofCrFi.setAdapter(spAdapterBoolean);
 
         //вешаем слушателя на изменение клавишы switch
         //(клавиша вкл./выкл. возможности редактирования полей с координатами геопозиции)
@@ -211,19 +191,19 @@ public class CreateFieldActivity extends AppCompatActivity implements View.OnFoc
     //обработчик нажатия клавишы Создать запись пользователя
     public void createNewField() {
         if (etNameCrFi.getText().toString().equals("")
-                || etPhoneCrFi.getText().toString().equals("")
+                || etPhoneCrFi.length()<14
                 || etGeolongCrFi.getText().toString().equals("")
                 || etGeolatCrFi.getText().toString().equals("")
                 || etAddressCrFi.getText().toString().equals("")) {
-            Toast.makeText(this, "Есть пустые поля!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Ошибка или пустые поля!", Toast.LENGTH_SHORT).show();
         } else {
             String city_id = String.valueOf(spListCity.indexOf(spCityCrFi.getSelectedItem()) + 1);
             String name = etNameCrFi.getText().toString();
             String phone = etPhoneCrFi.getText().toString();
-            String light_status = (spLightCrFi.getSelectedItem().toString() == "Нет") ? "0" : "1";
+            String light_status = (cbLightCrFi.isChecked()) ? "1" : "0";
             String coating_id = String.valueOf(spListCoating.indexOf(spCoatingCrFi.getSelectedItem()) + 1);
-            String shower_status = (spShowerCrFi.getSelectedItem().toString() == "Нет") ? "0" : "1";
-            String roof_status = (spRoofCrFi.getSelectedItem().toString() == "Нет") ? "0" : "1";
+            String shower_status = (cbShowerCrFi.isChecked()) ? "1" : "0";
+            String roof_status = (cbRoofCrFi.isChecked()) ? "1" : "0";
             String geo_long = etGeolongCrFi.getText().toString();
             String geo_lat = etGeolatCrFi.getText().toString();
             String address = etAddressCrFi.getText().toString();
@@ -236,25 +216,13 @@ public class CreateFieldActivity extends AppCompatActivity implements View.OnFoc
         }//if-else
     }//createNewField
 
-    //вернутся в активность авторизации
-    private void turnBack() {
-        Intent intent = new Intent(this, AuthorizationActivity.class);
-        startActivity(intent);
-    }//turnBack
-
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btnNewCityCrFi:           //выполнить операцию
-                createNewCity();
-                break;
             case R.id.btnCreateCrFi:            //выполнить операцию
                 createNewField();
                 break;
             case R.id.btnSelectGeoposCrFi:      //выполнить операцию
                 geoPositionOnMap();
-                break;
-            case R.id.btnBackCrFi:              //отменить операцию
-                turnBack();
                 break;
         }//switch
     }//onClick
@@ -264,12 +232,6 @@ public class CreateFieldActivity extends AppCompatActivity implements View.OnFoc
         intent.putExtra("mapStatus", 1);
         startActivityForResult(intent, REQ_SELECT_LOCATION);
     }//geoPositionOnMap
-
-    //обработка нажатия клавиши создания нового города
-    private void createNewCity() {
-        Intent intent = new Intent(this, CreateCityActivity.class);
-        startActivity(intent);
-    }//createNewCity
 
     //проверка ввода номера телефона
     @Override

@@ -92,10 +92,10 @@ public class NotificationService extends Service {
         Notification.Builder nBuilder = new Notification.Builder(this)
                 .setContentText(messageText)
                 .setContentTitle(notification.getMessage())
-                .setSmallIcon(R.drawable.file)
+                .setSmallIcon(R.drawable.icon_main_player)
                 .setStyle(new Notification.BigTextStyle()
                         .bigText(messageText))
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.file));
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon_main_player));
 
         // 3-я часть  Click on notification
         Intent intent = new Intent(this, NavigationDrawerLogInActivity.class);

@@ -4,62 +4,65 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="@color/colorMyColorGrey"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
+    android:orientation="vertical"
     tools:context="com.example.user.organizer.MainActivity">
+    <!--фоновая картинка-->
+    <!--http://androidforbeginners.blogspot.com/2010/06/how-to-tile-background-image-in-android.html-->
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnCheckConMaAc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="20dp"
-        android:onClick="onClick"
-        android:text="@string/btnCheckConMaAc" />
+            <Button
+                android:id="@+id/btnCheckConMaAc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="20dp"
+                android:onClick="onClick"
+                android:text="@string/btnCheckConMaAc" />
 
-    <Button
-        android:id="@+id/btnAuthorizationMaAc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="20dp"
-        android:onClick="onClick"
-        android:text="@string/btnAuthorizationMaAc" />
+            <Button
+                android:id="@+id/btnAuthorizationMaAc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="20dp"
+                android:onClick="onClick"
+                android:text="@string/btnAuthorizationMaAc" />
 
-    <Button
-        android:id="@+id/btnLocalDbFieldMaAc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="20dp"
-        android:onClick="onClick"
-        android:text="@string/btnLocalDbFieldMaAc" />
+            <Button
+                android:id="@+id/btnLocalDbFieldMaAc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="20dp"
+                android:onClick="onClick"
+                android:text="@string/btnLocalDbFieldMaAc" />
 
-    <Button
-        android:id="@+id/btnExitMaAc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="20dp"
-        android:onClick="onClick"
-        android:text="@string/btnExitMaAc" />
+            <Button
+                android:id="@+id/btnExitMaAc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="20dp"
+                android:onClick="onClick"
+                android:text="@string/btnExitMaAc" />
 
-    </LinearLayout>
+        </LinearLayout>
 
     </ScrollView>
 

@@ -158,6 +158,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:maxLength="4"
             android:inputType="numberDecimal" />
 
     </LinearLayout>
@@ -188,8 +189,7 @@
                 <ListView
                     android:id="@+id/lvListOfParticipantsCrEv"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
+                    android:layout_height="match_parent" />
             </ScrollView>
 
         </LinearLayout>
@@ -206,24 +206,38 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tvPhoneCrEv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/tvPhoneCrEv"
             android:textSize="18sp" />
 
-        <EditText
-            android:id="@+id/evPhoneCrEv"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/etphonecrevac_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:inputType="textPhonetic"
-            android:textSize="18sp" />
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/etPhoneCrEv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/etPhoneHint"
+                android:inputType="phone"
+                android:maxLength="10"
+                android:textSize="18sp" />
+
+        </android.support.design.widget.TextInputLayout>
 
     </LinearLayout>
 
@@ -237,7 +251,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:maxLength="4"
             android:text="@string/tvPasswordCrEv"
+            android:textAlignment="viewStart"
             android:textSize="18sp" />
 
         <EditText
@@ -245,7 +261,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:textSize="18sp" />
 
     </LinearLayout>
@@ -254,6 +270,7 @@
         android:id="@+id/btnConfirmCrEv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="20dp"
         android:onClick="onClick"
         android:text="@string/btnConfirmCrEv" />
 

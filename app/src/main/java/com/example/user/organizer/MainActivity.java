@@ -16,6 +16,9 @@ import java.util.List;
 //-------Главная Активность----------------
 public class MainActivity extends AppCompatActivity {
 
+    final public static String filterStr = "[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" +
+            "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя" +
+            "123456789_]*";
     DBUtilities dbUtilities;
     DBLocalUtilities dbLocalUtilities;
     //кнопка проверки соединения

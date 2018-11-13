@@ -7,9 +7,20 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //--------Активность для авторизация пользователя или перехода в актиность создания нового акаунта-
 
@@ -23,11 +34,16 @@ public class AuthorizationActivity extends AppCompatActivity {
 
     EditText etLogin;         //поле ввода для логина или email
     EditText etPassword;      //поле ввода для пароля
+    TextView tvSymCountPas; //кол-во символов для пароля
+    String temp = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authorization);
+        context = getBaseContext();
+        dbUtilities = new DBUtilities(context);
+
         //добавляем actionBar (стрелка сверху слева)
         actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
@@ -35,8 +51,22 @@ public class AuthorizationActivity extends AppCompatActivity {
 
         etLogin = (EditText) findViewById(R.id.etLogin);
         etPassword = (EditText) findViewById(R.id.etPassword);
-        context = getBaseContext();
-        dbUtilities = new DBUtilities(context);
+        tvSymCountPas = (TextView) findViewById(R.id.tvSymCountPas);
+        tvSymCountPas.setText(String.valueOf(10));
+        etPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                dbUtilities.inputFilterForListener(etPassword,
+                        10,
+                        MainActivity.filterStr
+                );
+                tvSymCountPas.setText(String.valueOf(10 - s.length()));
+            }//afterTextChanged
+        });
     }//onCreate
 
     //обработчик actionBar (стрелка сверху слева)
@@ -54,19 +84,21 @@ public class AuthorizationActivity extends AppCompatActivity {
 
     // Обработка нажатия кнопки авторизации
     public void signIn() {
-        String login = etLogin.getText().toString();          //введенное значение в поле логин
-        String password = etPassword.getText().toString();    //введенное значение в поле пароль
-
-        idAuthUser = dbUtilities.getAuthUserParam(login, password);
-
-        if(idAuthUser != null){
-            Intent intent = new Intent(context, NavigationDrawerLogInActivity.class);
-            intent.putExtra("idAuthUser", idAuthUser);
-            intent.putExtra("notificationServiceFlag", false);
-            startActivity(intent);
-            finish();
-        }//if
-
+        //проверка пустых полей
+        if (etLogin.getText().toString().equals("") || etPassword.getText().toString().equals("")) {
+            Toast.makeText(this, "Есть пустые поля!", Toast.LENGTH_SHORT).show();
+        } else {
+            String login = etLogin.getText().toString();          //введенное значение в поле логин
+            String password = etPassword.getText().toString();    //введенное значение в поле пароль
+            idAuthUser = dbUtilities.getAuthUserParam(login, password);
+            if (idAuthUser != null) {
+                Intent intent = new Intent(context, NavigationDrawerLogInActivity.class);
+                intent.putExtra("idAuthUser", idAuthUser);
+                intent.putExtra("notificationServiceFlag", false);
+                startActivity(intent);
+                finish();
+            }//if
+        }
     }//signIn
 
     //обработка нажатия кнопки создать новый аккаунт

@@ -2,7 +2,10 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -11,9 +14,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //--------------Вспомагательный класс для работы с БД-----------------------------
-public class DBUtilities{
+public class DBUtilities {
 
     private Context context;
 
@@ -29,79 +34,79 @@ public class DBUtilities{
         ConnectivityManager cm = (ConnectivityManager)
                 context.getSystemService(cs);
         return (cm.getActiveNetworkInfo() == null)          //проверка подключения к интернету
-                ||(getTableSize("cities") == null) //проверка подключения к БД
+                || (getTableSize("cities") == null) //проверка подключения к БД
                 ? false : true;
     }
 
     //проверка введенных параметров для авторизации
     public String getAuthUserParam(String login, String password) {
         String idAuthUser = null;
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("authorization", login, password);
 
             String resultDB = bg.get();
             JSONObject jResult = new JSONObject(resultDB);
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 idAuthUser = jResult.getJSONObject("user").getString("id");
 
-            }else{
+            } else {
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
         return idAuthUser;
     }//getAuthUserParam
 
     //поиск значения searchValue в определеному стобце searchColumnName
-    public String searchValueInColumn( String tableName, String searchColumnName,
-                                           String resultColumnName, String searchValue){
+    public String searchValueInColumn(String tableName, String searchColumnName,
+                                      String resultColumnName, String searchValue) {
         String value1 = null;
         //searchValue      -- переменная для сравнения
         //searchColumnName -- столбец в котором происходит сравнение переменной searchValue
         //resultColumnName -- столбец в котором находится результат
         //обращаемся к базе для получения списка имен городов
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("searchValueInColumn", tableName, searchColumnName, searchValue, resultColumnName);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
 
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 //получаем результат
                 value1 = jResult.getJSONObject("rez").getString(resultColumnName).toString();
-            }else{
+            } else {
                 //выводим текст с отрецательным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
         return value1;
     }//searchValueInColumn
 
     //поиск _id по определеному значению
-    public String getIdByValue(String tableName, String columnName, String value){
+    public String getIdByValue(String tableName, String columnName, String value) {
         String id = null;
         //обращаемся к базе для получения списка имен городов
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("getIdByValue", tableName, columnName, value);
 
             String resultdb = bg.get();
             Log.d("FOOTBALL", resultdb);
             JSONObject jResult = new JSONObject(resultdb);
 
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 //получаем результат
                 id = jResult.getJSONObject("rez").getString("id").toString();
-            }else{
+            } else {
                 //выводим текст с отрецательным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
         return id;
@@ -109,10 +114,10 @@ public class DBUtilities{
 
     //поиск _id по двум определеным значениям
     public String getIdByTwoValues(String tableName, String firstColumnName, String firstValue,
-                                   String secondColumnName, String secondValue){
+                                   String secondColumnName, String secondValue) {
         String id = null;
         //обращаемся к базе для получения списка имен городов
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("getIdByTwoValues", tableName, firstColumnName, firstValue,
                     secondColumnName, secondValue);
 
@@ -120,45 +125,45 @@ public class DBUtilities{
             Log.d("FOOTBALL", resultdb);
             JSONObject jResult = new JSONObject(resultdb);
 
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 //получаем результат
                 id = jResult.getJSONObject("rez").getString("id").toString();
-            }else{
+            } else {
                 //выводим текст с отрецательным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
         return id;
     }//getIdByValue
 
     //получаем данные из БД
-    public List<String> getStrListTableFromDB( String tableName, String columnName) {
+    public List<String> getStrListTableFromDB(String tableName, String columnName) {
         List<String> list = new ArrayList<>();
         //обращаемся к базе для получения списка имен городов
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("getStrListTable", tableName, columnName);
 
             String resultdb = bg.get();
             Log.d("FOOTBALL", resultdb);
             JSONObject jResult = new JSONObject(resultdb);
 
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 JSONObject jOb1 = jResult.getJSONObject(tableName);
                 Iterator<String> i = jOb1.keys();
 
-                while(i.hasNext()){
+                while (i.hasNext()) {
                     list.add(jOb1.getString(i.next()));
                 }//while
 
                 Log.d("FOOTBALL", list.toString());
-            }else{
+            } else {
                 Toast.makeText(context, "ERROR", Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
 
@@ -170,14 +175,14 @@ public class DBUtilities{
         List<Note> notes = new ArrayList<>();
 
         //обращаемся к базе для получения списка имен городов
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("getAllNotes");
 
             String resultdb = bg.get();
             Log.d("FOOTBALL", resultdb);
             JSONObject jResult = new JSONObject(resultdb);
 
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
 
                 JSONObject jListId = jResult.getJSONObject("id");
                 List<String> idList = getListFromJSON(jListId);
@@ -208,18 +213,18 @@ public class DBUtilities{
 
                 int n = headList.size();
 
-                for (int i = 0; i <n ; i++) {
-                    notes.add(new Note(idList.get(i),logoList.get(i),headList.get(i),
-                            userList.get(i),dateList.get(i),
-                            cityList.get(i),messList.get(i), tSizeMessageList.get(i),
+                for (int i = 0; i < n; i++) {
+                    notes.add(new Note(idList.get(i), logoList.get(i), headList.get(i),
+                            userList.get(i), dateList.get(i),
+                            cityList.get(i), messList.get(i), tSizeMessageList.get(i),
                             tStyleMessageList.get(i)));
                 }//fori
 
-            }else{
+            } else {
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
         return notes;
@@ -232,7 +237,7 @@ public class DBUtilities{
         Iterator<String> i = jList.keys();     //создаем итератор для перебора занчений объекта
 
         //перебираем значения и заносим в коллекцию list
-        while(i.hasNext()){
+        while (i.hasNext()) {
             try {
                 list.add(jList.getString(i.next()).toString());
             } catch (JSONException e) {
@@ -246,41 +251,41 @@ public class DBUtilities{
     //обращяемся к БД на сервер для создания новой записи в таблицу users
     public void insertIntoUsers(String login, String password, String name, String phone,
                                 String city_id, String email, String logo) {
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("insertIntoUsers", login, password, name, phone, city_id, email, logo);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 //выводим текст с положительным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
-            }else{
+            } else {
                 //выводим текст с отрецательным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
     }//insertIntoUsers
 
     //обращяемся к БД на сервер для создания нового записи в таблицу notification
     public void insertIntoNotifications(String event_id, String user_id, String city_id, String field_id, String time,
-                                String date, String message_id, String notice) {
-        try(BackgroundWorker bg = new BackgroundWorker()){
+                                        String date, String message_id, String notice) {
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("insertIntoNotifications", event_id, user_id, city_id, field_id, time, date, message_id, notice);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 //выводим текст с положительным ответом о создании нового уведмления
 //                Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
-            }else{
+            } else {
                 //выводим текст с отрецательным ответом о создании нового уведмления
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
     }//insertIntoNotification
@@ -289,61 +294,61 @@ public class DBUtilities{
     public void insertIntoFields(String city_id, String name, String phone, String light_status,
                                  String coating_id, String shower_status, String roof_status,
                                  String geo_long, String geo_lat, String address, String user_id) {
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("insertIntoFields", city_id, name, phone, light_status, coating_id,
-                        shower_status, roof_status, geo_long, geo_lat, address, user_id);
+                    shower_status, roof_status, geo_long, geo_lat, address, user_id);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 //выводим текст с положительным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
-            }else{
+            } else {
                 //выводим текст с отрецательным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
     }//insertIntoFields
 
     //обращяемся к БД на сервер для создания новой записи в таблицу participants
     public void insertIntoParticipants(String event_id, String user_id) {
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("insertIntoParticipants", event_id, user_id);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 //выводим текст с положительным ответом о создании нового пользователя
 //                Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
-            }else{
+            } else {
                 //выводим текст с отрецательным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
     }//insertIntoParticipants
 
     //обращяемся к БД на сервер для создания новой записи в таблицу regions
     public void insertIntoRegions(String name) {
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("insertIntoRegions", name);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 //выводим текст с положительным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
-            }else{
+            } else {
                 //выводим текст с отрецательным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
     }//insertIntoRegions
@@ -352,61 +357,61 @@ public class DBUtilities{
     public void insertIntoEvents(String field_id, String city_id, String date,
                                  String time, String duration, String price,
                                  String password, String phone, String user_id) {
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("insertIntoEvents", field_id, city_id, date, time, duration, price,
                     password, phone, user_id);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 //выводим текст с положительным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
-            }else{
+            } else {
                 //выводим текст с отрецательным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
     }//insertIntoEvents
 
     //обращяемся к БД на сервер для создания новой записи в таблицу coatings
     public void insertIntoCoatings(String type) {
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("insertIntoCoatings", type);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 //выводим текст с положительным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
-            }else{
+            } else {
                 //выводим текст с отрецательным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
     }//insertIntoCoatings
 
     //обращяемся к БД на сервер для создания новой записи в таблицу cities
     public void insertIntoCities(String name, String region_id) {
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("insertIntoCities", name, region_id);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 //выводим текст с положительным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
-            }else{
+            } else {
                 //выводим текст с отрецательным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
     }//insertIntoCities
@@ -415,20 +420,20 @@ public class DBUtilities{
     public void insertIntoNotes(String logo, String head, String user_id, String date,
                                 String city_id, String message,
                                 String tsizemessage, String tstylemessage) {
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("insertIntoNotes", logo, head, user_id, date, city_id, message, tsizemessage, tstylemessage);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 //выводим текст с положительным ответом о создании новой записи в таблицу
                 Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
-            }else{
+            } else {
                 //выводим текст с отрецательным ответом о создании новой записи в таблицу
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
     }//insertIntoNotes
@@ -441,14 +446,14 @@ public class DBUtilities{
         String city_id = getIdByValue("cities", "name", cityName);
 
         //обращаемся к базе для получения списка имен городов
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("getSomeNotes", city_id);
 
             String resultdb = bg.get();
             Log.d("FOOTBALL", resultdb);
             JSONObject jResult = new JSONObject(resultdb);
 
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
 
                 JSONObject jListId = jResult.getJSONObject("id");
                 List<String> idList = getListFromJSON(jListId);
@@ -479,18 +484,18 @@ public class DBUtilities{
 
                 int n = headList.size();
 
-                for (int i = 0; i <n ; i++) {
-                    notes.add(new Note(idList.get(i),logoList.get(i),headList.get(i),
-                            userList.get(i),dateList.get(i),
-                            cityList.get(i),messList.get(i), tSizeMessageList.get(i),
+                for (int i = 0; i < n; i++) {
+                    notes.add(new Note(idList.get(i), logoList.get(i), headList.get(i),
+                            userList.get(i), dateList.get(i),
+                            cityList.get(i), messList.get(i), tSizeMessageList.get(i),
                             tStyleMessageList.get(i)));
                 }//fori
 
-            }else{
+            } else {
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
         return notes;
@@ -503,27 +508,27 @@ public class DBUtilities{
         //получаем id по имени
         String city_id = getIdByValue("cities", "name", cityName);
         //обращаемся к базе для получения списка имен городов
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("getSomeFields", city_id);
 
             String resultdb = bg.get();
             Log.d("FOOTBALL", resultdb);
             JSONObject jResult = new JSONObject(resultdb);
 
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 JSONObject jOb1 = jResult.getJSONObject("name");
                 Iterator<String> i = jOb1.keys();
 
-                while(i.hasNext()){
+                while (i.hasNext()) {
                     list.add(jOb1.getString(i.next()));
                 }//while
 
                 Log.d("FOOTBALL", list.toString());
-            }else{
+            } else {
                 Toast.makeText(context, "В базе нет полей!", Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
 
@@ -535,14 +540,14 @@ public class DBUtilities{
         List<Notification> listNotification = new ArrayList<>();
 
         //обращаемся к базе для получения списка имен городов
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("getSomeNotifications", user_id);
 
             String resultdb = bg.get();
             Log.d("FOOTBALL", resultdb);
             JSONObject jResult = new JSONObject(resultdb);
 
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
 
                 JSONObject jListId = jResult.getJSONObject("id");
                 List<String> idList = getListFromJSON(jListId);
@@ -573,17 +578,17 @@ public class DBUtilities{
 
                 int n = idList.size();
 
-                for (int i = 0; i <n ; i++) {
-                    listNotification.add(new Notification(idList.get(i),eventList.get(i),
-                            userList.get(i),cityList.get(i),fieldList.get(i),timeList.get(i),
-                            dateList.get(i),messageList.get(i),noticeList.get(i)));
+                for (int i = 0; i < n; i++) {
+                    listNotification.add(new Notification(idList.get(i), eventList.get(i),
+                            userList.get(i), cityList.get(i), fieldList.get(i), timeList.get(i),
+                            dateList.get(i), messageList.get(i), noticeList.get(i)));
                 }//fori
 
-            }else{
+            } else {
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
 
@@ -629,7 +634,7 @@ public class DBUtilities{
             if (jResult.getString("error").toString().equals("")) {
                 //получаем результат
                 size = jResult.getJSONObject("rez")
-                        .getString(String.format("MAX(%s)",searchColumnName))
+                        .getString(String.format("MAX(%s)", searchColumnName))
                         .toString();
             } else {
                 //выводим текст с отрецательным ответом о создании нового пользователя
@@ -651,14 +656,14 @@ public class DBUtilities{
                 "cities", "name", cityName);
 
         //обращаемся к базе для получения списка имен городов
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("getListParticipantsUser", city_id);
 
             String resultdb = bg.get();
             Log.d("FOOTBALL", resultdb);
             JSONObject jResult = new JSONObject(resultdb);
 
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
 
                 JSONObject jListId = jResult.getJSONObject("id");
                 List<String> idList = getListFromJSON(jListId);
@@ -674,16 +679,17 @@ public class DBUtilities{
 
                 int n = idList.size();
 
-                for (int i = 0; i <n ; i++) {
-                    if(idList.get(i).equals(idAuthUser)) continue;  //если попали на запись организатора
-                    participantList.add(new Participant(idList.get(i),nameList.get(i),loginList.get(i),cityIdList.get(i)));
+                for (int i = 0; i < n; i++) {
+                    if (idList.get(i).equals(idAuthUser))
+                        continue;  //если попали на запись организатора
+                    participantList.add(new Participant(idList.get(i), nameList.get(i), loginList.get(i), cityIdList.get(i)));
                 }//fori
 
-            }else{
+            } else {
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
 
@@ -695,14 +701,14 @@ public class DBUtilities{
         List<Field> fieldList = new ArrayList<>();
 
         //обращаемся к базе для получения списка имен городов
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("getListField", fieldId, cityId);
 
             String resultdb = bg.get();
             Log.d("FOOTBALL", resultdb);
             JSONObject jResult = new JSONObject(resultdb);
 
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 JSONObject jListId = jResult.getJSONObject("id");
                 List<String> listId = getListFromJSON(jListId);
 
@@ -741,19 +747,19 @@ public class DBUtilities{
 
                 int n = listId.size();
 
-                for (int i = 0; i <n ; i++) {
+                for (int i = 0; i < n; i++) {
                     fieldList.add(new Field(listId.get(i), listCity.get(i),
                             listName.get(i), listPhone.get(i), listLight.get(i),
                             listCoating.get(i), listShower.get(i), listRoof.get(i),
-                            listGeoLong.get(i), listGeoLat.get(i),listAddress.get(i),
+                            listGeoLong.get(i), listGeoLat.get(i), listAddress.get(i),
                             listUser.get(i)));
                 }//fori
 
-            }else{
+            } else {
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
 
@@ -765,14 +771,14 @@ public class DBUtilities{
         List<City> cityList = new ArrayList<>();
 
         //обращаемся к базе для получения списка необходимых полей таблицы
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("getListCity", cityId);
 
             String resultdb = bg.get();
             Log.d("FOOTBALL", resultdb);
             JSONObject jResult = new JSONObject(resultdb);
 
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 JSONObject jListId = jResult.getJSONObject("id");
                 List<String> listId = getListFromJSON(jListId);
 
@@ -781,15 +787,15 @@ public class DBUtilities{
 
                 int n = listId.size();
 
-                for (int i = 0; i <n ; i++) {
+                for (int i = 0; i < n; i++) {
                     cityList.add(new City(listId.get(i), listName.get(i)));
                 }//fori
 
-            }else{
+            } else {
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
 
@@ -801,14 +807,14 @@ public class DBUtilities{
         List<Coating> coatingList = new ArrayList<>();
 
         //обращаемся к базе для получения списка необходимых полей таблицы
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("getListCoating", coatingId);
 
             String resultdb = bg.get();
             Log.d("FOOTBALL", resultdb);
             JSONObject jResult = new JSONObject(resultdb);
 
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 JSONObject jListId = jResult.getJSONObject("id");
                 List<String> listId = getListFromJSON(jListId);
 
@@ -817,15 +823,15 @@ public class DBUtilities{
 
                 int n = listId.size();
 
-                for (int i = 0; i <n ; i++) {
+                for (int i = 0; i < n; i++) {
                     coatingList.add(new Coating(listId.get(i), listType.get(i)));
                 }//fori
 
-            }else{
+            } else {
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
 
@@ -837,14 +843,14 @@ public class DBUtilities{
         List<User> userList = new ArrayList<>();
 
         //обращаемся к базе для получения списка необходимых полей таблицы
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("getListUser", userId);
 
             String resultdb = bg.get();
             Log.d("FOOTBALL", resultdb);
             JSONObject jResult = new JSONObject(resultdb);
 
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 JSONObject jListId = jResult.getJSONObject("id");
                 List<String> listId = getListFromJSON(jListId);
 
@@ -871,17 +877,17 @@ public class DBUtilities{
 
                 int n = listId.size();
 
-                for (int i = 0; i <n ; i++) {
+                for (int i = 0; i < n; i++) {
                     userList.add(new User(listId.get(i), listLogin.get(i), listPassword.get(i),
                             listName.get(i), listPhone.get(i), listCityId.get(i), listEmail.get(i),
                             listLogo.get(i)));
                 }//fori
 
-            }else{
+            } else {
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
 
@@ -891,23 +897,23 @@ public class DBUtilities{
     public String getLogoCount() {
         String result = null;
         //обращаемся к базе для получения списка необходимых полей таблицы
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("getLogoCount");
 
             String resultdb = bg.get();
             Log.d("FOOTBALL", resultdb);
             JSONObject jResult = new JSONObject(resultdb);
 
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 JSONObject jLogoCount = jResult.getJSONObject("count");
                 List<String> logoCount = getListFromJSON(jLogoCount);
 
                 result = logoCount.get(0);
-            }else{
+            } else {
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
 
@@ -919,14 +925,14 @@ public class DBUtilities{
         List<Event> eventsList = new ArrayList<>();
 
         //обращаемся к базе для получения списка имен городов
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("getListEvents", eventId, cityId, idAuthUser);
 
             String resultdb = bg.get();
             Log.d("FOOTBALL", resultdb);
             JSONObject jResult = new JSONObject(resultdb);
 
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
 
                 JSONObject jListEventId = jResult.getJSONObject("id");
                 List<String> listEventId = getListFromJSON(jListEventId);
@@ -963,18 +969,18 @@ public class DBUtilities{
 
                 int n = listCityName.size();
 
-                for (int i = 0; i <n ; i++) {
+                for (int i = 0; i < n; i++) {
                     eventsList.add(new Event(listEventId.get(i), listCityName.get(i),
                             listFieldName.get(i), listEventData.get(i), listEventTime.get(i),
                             listEventDuration.get(i), listEventPrice.get(i), listEventPassword.get(i),
                             listEventPhone.get(i), listEventUser.get(i), listEventUserStatus.get(i)));
                 }//fori
 
-            }else{
+            } else {
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
 
@@ -984,7 +990,7 @@ public class DBUtilities{
     //участвует ли данный пользователь в данном событии
     public boolean isTakingPart(String idEvent, String idUser) {
         boolean result = false;
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("isTakingPart", idEvent, idUser);
 
             String resultdb = bg.get();
@@ -992,7 +998,7 @@ public class DBUtilities{
 
             //результат
             result = jResult.getString("error").toString().equals("") ? true : false;
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
         return result;
@@ -1000,68 +1006,68 @@ public class DBUtilities{
 
     //удалить запись по id
     public void deleteRowById(String tableName, String id) {
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("deleteRowById", tableName, id);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 //выводим текст с положительным ответом о создании нового пользователя
 //                Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
-            }else{
+            } else {
                 //выводим текст с отрецательным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
     }//deleteRowById
 
     //удалить запись по Value
     public void deleteRowByValue(String tableName, String columnName, String value) {
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("deleteRowByValue", tableName, columnName, value);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 //выводим текст с положительным ответом о создании нового пользователя
 //                Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
-            }else{
+            } else {
                 //выводим текст с отрецательным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
     }//deleteRowByValue
 
     //получить коллекцию значений по задоному значению и его столбцу
     public List<String> getListValuesByValueAndHisColumn(String tableName, String searchColumnName,
-                                                          String searchValue, String resultColumnName) {
+                                                         String searchValue, String resultColumnName) {
         List<String> list = new ArrayList<>();
 
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("getListValuesByValueAndHisColumn", tableName, searchColumnName, searchValue, resultColumnName);
 
             String resultdb = bg.get();
             Log.d("FOOTBALL", resultdb);
             JSONObject jResult = new JSONObject(resultdb);
 
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
 
                 JSONObject jListRes = jResult.getJSONObject(
-                        String.format("%s",resultColumnName));
+                        String.format("%s", resultColumnName));
                 list = getListFromJSON(jListRes);
 
                 Log.d("FOOTBALL", list.toString());
-            }else{
+            } else {
 //                Toast.makeText(context, "Учасников нет!", Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
 
@@ -1072,21 +1078,21 @@ public class DBUtilities{
     public void deleteRowByTwoValueAndTheyColumnName(String tableName, String firstColumnName,
                                                      String firstValue, String secondColumnName,
                                                      String secondValue) {
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("deleteRowByTwoValueAndTheyColumnName", tableName, firstColumnName,
                     firstValue, secondColumnName, secondValue);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 //выводим текст с положительным ответом о создании нового пользователя
 //                Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
-            }else{
+            } else {
                 //выводим текст с отрецательным ответом о создании нового пользователя
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
     }//deleteRowByTwoValueAndTheyColumnName
@@ -1095,21 +1101,21 @@ public class DBUtilities{
     public void updateEventsTable(String id, String field_id, String city_id,
                                   String date, String time, String duration,
                                   String price, String password, String phone, String user_id) {
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("updateEventsTable", id, field_id, city_id, date, time, duration, price,
                     password, phone, user_id);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 //выводим текст с положительным ответом
                 Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
-            }else{
+            } else {
                 //выводим текст с отрецательным ответом
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
     }//updateEventsTable
@@ -1119,21 +1125,21 @@ public class DBUtilities{
                                   String light_status, String coating_id, String shower_status,
                                   String roof_status, String geo_long, String geo_lat, String address,
                                   String user_id) {
-        try(BackgroundWorker bg = new BackgroundWorker()){
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("updateFieldsTable", id, city_id, name, phone, light_status, coating_id,
                     shower_status, roof_status, geo_long, geo_lat, address, user_id);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 //выводим текст с положительным ответом
                 Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
-            }else{
+            } else {
                 //выводим текст с отрецательным ответом
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
     }
@@ -1142,43 +1148,79 @@ public class DBUtilities{
     public void updateNotesTable(String id, String logo, String head, String user_id, String date,
                                  String city_id, String message,
                                  String tsizemessage, String tstylemessage) {
-        try(BackgroundWorker bg = new BackgroundWorker()){
-            bg.execute("updateNotesTable", id,  logo, head, user_id, date, city_id,
+        try (BackgroundWorker bg = new BackgroundWorker()) {
+            bg.execute("updateNotesTable", id, logo, head, user_id, date, city_id,
                     message, tsizemessage, tstylemessage);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 //выводим текст с положительным ответом
                 Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
-            }else{
+            } else {
                 //выводим текст с отрецательным ответом
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
     }
 
     //обновляем один столбец в  определенной записи таблици по id
-    public void updateOneColumnTable( String id, String column, String value, String table) {
-        try(BackgroundWorker bg = new BackgroundWorker()){
+    public void updateOneColumnTable(String id, String column, String value, String table) {
+        try (BackgroundWorker bg = new BackgroundWorker()) {
             bg.execute("updateOneColumnTable", id, column, value, table);
 
             String resultdb = bg.get();
             JSONObject jResult = new JSONObject(resultdb);
-            if(jResult.getString("error").toString().equals("")){
+            if (jResult.getString("error").toString().equals("")) {
                 //выводим текст с положительным ответом
                 Toast.makeText(context, jResult.getString("rez").toString(), Toast.LENGTH_LONG).show();
-            }else{
+            } else {
                 //выводим текст с отрецательным ответом
                 Toast.makeText(context, jResult.getString("error").toString(), Toast.LENGTH_LONG).show();
             }//if-else
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }//try-catch
     }//updateOneColumnTable
+
+    //------------------------ФУНКЦИИ НЕ ДЛЯ БАЗЫ ДАННЫХ-----------------------------------------
+
+    //фильтр вводимых символов для EditText.addTextChangedListener()
+    public void inputFilterForListener(EditText editText, int countSymbol, String rightSymbols ) {
+
+        //формируем фильтр количества вводимых символов
+        int maxLength = countSymbol;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+
+        //формируем фильтр вводимых символов
+        InputFilter filter = new InputFilter() {
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest,
+                                       int dstart, int dend) {
+                for (int i = start; i < end; i++) {
+                    String checkMe = String.valueOf(source.charAt(i));
+                    Pattern pattern = Pattern.compile( rightSymbols);
+                    Matcher matcher = pattern.matcher(checkMe);
+                    boolean valid = matcher.matches();
+                    if (!valid) {
+                        //Log.d("", "Некорректный ввод!");
+                        return "";
+                    }
+                }
+                return null;
+            }
+        };//filter
+
+        //проверка длины вводимой строки и выбор фильтра
+        if(editText.length() < countSymbol) {
+            editText.setFilters(new InputFilter[]{filter});  //применяем фильтр вводимых символов
+        }else {
+            editText.setFilters(FilterArray);                //применяем фильтр количества символов
+        }//if
+    }//inputFilterForListener
 
 }//DBUtilities

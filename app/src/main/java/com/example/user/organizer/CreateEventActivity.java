@@ -4,9 +4,14 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -29,7 +34,7 @@ import java.util.List;
 //-- Активность для создания нового события(переход на активность создание нового поля --------------
 //-- или нового города или активность для добавления нового участника в событие)-------
 
-public class CreateEventActivity extends AppCompatActivity {
+public class CreateEventActivity extends AppCompatActivity implements View.OnFocusChangeListener {
 
     // коды для идентификации активностей при получении результата
     public final int REQ_ADD_USER = 1001;
@@ -52,7 +57,7 @@ public class CreateEventActivity extends AppCompatActivity {
     List<String> loginUserList;          //коллекция login-ов с выбранными игроками
 
     EditText etPriceCrEv;                //Общая стоимость тренеровки
-    EditText evPhoneCrEv;                //телефон организатора
+    EditText etPhoneCrEv;                //телефон организатора
     EditText evPasswordCrEv;             //пароль для приватной тренировки
     TextView tvDateCrEv;                 //Строка для отображения даты
     TextView tvStartTimeCrEv;            //Строка для отображения время
@@ -66,6 +71,8 @@ public class CreateEventActivity extends AppCompatActivity {
     String showEventDate;                   // дата события для показа
     String eventDateForDB;                  // дата события для БД
     String eventStartTime;                  // Время начала события
+    TextInputLayout etPhoneLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +88,7 @@ public class CreateEventActivity extends AppCompatActivity {
         tvDateCrEv = (TextView) findViewById(R.id.tvDateCrEv);
         tvStartTimeCrEv = (TextView) findViewById(R.id.tvStartTimeCrEv);
         etPriceCrEv = (EditText) findViewById(R.id.etPriceCrEv);
-        evPhoneCrEv = (EditText) findViewById(R.id.evPhoneCrEv);
+        etPhoneCrEv = (EditText) findViewById(R.id.etPhoneCrEv);
         evPasswordCrEv = (EditText) findViewById(R.id.evPasswordCrEv);
         spCityCrEv = (Spinner) findViewById(R.id.spCityCrEv);
         spFieldCrEv = (Spinner) findViewById(R.id.spFieldCrEv);
@@ -99,6 +106,41 @@ public class CreateEventActivity extends AppCompatActivity {
         setInitialDate();               //начальная установка даты
         context = getBaseContext();
         dbUtilities = new DBUtilities(context);
+
+        etPhoneLayout = (TextInputLayout) findViewById(R.id.etphonecrevac_layout);
+
+        final String regex = "\\(\\d{3}\\)\\d{3}\\-\\d{2}\\-\\d{2}";
+
+        etPhoneCrEv.setFilters(
+                new InputFilter[] {
+                        new PartialRegexInputFilter(regex)
+                }
+        );
+
+        etPhoneCrEv.addTextChangedListener(
+                new TextWatcher(){
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        String value  = s.toString();
+                        if(value.matches(regex))
+                            etPhoneCrEv.setTextColor(Color.BLACK);
+                        else
+                            etPhoneCrEv.setTextColor(Color.RED);
+                    }
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start,
+                                                  int count, int after) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start,
+                                              int before, int count) {}
+
+                }
+        );
+
+        etPhoneCrEv.setOnFocusChangeListener(this);
 
         //заполнить spListCity данные для отображения в Spinner
         spListCity = dbUtilities.getStrListTableFromDB("cities", "name");
@@ -344,7 +386,7 @@ public class CreateEventActivity extends AppCompatActivity {
         String duration = spDurationCrEv.getSelectedItem().toString();
         String price = etPriceCrEv.getText().toString();
         String password = evPasswordCrEv.getText().toString();
-        String phone = evPhoneCrEv.getText().toString();
+        String phone = etPhoneCrEv.getText().toString();
         String user_id = idAuthUser;
 
         //добваить данные через объект ContentValues(cv), в таблицу "event"
@@ -368,4 +410,14 @@ public class CreateEventActivity extends AppCompatActivity {
         }//foreach
 
     }//createEvent
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (v != etPhoneCrEv && etPhoneCrEv.getText().toString().isEmpty()) {
+            etPhoneLayout.setErrorEnabled(true);
+            etPhoneLayout.setError(getResources().getString(R.string.error_enter_phone));
+        } else {
+            etPhoneLayout.setErrorEnabled(false);
+        }
+    }
 }//CreateEventActivity

@@ -85,7 +85,7 @@ public class EditEventActivity extends AppCompatActivity {
         tvDateCrEv = (TextView) findViewById(R.id.tvDateCrEv);
         tvStartTimeCrEv = (TextView) findViewById(R.id.tvStartTimeCrEv);
         etPriceCrEv = (EditText) findViewById(R.id.etPriceCrEv);
-        evPhoneCrEv = (EditText) findViewById(R.id.evPhoneCrEv);
+        evPhoneCrEv = (EditText) findViewById(R.id.etPhoneCrEv);
         evPasswordCrEv = (EditText) findViewById(R.id.evPasswordCrEv);
         spCityCrEv = (Spinner) findViewById(R.id.spCityCrEv);
         spFieldCrEv = (Spinner) findViewById(R.id.spFieldCrEv);

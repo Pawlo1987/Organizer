@@ -3,13 +3,16 @@ package com.example.user.organizer;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.user.organizer.fragment.AdvertisingAndInformationFragment;
 import com.example.user.organizer.fragment.ExitConfirmDialog;
@@ -59,6 +62,16 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent= new Intent(getBaseContext(), CreateEventActivity.class);
+                intent.putExtra("idAuthUser",idAuthUser);
+                startActivity(intent);
+            }
+        });
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -87,11 +100,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
 
         fTrans = getFragmentManager().beginTransaction();
 
-        if (id == R.id.create_event) {
-            Intent intent= new Intent(this, CreateEventActivity.class);
-            intent.putExtra("idAuthUser",idAuthUser);
-            startActivity(intent);
-        } else if (id == R.id.show_field_catalog) {
+        if (id == R.id.show_field_catalog) {
             fTrans.replace(R.id.container, showFieldCatalogFragment);
         } else if (id == R.id.show_user_events) {
             fTrans.replace(R.id.container, showAuthUserEventsFragment);

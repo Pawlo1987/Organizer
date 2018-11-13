@@ -3,10 +3,6 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/create_event"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/create_event" />
-        <item
             android:id="@+id/show_field_catalog"
             android:icon="@drawable/icon_all_events"
             android:title="@string/show_field_catalog" />

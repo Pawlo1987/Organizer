@@ -2,14 +2,20 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -88,7 +94,9 @@ public class ShowAllEventsRecyclerAdapter extends
     //отдельного пункта списка и подключаем слушателя события нажатия меню
     public class ViewHolder extends RecyclerView.ViewHolder
             implements PopupMenu.OnMenuItemClickListener{
-        final TextView tvDateShAlEvReAd, tvTimeShAlEvReAd, tvCityShAlEvReAd, tvFieldShAlEvReAd;
+        final TextView tvDateShAlEvReAd, tvTimeShAlEvReAd,
+                tvCityShAlEvReAd, tvFieldShAlEvReAd;
+        LinearLayout llMainShAlEvReAd;
 
         ViewHolder(View view){
             super(view);
@@ -97,16 +105,30 @@ public class ShowAllEventsRecyclerAdapter extends
             tvTimeShAlEvReAd = view.findViewById(R.id.tvTimeShAlEvReAd);
             tvCityShAlEvReAd = view.findViewById(R.id.tvCityShAlEvReAd);
             tvFieldShAlEvReAd = view.findViewById(R.id.tvFieldShAlEvReAd);
+            llMainShAlEvReAd = view.findViewById(R.id.llMainShAlEvReAd);
 
-            //слушатель события нажатого меню
-            view.setOnClickListener(new View.OnClickListener() {
+            view.setOnTouchListener(new View.OnTouchListener() {
                 @Override
-                public void onClick(View view) {
-                    PopupMenu popup = new PopupMenu(view.getContext(), view);
-                    popup.inflate(R.menu.rva_show_all_event_popup_menu);
-                    popup.setOnMenuItemClickListener(ViewHolder.this);
-                    popup.show();
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            view.setBackgroundColor(Color.GRAY);
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            view.setBackgroundColor(Color.WHITE);
+                            break;
+                        default:
+                            view.setBackgroundColor(Color.WHITE);
+                            break;
 
+                    }
+                    return false;
+                }
+            });
+
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
                     //получаем данные о нажатом событии
                     event = eventsList.get(getAdapterPosition());
                     eventId = event.eventId;
@@ -118,8 +140,37 @@ public class ShowAllEventsRecyclerAdapter extends
                     eventPrice = event.eventPrice;
                     eventPhone = event.eventPhone;
                     eventUserId = event.eventUserId;
-                }//onClick
+
+                    //выбран пункт подробная информация
+                    aboutEvent();
+                    return true;
+                }
             });
+
+//            //слушатель события нажатого меню
+//            view.setOnClickListener(new View.OnClickListener() {
+//
+//                @Override
+//                public void onClick(View view) {
+//                    PopupMenu popup = new PopupMenu(view.getContext(), view);
+//                    popup.inflate(R.menu.rva_show_all_event_popup_menu);
+//                    popup.setOnMenuItemClickListener(ViewHolder.this);
+//                    popup.show();
+//
+//
+//                    //получаем данные о нажатом событии
+//                    event = eventsList.get(getAdapterPosition());
+//                    eventId = event.eventId;
+//                    eventCityName = event.cityName;
+//                    eventFieldName = event.fieldName;
+//                    eventData = event.eventData;
+//                    eventTime = event.eventTime;
+//                    eventDuration = event.eventDuration;
+//                    eventPrice = event.eventPrice;
+//                    eventPhone = event.eventPhone;
+//                    eventUserId = event.eventUserId;
+//                }//onClick
+//            });
         } // ViewHolder
 
         //обработчик выбраного пункта меню

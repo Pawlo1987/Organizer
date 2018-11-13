@@ -86,7 +86,6 @@
     <string name="btnConfirmCrNeNoAc">Создать</string>
     <string name="btnCancelCrNeNoAc">Отмена</string>
     <string name="title_activity_navigation_drawer_log_in">NavigationDrawerLogInActivity</string>
-    <string name="create_event">Создать событие</string>
     <string name="show_user_events">События пользователя</string>
     <string name="show_all_events">Все события</string>
     <string name="news_line">Новости</string>

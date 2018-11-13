@@ -24,13 +24,7 @@
         android:roundIcon="@drawable/icon_main_player"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".AuthorizationActivity" />
         <activity android:name=".CreateEventActivity" />
         <activity android:name=".CreateAccountActivity" />
@@ -69,7 +63,16 @@
         <activity android:name=".EditFieldActivity" />
         <activity android:name=".ShowFieldCatalogBeforeAuthActivity" />
         <activity android:name=".SelectLogoActivity" />
-        <activity android:name=".EditNewsNoteActivity"></activity>
+        <activity android:name=".EditNewsNoteActivity" />
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

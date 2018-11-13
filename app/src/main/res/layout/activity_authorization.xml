@@ -23,13 +23,21 @@
                 android:id="@+id/tvLogIn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="20dp"
                 android:fontFamily="@font/delius_swash_caps"
                 android:text="@string/tvLogIn"
                 android:textAlignment="center"
                 android:textColor="@android:color/black"
                 android:textSize="30sp"
                 android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="100dp"
+                android:layout_height="105dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/image_login" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -54,10 +62,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
+                            android:drawablePadding="12dp"
+                            android:drawableLeft="@drawable/ic_person_24"
                             android:hint="@string/etLogin"
                             android:inputType="textEmailAddress"
                             android:maxLength="50"
-                            android:textSize="24sp" />
+                            android:textSize="18sp" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -80,9 +90,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
+                            android:drawablePadding="12dp"
+                            android:drawableLeft="@drawable/ic_key_24"
                             android:hint="@string/etPassword"
                             android:maxLength="10"
-                            android:textSize="24sp" />
+                            android:textSize="18sp" />
 
                     </android.support.design.widget.TextInputLayout>
 

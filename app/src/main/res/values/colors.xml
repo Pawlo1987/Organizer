@@ -9,4 +9,5 @@
     <color name="colorMyColorGold">#e0c7a715</color>
     <color name="colorMyColorGreen">#db34b43b</color>
     <color name="background_color">#beb7b7</color>
+    <color name="gray">#444440</color>
 </resources>

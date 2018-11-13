@@ -34,6 +34,7 @@ import com.example.user.organizer.fragment.WebFragment;
 import com.example.user.organizer.inteface.NavigationDrawerInterface;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -114,12 +115,14 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         //инициализация коллекции для спинера
         spListCity = new ArrayList<>();
         //обращаемся к базе для получения списка имен городов
-        spListCity = dbUtilities.getStrListTableFromDB("cities", "name");
+        List<String> listTemp = dbUtilities.getStrListTableFromDB("cities", "name");
+        Collections.sort(listTemp);
         //добавляем вариант "Все города"
         spListCity.add("ВСЕ ГОРОДА");
+        //добавляем всю коллекцию
+        spListCity.addAll(listTemp);
         spCityMain = findViewById(R.id.spCityMain);
         spCityMain.setAdapter(buildSpinner(spListCity));
-        spCityMain.setSelection(spListCity.size()-1);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

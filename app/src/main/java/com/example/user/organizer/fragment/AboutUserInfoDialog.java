@@ -51,7 +51,7 @@ public class AboutUserInfoDialog extends DialogFragment {
 
         tvMessage.setText(text);
         if(tvMessage.getText() != null) {
-            Linkify.addLinks(tvMessage, Linkify.PHONE_NUMBERS);
+            Linkify.addLinks(tvMessage, Linkify.ALL);
         }
 
         return builder

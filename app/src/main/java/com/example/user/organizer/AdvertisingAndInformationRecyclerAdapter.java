@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +66,14 @@ public class AdvertisingAndInformationRecyclerAdapter extends RecyclerView.Adapt
         //настраиваем EditText не редактируемые
         holder.tvHeadAdAvInReAd.setKeyListener(null);
         holder.tvMessageAdAvInReAd.setKeyListener(null);
+
+        if(holder.tvHeadAdAvInReAd.getText() != null) {
+            Linkify.addLinks(holder.tvHeadAdAvInReAd, Linkify.ALL);
+        }
+
+        if(holder.tvMessageAdAvInReAd.getText() != null) {
+            Linkify.addLinks(holder.tvMessageAdAvInReAd, Linkify.ALL);
+        }
 
         //Получаем размер установленного шрифта
         switch (note.getNoteTextSizeMessage()) {

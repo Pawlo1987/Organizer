@@ -16,9 +16,12 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormatSymbols;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -1331,8 +1334,28 @@ public class DBUtilities {
         return status;
     }//getEventExecutionStatus
 
-    //получение время
-    public void getTime() {
+    //приведение даты в формат вывода
+    public String dateShowFormat(String getDate) {
 
-    }//getTime
+        //преобразуем StringToDate
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try { date = simpleDateFormat.parse(getDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }//try-catch
+        //преобразуем DateToString в читабельный формат
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", myDateFormatSymbols );
+        return  dateFormat.format(date);
+    } // dateShowFormat
+
+    //вспомагательный объект для формирования даты
+    private DateFormatSymbols myDateFormatSymbols = new DateFormatSymbols() {
+
+        @Override
+        public String[] getMonths() {
+            return new String[]{"января", "февраля", "марта", "апреля", "мая", "июня",
+                    "июля", "августа", "сентября", "октября", "ноября", "декабря"};
+        }
+    };//DateFormatSymbols
 }//DBUtilities

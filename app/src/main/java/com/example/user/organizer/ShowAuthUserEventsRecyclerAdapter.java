@@ -92,7 +92,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         // получение данных
         holder.tvCityShAuUsEvReAd.setText(eventShow.cityName); //город
         holder.tvFieldShAuUsEvReAd.setText(eventShow.fieldName);//поле
-        holder.tvDateShAuUsEvReAd.setText(dateShowFormat(eventShow.eventData)); // Дата
+        holder.tvDateShAuUsEvReAd.setText(dbUtilities.dateShowFormat(eventShow.eventData)); // Дата
         holder.tvTimeShAuUsEvReAd.setText(eventShow.eventTime); //Время
         holder.tvStatusShAuUsEvReAd.setText(
                 (eventShow.eventUserStatus.equals("0"))?"Участник":"Организатор"
@@ -174,7 +174,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
                     eventCityName = event.cityName;
                     eventFieldName = event.fieldName;
                     eventDate = event.eventData;
-                    showEventDate = dateShowFormat(eventDate);
+                    showEventDate = dbUtilities.dateShowFormat(eventDate);
                     eventTime = event.eventTime;
                     eventDuration = event.eventDuration;
                     eventPrice = event.eventPrice;
@@ -199,7 +199,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
                     eventCityName = event.cityName;
                     eventFieldName = event.fieldName;
                     eventDate = event.eventData;
-                    showEventDate = dateShowFormat(eventDate);
+                    showEventDate = dbUtilities.dateShowFormat(eventDate);
                     eventTime = event.eventTime;
                     eventDuration = event.eventDuration;
                     eventPrice = event.eventPrice;
@@ -221,7 +221,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
                     eventCityName = event.cityName;
                     eventFieldName = event.fieldName;
                     eventDate = event.eventData;
-                    showEventDate = dateShowFormat(eventDate);
+                    showEventDate = dbUtilities.dateShowFormat(eventDate);
                     eventTime = event.eventTime;
                     eventDuration = event.eventDuration;
                     eventPrice = event.eventPrice;
@@ -287,7 +287,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
                             "Телефон %s",
                     eventCityName,
                     eventFieldName,
-                    showEventDate,
+                    dbUtilities.dateShowFormat(eventDate),
                     eventTime,
                     eventDuration,
                     eventPrice,
@@ -295,30 +295,4 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         }//fullInfoAboutEvent
 
     } // class ViewHolder
-
-    //приведение даты в формат вывода
-    private String dateShowFormat(String eventDate) {
-
-        //преобразуем StringToDate
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-        try { date = simpleDateFormat.parse(eventDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }//try-catch
-        //преобразуем DateToString в читабельный формат
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", myDateFormatSymbols );
-        return  dateFormat.format(date);
-    } // dateShowFormat
-
-    //вспомагательный объект для формирования даты
-    private DateFormatSymbols myDateFormatSymbols = new DateFormatSymbols() {
-
-        @Override
-        public String[] getMonths() {
-            return new String[]{"января", "февраля", "марта", "апреля", "мая", "июня",
-                    "июля", "августа", "сентября", "октября", "ноября", "декабря"};
-        }
-    };//DateFormatSymbols
-
 }//ShowAuthUserEventsRecyclerAdapter

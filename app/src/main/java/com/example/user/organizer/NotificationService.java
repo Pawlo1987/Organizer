@@ -84,7 +84,7 @@ public class NotificationService extends Service {
                                 notification.getNotice()
                         )+" ":"",
                 notification.getMessage(),
-                notification.getDate(),
+                dbUtilities.dateShowFormat(notification.getDate()),
                 notification.getTime(),
                 notification.getCity_id(),
                 notification.getField_id());

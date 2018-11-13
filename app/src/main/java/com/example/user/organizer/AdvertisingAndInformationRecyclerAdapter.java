@@ -16,6 +16,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 //-------Адаптер для вывода(просмотра) новости и реклама --------------
@@ -55,7 +59,7 @@ public class AdvertisingAndInformationRecyclerAdapter extends RecyclerView.Adapt
         new DownloadImageTask(holder.ivLogoAdAvInReAd)
                 .execute("http://strahovanie.dn.ua/football_db/logo/logo_" + note.getNoteLogo() + ".png");
         holder.tvHeadAdAvInReAd.setText(Html.fromHtml("<u>" + note.getNoteHead() + "</u>"));     //заголовок
-        holder.tvDateAdAvInReAd.setText(note.getNoteDate());     //дата
+        holder.tvDateAdAvInReAd.setText(dbUtilities.dateShowFormat(note.getNoteDate()));     //дата
         holder.tvCityAdAvInReAd.setText(note.getNoteCityName()); //город
         holder.tvMessageAdAvInReAd.setText(note.getNoteMessage());     //сообшение
         //настраиваем EditText не редактируемые

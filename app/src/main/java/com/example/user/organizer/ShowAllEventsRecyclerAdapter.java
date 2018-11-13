@@ -88,7 +88,7 @@ public class ShowAllEventsRecyclerAdapter extends
         // получение данных
         holder.tvCityShAlEvReAd.setText(eventShow.cityName); //город
         holder.tvFieldShAlEvReAd.setText(eventShow.fieldName);//поле
-        holder.tvDateShAlEvReAd.setText(dateShowFormat(eventShow.eventData)); // Дата
+        holder.tvDateShAlEvReAd.setText(dbUtilities.dateShowFormat(eventShow.eventData)); // Дата
         holder.tvTimeShAlEvReAd.setText(eventShow.eventTime); //Время
 
         //опредиляемся с цветом CardView взависимости от роли пользователя в собитии
@@ -165,7 +165,7 @@ public class ShowAllEventsRecyclerAdapter extends
                     eventCityName = event.cityName;
                     eventFieldName = event.fieldName;
                     eventDate = event.eventData;
-                    showEventDate = dateShowFormat(eventDate);
+                    showEventDate = dbUtilities.dateShowFormat(eventDate);
                     eventTime = event.eventTime;
                     eventDuration = event.eventDuration;
                     eventPrice = event.eventPrice;
@@ -189,7 +189,7 @@ public class ShowAllEventsRecyclerAdapter extends
                     eventCityName = event.cityName;
                     eventFieldName = event.fieldName;
                     eventDate = event.eventData;
-                    showEventDate = dateShowFormat(eventDate);
+                    showEventDate = dbUtilities.dateShowFormat(eventDate);
                     eventTime = event.eventTime;
                     eventDuration = event.eventDuration;
                     eventPrice = event.eventPrice;
@@ -238,37 +238,12 @@ public class ShowAllEventsRecyclerAdapter extends
                             "Телефон %s",
                     eventCityName,
                     eventFieldName,
-                    eventDate,
+                    dbUtilities.dateShowFormat(eventDate),
                     eventTime,
                     eventDuration,
                     eventPrice,
                     eventPhone);
         }//fullInfoAboutEvent
     } // class ViewHolder
-
-    //приведение даты в формат вывода
-    private String dateShowFormat(String eventDate) {
-
-        //преобразуем StringToDate
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-        try { date = simpleDateFormat.parse(eventDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }//try-catch
-        //преобразуем DateToString в читабельный формат
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", myDateFormatSymbols );
-        return  dateFormat.format(date);
-    } // dateShowFormat
-
-    //вспомагательный объект для формирования даты
-    private DateFormatSymbols myDateFormatSymbols = new DateFormatSymbols() {
-
-        @Override
-        public String[] getMonths() {
-            return new String[]{"января", "февраля", "марта", "апреля", "мая", "июня",
-                    "июля", "августа", "сентября", "октября", "ноября", "декабря"};
-        }
-    };//DateFormatSymbols
 
 }//ShowAllEventsRecyclerAdapter

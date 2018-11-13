@@ -29,6 +29,9 @@
                 android:id="@+id/settings"
                 android:title="@string/settings" />
             <item
+                android:id="@+id/about_us"
+                android:title="@string/about_us" />
+            <item
                 android:id="@+id/log_out"
                 android:title="@string/log_out" />
             <item

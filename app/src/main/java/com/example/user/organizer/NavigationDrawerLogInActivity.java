@@ -22,6 +22,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.user.organizer.fragment.AboutUsFragment;
 import com.example.user.organizer.fragment.AboutUserInfoDialog;
 import com.example.user.organizer.fragment.AdvertisingAndInformationFragment;
 import com.example.user.organizer.fragment.ExitConfirmDialog;
@@ -57,6 +58,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
     ShowFieldCatalogFragment showFieldCatalogFragment;
     ShowAuthUserEventsFragment showAuthUserEventsFragment;
     AdvertisingAndInformationFragment advertisingAndInformationFragment;
+    AboutUsFragment aboutUsFragment;
     WebFragment webFragment;
     SettingsFragment settingsFragment;
     FragmentTransaction fTrans;
@@ -81,6 +83,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
 
         dbUtilities = new DBUtilities(getBaseContext());
 
+        aboutUsFragment = new AboutUsFragment();
         exitConfirmDialog = new ExitConfirmDialog();
         showAllEventsFragment = new ShowAllEventsFragment();
         showFieldCatalogFragment = new ShowFieldCatalogFragment();
@@ -170,7 +173,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         fTrans = getFragmentManager().beginTransaction();
-        fTrans.replace(R.id.container, webFragment);
+        fTrans.replace(R.id.container, advertisingAndInformationFragment);
         fTrans.commit();
         drawer.closeDrawer(GravityCompat.START);
     }//onCreate
@@ -320,6 +323,8 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
             fTrans.replace(R.id.container, webFragment);
         } else if (id == R.id.settings) {
             fTrans.replace(R.id.container, settingsFragment);
+        } else if (id == R.id.about_us) {
+            fTrans.replace(R.id.container, aboutUsFragment);
         } else if (id == R.id.log_out) {
             Bundle args1 = new Bundle();    // объект для передачи параметров в диалог
             args1.putBoolean("flag", true);      //выйти из аккаунта

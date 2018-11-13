@@ -153,5 +153,8 @@
     <string name="tvHeadSeFr">Settings</string>
     <string name="tvHeaderWeFr">Web Info</string>
     <string name="web_info">Веб инфо</string>
+    <string name="btnAboutUs">О нас</string>
+    <string name="about_us">О нас</string>
+    <string name="tvHeadAbUsFr">About Us</string>
 
 </resources>

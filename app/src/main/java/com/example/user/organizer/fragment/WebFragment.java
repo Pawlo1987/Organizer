@@ -65,7 +65,7 @@ public class WebFragment extends Fragment {
 
         FloatingActionButton fabMain = getActivity().findViewById(R.id.fabMain);
         fabMain.setVisibility(View.GONE);
-        
+
         wvMainWeFr = (WebView)result.findViewById(R.id.wvMainWeFr);
         String url = "http://livesport.ws/live-football";
         wvMainWeFr.getSettings().setJavaScriptEnabled(true);

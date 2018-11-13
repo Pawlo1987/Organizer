@@ -131,6 +131,10 @@ public class MainActivity extends AppCompatActivity {
                 showFieldCatalog();
                 break;
 
+            case R.id.btnAboutUs:
+                aboutUsFragment();
+                break;
+
             case R.id.btnExitMaAc:
                 finish();
                 break;
@@ -138,9 +142,17 @@ public class MainActivity extends AppCompatActivity {
 
     }//onClick
 
+    //показать фрагмент О нас
+    private void aboutUsFragment() {
+        Intent intent = new Intent(this, ShowSomeFragmentBeforeAuthActivity.class);
+        intent.putExtra("fragment","about");
+        startActivity(intent);
+    }//aboutUsFragment
+
     //показать каталог полей
     private void showFieldCatalog() {
-        Intent intent = new Intent(this, ShowFieldCatalogBeforeAuthActivity.class);
+        Intent intent = new Intent(this, ShowSomeFragmentBeforeAuthActivity.class);
+        intent.putExtra("fragment","field");
         startActivity(intent);
     }//showFieldCatalog
 

@@ -113,7 +113,6 @@
     <string name="btnConfirmEdEv">Подтвердить</string>
     <string name="tvPhoneCrFi">Телефон</string>
     <string name="tvGeolongCrFi">Геолок. долгота</string>
-    <string name="tvHeaderShFiCaFr">Каталог полей</string>
     <string name="tvFirstLineShFiCaReAd">Город</string>
     <string name="tvSecondLineShFiCaReAd">Назв.</string>
     <string name="tvThirdLineShFiCaReAd">Телефон</string>
@@ -123,5 +122,6 @@
     <string name="tvTypeShAlEvReAd">Тренировка</string>
     <string name="tvThirdLineShAlEvReAd">Город:</string>
     <string name="tvTypeShAuUsEvReAd">Тренировка</string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>

@@ -2,24 +2,23 @@ package com.example.user.organizer.fragment;
 
 //-----------Фрагмент выводит каталог полей--------------------------
 
-
-
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.user.organizer.DBUtilities;
 import com.example.user.organizer.Field;
+import com.example.user.organizer.FieldMapsActivity;
 import com.example.user.organizer.R;
-import com.example.user.organizer.ShowAllEventsRecyclerAdapter;
 import com.example.user.organizer.ShowFieldCatalogRecyclerAdapter;
 
 import java.util.ArrayList;
@@ -30,6 +29,7 @@ public class ShowFieldCatalogFragment extends Fragment {
     RecyclerView rvMainShFiCaFr;
     // адаптер для отображения recyclerView
     ShowFieldCatalogRecyclerAdapter showFieldCatalogRecyclerAdapter;
+    Button btnMapShFiCaFr;
     DBUtilities dbUtilities;
 
     List<Field> fieldList = new ArrayList<>(); //коллекция полей
@@ -78,6 +78,7 @@ public class ShowFieldCatalogFragment extends Fragment {
 
         // создаем адаптер, передаем в него курсор
         showFieldCatalogRecyclerAdapter = new ShowFieldCatalogRecyclerAdapter(context, fieldList, idAuthUser);
+
     }//onAttachToContext
 
     @Override
@@ -85,6 +86,15 @@ public class ShowFieldCatalogFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View result = inflater.inflate(R.layout.fragment_show_field_catalog, container, false);
+
+        btnMapShFiCaFr = (Button)result.findViewById(R.id.btnMapShFiCaFr);
+        btnMapShFiCaFr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), FieldMapsActivity.class);
+                startActivity(intent);
+            }
+        });
         // RecyclerView для отображения таблицы users БД
         rvMainShFiCaFr = result.findViewById(R.id.rvMainShFiCaFr);
         //привязываем адаптер к recycler объекту

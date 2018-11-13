@@ -71,16 +71,11 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer_log_in);
-        idAuthUser = getIntent().getStringExtra("idAuthUser");
-
         //если активность была вызванна после получения уведомления true
         notificationServiceFlag =
                 getIntent().getBooleanExtra("notificationServiceFlag",false);
 
-
-        //проверка флага notificationServiceFlag
-        //если активность вызваннна после NotificationService
-        if(notificationServiceFlag) checkNotificationMessage();
+        idAuthUser = getIntent().getStringExtra("idAuthUser");
 
         dbUtilities = new DBUtilities(getBaseContext());
 
@@ -179,6 +174,10 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         fTrans.replace(R.id.container, advertisingAndInformationFragment);
         fTrans.commit();
         drawer.closeDrawer(GravityCompat.START);
+
+        //проверка флага notificationServiceFlag
+        //если активность вызваннна после NotificationService
+        if(notificationServiceFlag) checkNotificationMessage();
     }//onCreate
 
     //строим Spinner
@@ -200,11 +199,11 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
     private void checkNotificationMessage() {
         int messageId = Integer.parseInt(getIntent().getStringExtra("messageId"));
         String messageText = getIntent().getStringExtra("messageText");
-        String title = getIntent().getStringExtra(" title");
+        String title = getIntent().getStringExtra("title");
         //назначение уведомлений в соответсвии с таблицей в БД notificationmessage
         switch(messageId){
             case 1:
-                alertDialogTwoButton(title, messageText, messageId);
+                alertDialogOneButton(title, messageText);
                 break;
             case 2:
                 alertDialogOneButton(title, messageText);
@@ -219,6 +218,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
                 alertDialogTwoButton(title, messageText, messageId);
                 break;
         }//switch
+
     }//checkNotificationMessage
 
     //AlertDialog с одной кнопкой
@@ -226,11 +226,12 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(title)
                 .setMessage(messageText)
-//                .setIcon(R.drawable.ic_android_cat)
+                .setIcon(R.drawable.icon_information)
                 .setCancelable(false)
                 .setNegativeButton("ОК",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                restartService();
                                 dialog.cancel();
                             }
                         });
@@ -248,17 +249,38 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         ad = new AlertDialog.Builder(this);
         ad.setTitle(title);  // заголовок
         ad.setMessage(messageText); // сообщение
+        ad.setIcon(R.drawable.icon_question);
         ad.setPositiveButton(button1String, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int arg1) {
-                if(messageId == 5) dbUtilities.insertIntoParticipants(
+                if(messageId == 5) {
+                    //добавляем учасника
+                    dbUtilities.insertIntoParticipants(
                         eventId,
                         getIntent().getStringExtra("notice")
-                );
+                    );
+
+                    //оповещаем учасника
+                    Event event = dbUtilities.getListEvents(eventId,"","").get(0);
+                    String city_id = dbUtilities.getIdByValue(
+                            "cities", "name",event.cityName);
+                    String field_id = dbUtilities.getIdByValue(
+                            "fields", "name",event.fieldName);
+                    dbUtilities.insertIntoNotifications(
+                            event.eventId,
+                            getIntent().getStringExtra("notice"),
+                            city_id,
+                            field_id,
+                            event.eventTime,
+                            event.eventData,
+                            "1",
+                            " ");
+                }//if(messageId == 5)
+                restartService();
             }
         });
         ad.setNegativeButton(button2String, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int arg1) {
-                if(messageId == 1) { leaveEvent(eventId); }
+                restartService();
             }
         });
         ad.setCancelable(true);
@@ -270,6 +292,22 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         });
         ad.show();
     }//alertDialogTwoButton
+
+    //удаляем сообщение и перезапускаем поток
+    private void restartService() {
+        //удаляем сообщение из БД
+        dbUtilities.deleteRowByValue(
+                "notifications",
+                "id",
+                getIntent().getStringExtra("notificationId")
+        );//deleteRowByValue
+
+        //процедура запуска сервиса отслеживания изменения БД
+        //для получения сообщений
+        Intent intent = new Intent(this, NotificationService.class);
+        intent.putExtra("idAuthUser", idAuthUser);
+        startService(intent);
+    }//restartService
 
     //отказатся от участия в событии
     private void leaveEvent(String eventId) {

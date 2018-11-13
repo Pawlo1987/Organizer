@@ -56,12 +56,20 @@
                             android:textAlignment="center"
                             android:textColor="@android:color/holo_red_dark" />
 
+                        <ImageView
+                            android:id="@+id/ivParticipantsShAuUsEvReAd"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1.5"
+                            android:src="@drawable/ic_person_24" />
+
                         <TextView
                             android:id="@+id/tvExecutionStatusShAuUsEvReAd"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:text="TextView"
+                            android:textAlignment="center"
                             android:textColor="@android:color/holo_red_dark" />
 
                     </LinearLayout>

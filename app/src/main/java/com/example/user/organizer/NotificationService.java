@@ -50,17 +50,9 @@ public class NotificationService extends Service {
                         List<com.example.user.organizer.Notification> listNotification = new ArrayList<>();
                         listNotification.addAll(dbUtilities.getSomeNotifications(idAuthUser));
 
-                        if (listNotification.size() > 0)
-                            for (com.example.user.organizer.Notification notification : listNotification) {
-                                sendNotification(notification);
-
-                                dbUtilities.deleteRowByValue(
-                                        "notifications",
-                                        "id",
-                                        notification.getId()
-                                );//deleteRowByValue
-
-                            }//foreach
+                        if (listNotification.size() > 0) {
+                            sendNotification(listNotification.get(0));
+                        }
                         Log.d("qwe", String.format("работает поток %s       %s", this.hashCode(), idAuthUser));
                         //задержка перед формирование следующего файла
                         Thread.sleep(8000);
@@ -99,6 +91,7 @@ public class NotificationService extends Service {
 
         // 3-я часть  Click on notification
         Intent intent = new Intent(this, NavigationDrawerLogInActivity.class);
+        intent.putExtra("notificationId", notification.getId());
         intent.putExtra("idAuthUser", idAuthUser);
         intent.putExtra("notice", notification.getNotice());
         intent.putExtra("title", notification.getMessage());
@@ -130,6 +123,7 @@ public class NotificationService extends Service {
         // отправляем
         //Utils.getRandom(1, 100) - чтоб сообщений приходило много, а не одно
         nm.notify(Utils.getRandom(1, 100), notif);
+        stopSelf();
     }//sendNotification
 
     @Override

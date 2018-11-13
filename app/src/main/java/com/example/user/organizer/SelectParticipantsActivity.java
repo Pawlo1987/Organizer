@@ -141,7 +141,7 @@ public class SelectParticipantsActivity extends AppCompatActivity {
 
         // создаем адаптер, передаем в него курсор
         selectParticipantsRecyclerAdapter
-                = new SelectParticipantsRecyclerAdapter(context, filter, showUserList, loginUserList);
+                = new SelectParticipantsRecyclerAdapter(context, filter, showUserList, loginUserList, idAuthUser);
         // RecycerView для отображения таблицы users БД
         rvUserSePaAc = (RecyclerView) findViewById(R.id.rvUserSePaAc);
 

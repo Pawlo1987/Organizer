@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         }else{
             btnCheckConMaAc.setVisibility(View.GONE);
             btnAuthorizationMaAc.setVisibility(View.VISIBLE);
-            reserveFieldData();
+//            reserveFieldData();
         }//if-else
     }//onCreate
 
@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         List<Field> fieldList = dbUtilities.getListField("","");
 
         for (User user : userList) {
+//            dbLocalUtilities.getUser(cv, "users");
             ContentValues cv = new ContentValues();
             cv.put("id",user.getId());
             cv.put("name", user.getName());

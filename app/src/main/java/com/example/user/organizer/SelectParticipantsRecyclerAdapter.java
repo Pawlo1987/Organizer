@@ -23,12 +23,16 @@ public class SelectParticipantsRecyclerAdapter extends RecyclerView.Adapter<Sele
     DBUtilities dbUtilities;
     private Participant participant = new Participant();
     List<String> loginUserList;     //коллекция логинов участников для добавления в событие
+    String idAuthUser;
 
     //конструктор
-    SelectParticipantsRecyclerAdapter(Context context, String filter, List<Participant> ShowUserList, List<String> loginUserList) {
+    SelectParticipantsRecyclerAdapter(Context context, String filter,
+                                      List<Participant> ShowUserList, List<String> loginUserList,
+                                      String idAuthUser) {
         this.inflater = LayoutInflater.from(context);
         this.filter = filter;
         this.ShowUserList = ShowUserList;
+        this.idAuthUser = idAuthUser;
         dbUtilities = new DBUtilities(context);
         this.loginUserList = loginUserList;
     } // SelectParticipantsRecyclerAdapter

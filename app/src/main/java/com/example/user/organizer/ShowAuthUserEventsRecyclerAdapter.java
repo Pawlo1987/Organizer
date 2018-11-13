@@ -2,6 +2,8 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.user.organizer.fragment.ShowListParticipantsDialog;
 import com.example.user.organizer.inteface.AuthUserEventsInterface;
 
 import java.text.DateFormatSymbols;
@@ -45,6 +48,11 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
     String eventPhone;
     String eventUserId;
     String cityId;
+    //параметр для вызова диалога "showListParticipantsDialog"
+    final String ID_SHOW_LIST_PARTICIPANTS_DIALOG = "showListParticipantsDialog";
+
+    ShowListParticipantsDialog showListParticipantsDialog =
+            new ShowListParticipantsDialog(); // диалог просмотра списка участиков
 
     //конструктор
     public ShowAuthUserEventsRecyclerAdapter(AuthUserEventsInterface authUserEventsInterface,
@@ -123,7 +131,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
     public class ViewHolder extends RecyclerView.ViewHolder{
         final TextView tvDateShAuUsEvReAd, tvTimeShAuUsEvReAd, tvCityShAuUsEvReAd,
                        tvFieldShAuUsEvReAd, tvStatusShAuUsEvReAd, tvExecutionStatusShAuUsEvReAd;
-        ImageView ivArrowShAuUsEvReAd, ivDeleteEventShAuUsEvReAd;
+        ImageView ivArrowShAuUsEvReAd, ivDeleteEventShAuUsEvReAd, ivParticipantsShAuUsEvReAd;
         CardView cvMainShAuUsEvReAd;
 
         ViewHolder(View view){
@@ -137,6 +145,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
             ivArrowShAuUsEvReAd = view.findViewById(R.id.ivArrowShAuUsEvReAd);
             ivDeleteEventShAuUsEvReAd = view.findViewById(R.id.ivDeleteEventShAuUsEvReAd);
             cvMainShAuUsEvReAd = view.findViewById(R.id.cvMainShAuUsEvReAd);
+            ivParticipantsShAuUsEvReAd = view.findViewById(R.id.ivParticipantsShAuUsEvReAd);
 
 
             //onTouch
@@ -188,6 +197,31 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
                 }//if-else
                 return true;
             });//setOnLongClickListener
+
+            //слушатель события нажатия человечка
+            ivParticipantsShAuUsEvReAd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    List<String> loginUserList = new ArrayList<>();
+                    //получаем колекцию id
+                    List<String> idUserList = dbUtilities.getListValuesByValueAndHisColumn(
+                            "participants","event_id",
+                            eventsList.get(getAdapterPosition()).eventId,"user_id");
+                    //получаем колекцию логинов
+                    for (String userId : idUserList) {
+                        loginUserList.add(dbUtilities.searchValueInColumn(
+                                "users","id","login",userId));
+                    }//for
+
+                    Bundle args = new Bundle();    // объект для передачи параметров в диалог
+                    args.putStringArrayList("participantsLoginList", (ArrayList<String>) loginUserList);
+
+                    showListParticipantsDialog.setArguments(args);
+                    // Точка вызова отображение диалогового окна
+                    showListParticipantsDialog.show( ((AppCompatActivity)context).
+                            getSupportFragmentManager(), ID_SHOW_LIST_PARTICIPANTS_DIALOG);
+                }
+            });// ivParticipants.setOnClickListener
 
             //слушатель события нажатия стрелки
             ivArrowShAuUsEvReAd.setOnClickListener(new View.OnClickListener() {

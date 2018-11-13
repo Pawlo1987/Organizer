@@ -2,26 +2,24 @@ package com.example.user.organizer;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.user.organizer.fragment.SelectDurationDialog;
+import com.example.user.organizer.fragment.ShowListParticipantsDialog;
 import com.example.user.organizer.inteface.AllEventsInterface;
 
-import java.text.DateFormatSymbols;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 //-------Адаптера для вывода(просмотра) всех событий--------------
@@ -49,6 +47,12 @@ public class ShowAllEventsRecyclerAdapter extends
     String eventUserId;
     String cityId;
     final String[] value = new String[1];   //строка изъятая из alertDialog при проверке пароля
+
+    //параметр для вызова диалога "showListParticipantsDialog"
+    final String ID_SHOW_LIST_PARTICIPANTS_DIALOG = "showListParticipantsDialog";
+
+    ShowListParticipantsDialog showListParticipantsDialog =
+            new ShowListParticipantsDialog(); // диалог просмотра списка участиков
 
     //конструктор
     public ShowAllEventsRecyclerAdapter(AllEventsInterface allEventsInterface,
@@ -120,7 +124,7 @@ public class ShowAllEventsRecyclerAdapter extends
         final TextView tvDateShAlEvReAd, tvTimeShAlEvReAd,
                 tvCityShAlEvReAd, tvFieldShAlEvReAd;
         CardView cvMainShAlEvAc;
-        ImageView ivArrowShAlEvReAd;
+        ImageView ivArrowShAlEvReAd, ivParticipantsShAlEvReAd;
 
         ViewHolder(View view){
             super(view);
@@ -131,6 +135,7 @@ public class ShowAllEventsRecyclerAdapter extends
             tvFieldShAlEvReAd = view.findViewById(R.id.tvFieldShAlEvReAd);
             cvMainShAlEvAc = view.findViewById(R.id.cvMainShAlEvAc);
             ivArrowShAlEvReAd = view.findViewById(R.id.ivArrowShAlEvReAd);
+            ivParticipantsShAlEvReAd = view.findViewById(R.id.ivParticipantsShAlEvReAd);
 
             cvMainShAlEvAc.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -182,6 +187,31 @@ public class ShowAllEventsRecyclerAdapter extends
                 }//onLongClick
             });//setOnLongClickListener
 
+            //слушатель события нажатия человечка
+            ivParticipantsShAlEvReAd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    List<String> loginUserList = new ArrayList<>();
+                    //получаем колекцию id
+                    List<String> idUserList = dbUtilities.getListValuesByValueAndHisColumn(
+                            "participants","event_id",
+                            eventsList.get(getAdapterPosition()).eventId,"user_id");
+                    //получаем колекцию логинов
+                    for (String userId : idUserList) {
+                        loginUserList.add(dbUtilities.searchValueInColumn(
+                                "users","id","login",userId));
+                    }//for
+
+                    Bundle args = new Bundle();    // объект для передачи параметров в диалог
+                    args.putStringArrayList("participantsLoginList", (ArrayList<String>) loginUserList);
+
+                    showListParticipantsDialog.setArguments(args);
+                    // Точка вызова отображение диалогового окна
+                    showListParticipantsDialog.show( ((AppCompatActivity)context).
+                            getSupportFragmentManager(), ID_SHOW_LIST_PARTICIPANTS_DIALOG);
+                }
+            });// ivParticipants.setOnClickListener
+
             //слушатель события нажатия стрелки
             ivArrowShAlEvReAd.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -219,21 +249,28 @@ public class ShowAllEventsRecyclerAdapter extends
                 message = fullInfoAboutEvent();
             }//if-else
             if(!userTakeInPart) {
-                //берем пароль из БД
-                String password = dbUtilities.searchValueInColumn(
-                        "events","id","password",eventId);
+                boolean requestIsReady = false;  //переменная есть ли такой запрос
+                //проверка есть ли непрочитаный запрос чтобы не дублирывать его
+                requestIsReady = checkIsRequestIsReady(eventId);
+                if(requestIsReady) {
+                    alertDialogOneButton("Вы уже подавали запрос!", "Организатор еще не получил ваш запрос.");
+                }else {
+                    //берем пароль из БД
+                    String password = dbUtilities.searchValueInColumn(
+                            "events", "id", "password", eventId);
 
-                //если пароль не пустой запрос пароля через alertDialog
-                if(!password.equals("")) alertDialogEditText(context, password, userTakeInPart, eventId, message);
-                else {
-                    //через интерфейс allEventsInterface
-                    allEventsInterface.callDialogTakePart(context, eventId, userTakeInPart, message);
-                }
-
+                    //если пароль не пустой запрос пароля через alertDialog
+                    if (!password.equals(""))
+                        alertDialogEditText(context, password, userTakeInPart, eventId, message);
+                    else {
+                        //через интерфейс allEventsInterface
+                        allEventsInterface.callDialogTakePart(context, eventId, userTakeInPart, message);
+                    }
+                }//if(requestIsReady) {
             }else {
                 //через интерфейс allEventsInterface
                 allEventsInterface.callDialogTakePart(context, eventId, userTakeInPart, message);
-            }
+            }//if(!userTakeInPart) {
         }//callDialogTakePart
 
         //Вызов диалога для подробной информации о событии
@@ -288,19 +325,33 @@ public class ShowAllEventsRecyclerAdapter extends
 
     //проверка пароля если событие запароленно
     private void checkPassword(Context context, String password, String value, boolean userTakeInPart, String eventId, String message) {
-        if(password.equals(value)) {
+        //проверка совпадения пароля
+        if (password.equals(value)) {
             //через интерфейс allEventsInterface
             allEventsInterface.callDialogTakePart(context, eventId, userTakeInPart, message);
-        }else{
-            alertDialogOneButton();
-        }
+        } else {
+            alertDialogOneButton("Ошибка!", "Неверный пароль!");
+        }//if(password.equals(value))
     }//checkPassword
 
+    //проверка есть ли непрочитаный запрос чтобы не дублирывать его
+    private boolean checkIsRequestIsReady(String eventId) {
+        List<Notification> someNotification = dbUtilities.getSomeNotifications(eventUserId);
+        for (Notification notification : someNotification) {
+            //поиск совподающих сообщений
+            if(notification.event_id.equals(eventId)
+                    && notification.notice.equals(idAuthUser)
+                    && notification.message.equals("подал запрос на участие в событии"))
+                return true;
+        }
+        return false;
+    }//checkIsRequestIsReady
+
     //если пароль неверный сообщение оповещающие об этом
-    private void alertDialogOneButton() {
+    private void alertDialogOneButton(String title, String message) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("Ошибка!")
-                    .setMessage("Неверный пароль!")
+            builder.setTitle(title)
+                    .setMessage(message)
                     .setIcon(R.drawable.icon_information)
                     .setCancelable(false)
                     .setNegativeButton("ОК",

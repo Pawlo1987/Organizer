@@ -69,6 +69,41 @@ public class DBLocalUtilities {
         return list;
     }//fillListStr
 
+//    //заполнить коллекцию(List) данные для отображения в Spinner
+//    public List<User> getUserList(String cityId) {
+//        List<Field> list = new ArrayList<>();
+//        Cursor cursor;
+//
+//        // получаем данные из БД в виде курсора (коллекция, возвращенная запросом)
+//        String query = null;
+//        if(cityId.equals("")) query = "SELECT * FROM fields;";
+//        else query = "SELECT * FROM fields WHERE city_id = " + cityId + ";";
+//        // получаем данные из БД в виде курсора
+//        cursor = db.rawQuery(query, null);
+//        int n = cursor.getCount();        //количество строк в курсоре
+//        for (int i = 0; i < n; i++) {
+//            cursor.moveToPosition(i); // переходим в курсоре на текущую позицию
+//            //считываем данные
+//            list.add(
+//                    new Field(
+//                            (cursor.getString(0)),
+//                            (cursor.getString(1)),
+//                            (cursor.getString(2)),
+//                            (cursor.getString(3)),
+//                            (cursor.getString(4)),
+//                            (cursor.getString(5)),
+//                            (cursor.getString(6)),
+//                            (cursor.getString(7)),
+//                            (cursor.getString(8)),
+//                            (cursor.getString(9)),
+//                            (cursor.getString(10)),
+//                            (cursor.getString(11))
+//                    )//Field
+//            );//list.add
+//        }//for
+//        return list;
+//    }//getFieldList
+
     //заполнить коллекцию(List) данные для отображения в Spinner
     public List<Field> getFieldList(String cityId) {
         List<Field> list = new ArrayList<>();

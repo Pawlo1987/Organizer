@@ -388,6 +388,7 @@ public class EditEventActivity extends AppCompatActivity{
     //обработка нажатия клавиши добавить участника
     private void addUser() {
         Intent intent = new Intent(this, SelectParticipantsActivity.class);
+        intent.putExtra("idAuthUser", idAuthUser);
         startActivityForResult(intent, REQ_ADD_USER);
     }//addUser
 
@@ -407,8 +408,10 @@ public class EditEventActivity extends AppCompatActivity{
     //обновление событие
     private void updateEvent() {
         //статус создания по времени(создавать минимум за час)
-        boolean status = dbUtilities.getEventExecutionStatus(eventDateForDB, eventStartTime);
-        if ( etPriceCrEv.getText().toString().equals("")
+        boolean status = dbUtilities.getEventExecutionStatus(
+                btnDateCrEv.getText().toString().substring(16),
+                btnStartTimeCrEv.getText().toString().substring(13));
+        if (etPriceCrEv.getText().toString().equals("")
                 || etPhoneCrEv.length()<14
                 || spListField.size() == 0) {
             Toast.makeText(this, "Ошибка или пустые поля!", Toast.LENGTH_SHORT).show();
@@ -422,8 +425,8 @@ public class EditEventActivity extends AppCompatActivity{
             String field_id = dbUtilities.getIdByValue("fields", "name",
                     spFieldCrEv.getSelectedItem().toString()   //Объект спинера(название поля)
             );
-            String date = eventDateForDB;
-            String time = eventStartTime;
+            String date = btnDateCrEv.getText().toString().substring(16);
+            String time = btnStartTimeCrEv.getText().toString().substring(13);
             String duration = durationMas[iDuration];
             String price = etPriceCrEv.getText().toString();
             String password = evPasswordCrEv.getText().toString();
@@ -435,6 +438,11 @@ public class EditEventActivity extends AppCompatActivity{
                     duration, price, password, phone, user_id);
 
             if (flChangeLoginUserList) {
+
+                //получаем колекцию id
+                idUserList = dbUtilities.getListValuesByValueAndHisColumn(
+                        "participants","event_id",
+                        eventId,"user_id");
 
                 //удаляем старый список учасников из таблицы participants
                 for (String idUser : idUserList) {

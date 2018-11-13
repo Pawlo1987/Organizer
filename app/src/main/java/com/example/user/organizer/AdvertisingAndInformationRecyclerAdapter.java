@@ -84,7 +84,6 @@ public class AdvertisingAndInformationRecyclerAdapter extends RecyclerView.Adapt
                     context.getResources().getColor(R.color.colorMyColorGold));
         else holder.cvMainAdAvInReAd.setCardBackgroundColor(
                 context.getResources().getColor(R.color.colorMyColorGrey));
-
     } // onBindViewHolder
 
     //получаем количество элементов объекта(курсора)

@@ -66,6 +66,7 @@ public class ChangeColumnDialog extends DialogFragment {
         String value = getArguments().getString("value");
         String dataMessage = getArguments().getString("dataMessage");
 
+        //формирование строки message для диалога
         String message = "Новые данные: " + dataMessage;
 
         return builder
@@ -86,6 +87,7 @@ public class ChangeColumnDialog extends DialogFragment {
                 .create();
     }//onCreateDialog
 
+    //процедура обновленя данных при нажати на клавишу "Подтверждения
     private void updateData(String userId, String column, String value, String table) {
         //Занесем данные в БД
         dbUtilities.updateOneColumnTable(userId, column, value, table);

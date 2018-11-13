@@ -69,6 +69,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
 
         idAuthUser = getIntent().getStringExtra("idAuthUser");
 
+        //если активность была вызванна после получения уведомления true
         notificationServiceFlag =
                 getIntent().getBooleanExtra("notificationServiceFlag",false);
 
@@ -100,6 +101,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //создание кнопки обновления recyclerView для доступа в других фрагментах
         FloatingActionButton fabMain = (FloatingActionButton) findViewById(R.id.fabMain);
         fabMain.setVisibility(View.GONE);
 
@@ -163,13 +165,14 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         );
 
         navigationView.setNavigationItemSelectedListener(this);
+
         //Запуск сервиса следящего за обновления информации в БД
+        //для получения уведомлений
         startServiceWatchingForDb();
     }//onCreate
 
     //строим Spinner
     private ArrayAdapter buildSpinner(List<String> list) {
-
         ArrayAdapter<String> spinnerAdapter;
 
         //создание адаптера для спинера
@@ -178,10 +181,8 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
                 android.R.layout.simple_spinner_item,
                 list
         );
-
         // назначение адапетра для списка
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         return spinnerAdapter;
     }//buildCitySpinner
 
@@ -190,6 +191,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         int messageId = Integer.parseInt(getIntent().getStringExtra("messageId"));
         String messageText = getIntent().getStringExtra("messageText");
         String title = getIntent().getStringExtra(" title");
+        //назначение уведомлений в соответсвии с таблицей в БД notificationmessage
         switch(messageId){
             case 1:
                 alertDialogTwoButton(title, messageText, messageId);
@@ -268,7 +270,6 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         //получаем данные для уведомления
         List<Event> listEvent = new ArrayList<>();
         listEvent = dbUtilities.getListEvents(eventId, "", idAuthUser);
-
         //увеомление для организатора
         dbUtilities.insertIntoNotifications(eventId,
                 dbUtilities.searchValueInColumn("events","id","user_id",eventId),
@@ -277,31 +278,12 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
                 listEvent.get(0).getEventTime(), listEvent.get(0).getEventData(), "3",
                 idAuthUser
         );
-
         //удаления записи из БД( удаление записи из таблицы participants по id)
         dbUtilities.deleteRowById("participants", id);
     }//leaveEvent
 
-    private void alertDialogTimeOut(String messageText) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Автоматическое закрытие окна");
-        builder.setMessage(messageText);
-        builder.setCancelable(true);
-
-        final AlertDialog dlg = builder.create();
-
-        dlg.show();
-
-        final Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            public void run() {
-                dlg.dismiss(); // when the task active then close the dialog
-                timer.cancel(); // also just top the timer thread, otherwise,
-                // you may receive a crash report
-            }
-        }, 3000); // через 5 секунд (5000 миллисекунд), the task will be active.
-    }//alertDialogTimeOut
-
+    //процедура запуска сервиса отслеживания изменения БД
+    //для получения сообщений
     private void startServiceWatchingForDb() {
         Intent intent = new Intent(this, NotificationService.class);
         intent.putExtra("idAuthUser", idAuthUser);
@@ -318,6 +300,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         }
     }
 
+    //работа с боковым меню
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -387,6 +370,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
                 user.getEmail());
     }//fullInfoAboutEvent
 
+    //разавторизироватся
     @Override
     public void signOut() {
         moveTaskToBack(true);
@@ -396,7 +380,7 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         startActivity(intent);
     }//signOut
 
-    //вызов диалога
+    //вызов диалога с информацией о пользователе
     @Override
     public void aboutUserInfoDialog() {
         userInfo = fullInfoAboutUser();
@@ -413,5 +397,4 @@ public class NavigationDrawerLogInActivity extends AppCompatActivity
         stopService(new Intent(this, NotificationService.class));
         super.onDestroy();
     }//onDestroy
-
 }//NavigationDrawerLogInActivity

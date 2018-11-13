@@ -8,19 +8,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputFilter;
-import android.text.Spanned;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 //--------Активность для авторизация пользователя или перехода в актиность создания нового акаунта-
 
@@ -62,7 +55,7 @@ public class AuthorizationActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 dbUtilities.inputFilterForListener(etPassword,
                         10,
-                        MainActivity.filterStr
+                        MainActivity.FILTER_STR
                 );
                 tvSymCountPas.setText(String.valueOf(10 - s.length()));
             }//afterTextChanged

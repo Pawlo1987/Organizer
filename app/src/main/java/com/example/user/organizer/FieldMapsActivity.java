@@ -29,7 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-
+//-----Активность по работе с GoogleMap
 public class FieldMapsActivity extends FragmentActivity implements OnMapReadyCallback {
     double myLatitude;              //широта местоположения онлайн
     double myLongitude;             //долгота местоположения онлайн

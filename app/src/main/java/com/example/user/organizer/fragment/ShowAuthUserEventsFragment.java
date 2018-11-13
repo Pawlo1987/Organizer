@@ -36,7 +36,7 @@ implements AuthUserEventsInterface {
 
     int spPos;                      //позиция спинера
     List<String> spListCity;             // Данные для спинера выбора города
-    Spinner spCityShAuUsEvAc;
+    Spinner spCityShAuUsEvAc;           //основной спинер выбора города
     Context context;
     String idAuthUser;
 
@@ -127,11 +127,8 @@ implements AuthUserEventsInterface {
                     buildUserRecyclerView(cityId);
                 }//if
             }//onItemSelected
-
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }//onNothingSelected
+            public void onNothingSelected(AdapterView<?> parent) {}//onNothingSelected
         });
 
         //проверка если выбран пункт "Все города"
@@ -143,6 +140,7 @@ implements AuthUserEventsInterface {
             buildUserRecyclerView(cityId);
         }
 
+        //кнопка обовления списка recyclerView
         fabMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -198,11 +196,9 @@ implements AuthUserEventsInterface {
         // Возврат результата выполнения из DialogFragment во Fragment минуя Activity
         // ссылка (https://habrahabr.ru/post/259805/)
         leaveEventDialog.setTargetFragment(this, REQUEST_POS);
-
         // Точка вызова отображение диалогового окна
         leaveEventDialog.show(getFragmentManager(), ID_LEAVE_DIALOG);
-
-    }
+    }//callDialogLeaveDialog
 
     //Метод имплеметируемые интерфейсом AuthUserEventsInterface
     @Override
@@ -216,10 +212,9 @@ implements AuthUserEventsInterface {
         // Возврат результата выполнения из DialogFragment во Fragment минуя Activity
         // ссылка (https://habrahabr.ru/post/259805/)
         deleteEventDialog.setTargetFragment(this, REQUEST_POS);
-
         // Точка вызова отображение диалогового окна
         deleteEventDialog.show(getFragmentManager(), ID_DELETE_DIALOG);
-    }
+    }//callDialogDeleteDialog
 
     //Метод имплеметируемые интерфейсом AuthUserEventsInterface
     @Override
@@ -227,10 +222,8 @@ implements AuthUserEventsInterface {
         Bundle args = new Bundle();    // объект для передачи параметров в диалог
         args.putString("message", message);
         aboutEventShowAllEventDialog.setArguments(args);
-
          // отображение диалогового окна
          aboutEventShowAllEventDialog.show(((AppCompatActivity)context).
                 getSupportFragmentManager(), ID_ABOUT_DIALOG);
-    }
-
-}
+    }//callDialogAboutDialog
+}//ShowAuthUserEventsFragment

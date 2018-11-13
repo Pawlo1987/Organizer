@@ -16,7 +16,8 @@ import java.util.List;
 //-------Главная Активность----------------
 public class MainActivity extends AppCompatActivity {
 
-    final public static String filterStr = "[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" +
+    //глобальная переменная для проверки введенных символов в EditText
+    final public static String FILTER_STR = "[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" +
             "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя" +
             "123456789_]*";
     DBUtilities dbUtilities;
@@ -134,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }//showFieldCatalog
 
+    //процедура авторизации
     private void authorization(View view) {
         if (!dbUtilities.isConnection()) {
             btnCheckConMaAc.setVisibility(View.VISIBLE);
@@ -149,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
         }//if-else
     }//authorization
 
+    //процедура проверки соединения с интернетов
     private void checkConnection(View view) {
         if (!dbUtilities.isConnection()) {
             Snackbar.make(view, "\t\t\t\t\t\t\t\t\t\tБАЗА ДАННЫХ НЕ ОТВЕЧАЕТ!", Snackbar.LENGTH_LONG)

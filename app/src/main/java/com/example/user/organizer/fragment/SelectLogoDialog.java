@@ -94,6 +94,9 @@ public class SelectLogoDialog extends DialogFragment {
             intent.putExtra("idAuthUser", userId);
             startActivity(intent);
         }else {
+            //если работа с диалогом идет из активности создания Новостного поста(CreateNoteNews)
+            //то так мы передаем данные о выбранном логотипе
+            //через скрытый элемент TextView в Активности (CreateNoteNews)
             ((TextView)getActivity().findViewById(R.id.tvBufferSeLoAc)).setText(value);
         }
     }//selectLogo

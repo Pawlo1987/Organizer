@@ -51,7 +51,7 @@ public class AdvertisingAndInformationFragment extends Fragment {
     // адаптер для отображения recyclerView
     AdvertisingAndInformationRecyclerAdapter advertisingAndInformationRecyclerAdapter;
     DBUtilities dbUtilities;
-    Spinner spCityAdAnInAc;
+    Spinner spCityAdAnInAc;         //основной спинер выбора города
     int spPos;                      //позиция спинера
 
     Button btnNewNoteAdAnInAc;      // кнопка создания новости
@@ -63,9 +63,7 @@ public class AdvertisingAndInformationFragment extends Fragment {
     String idAuthUser;
 
     public AdvertisingAndInformationFragment newInstance() {
-
         AdvertisingAndInformationFragment fragment = new AdvertisingAndInformationFragment();
-
         return fragment;
     } // FirstPageFragment
 
@@ -100,7 +98,6 @@ public class AdvertisingAndInformationFragment extends Fragment {
         //чтоб не проверять из какого пакета активити в каждом из случаев
         this.context = context;
         dbUtilities = new DBUtilities(context);
-
         // прочитать данные, переданные из активности (из точки вызова)
         idAuthUser = getArguments().getString("idAuthUser");
     }//onAttachToContext
@@ -114,10 +111,8 @@ public class AdvertisingAndInformationFragment extends Fragment {
         fabMain.setVisibility(View.VISIBLE);
 
         btnNewNoteAdAnInAc = result.findViewById(R.id.btnNewNoteAdAnInAc);
-
         // RecycerView для отображения таблицы users БД
         rvNoteLineAdAnInAc = result.findViewById(R.id.rvNoteLineAdAnInAc);
-
         //Обработка нажатия клавишы "Создать новость"
         btnNewNoteAdAnInAc.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -127,10 +122,10 @@ public class AdvertisingAndInformationFragment extends Fragment {
             }
         });
 
-        //привязка ресурсов к объектам
+        //привязка ресурсов к объектам(основной спиннер из активности NavigationDrawerLogInActivity)
         spCityAdAnInAc = getActivity().findViewById(R.id.spCityMain);
 
-        //инициализация коллекции для спинера
+        //инициализация коллекции для спинера (коллекция городов)
         spListCity = new ArrayList<>();
 
         //обращаемся к базе для получения списка имен городов
@@ -145,19 +140,17 @@ public class AdvertisingAndInformationFragment extends Fragment {
                 buildUserRecyclerView(
                         spCityAdAnInAc.getItemAtPosition(spPos).toString()
                 );
-
             }//onItemSelected
-
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }//onNothingSelected
+            public void onNothingSelected(AdapterView<?> parent) {}//onNothingSelected
         });
 
         //строим новый адаптер RecyclerView
         buildUserRecyclerView(
                 spCityAdAnInAc.getItemAtPosition(spCityAdAnInAc.getSelectedItemPosition()).toString()
         );
+
+        //слушатель клавиши обновления списка Recyclerview
         fabMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -183,8 +176,8 @@ public class AdvertisingAndInformationFragment extends Fragment {
 
         // обработка результатов по активностям
         if (resultCode == RESULT_OK) {
+            //возврат из активности создать новое событие
             // читаем из объекта data полученные данные и выводим в поле результата
-
             String logo = data.getStringExtra(PAR_LOGO);
             String head = data.getStringExtra(PAR_HEAD);
             String date = data.getStringExtra(PAR_DATE);
@@ -192,39 +185,16 @@ public class AdvertisingAndInformationFragment extends Fragment {
             String message = data.getStringExtra(PAR_MESSAGE);
             String tsizemessage = data.getStringExtra(PAR_TSIZE_MESSAGE);
             String tstylemessage = data.getStringExtra(PAR_TSTYLE_MESSAGE);
-
             //обращяемся к БД на сервер для создания новой записи в таблицу notes
             dbUtilities.insertIntoNotes(logo, head, idAuthUser, date, city_id, message, tsizemessage, tstylemessage);
             refreshList();
         }//RESULT_OK
 
-        //устанавливаем спинер в позицию "ВСЕ ГОРОДА"
-        spCityAdAnInAc.setSelection(spListCity.size()-1);
-
         //строим новый адаптер RecyclerView
         buildUserRecyclerView(
                 spCityAdAnInAc.getItemAtPosition(spPos).toString()
         );
-
     }//onActivityResult
-
-    //строим Spinner
-    private ArrayAdapter buildSpinner(List<String> list) {
-
-        ArrayAdapter<String> spinnerAdapter;
-
-        //создание адаптера для спинера
-        spinnerAdapter = new ArrayAdapter<String>(
-                context,
-                android.R.layout.simple_spinner_item,
-                list
-        );
-
-        // назначение адапетра для списка
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        return spinnerAdapter;
-    }//buildCitySpinner
 
     //Строим RecyclerView
     private void buildUserRecyclerView(String cityName) {
@@ -245,5 +215,4 @@ public class AdvertisingAndInformationFragment extends Fragment {
         // RecycerView для отображения таблицы users БД
         rvNoteLineAdAnInAc.setAdapter(advertisingAndInformationRecyclerAdapter);
     }//buildUserRecyclerView
-
 }//AdvertisingAndInformationFragment

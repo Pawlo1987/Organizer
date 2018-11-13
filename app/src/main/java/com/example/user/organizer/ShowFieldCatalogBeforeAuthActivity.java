@@ -8,6 +8,7 @@ import android.view.MenuItem;
 
 import com.example.user.organizer.fragment.ShowFieldCatalogFragment;
 
+//-----активность для вызова фрагмента без авторизации
 public class ShowFieldCatalogBeforeAuthActivity extends AppCompatActivity {
     ShowFieldCatalogFragment showFieldCatalogFragment;
     FragmentTransaction fTrans;

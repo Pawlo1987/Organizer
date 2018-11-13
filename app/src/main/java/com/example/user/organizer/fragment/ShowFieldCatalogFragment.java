@@ -1,7 +1,5 @@
 package com.example.user.organizer.fragment;
 
-//-----------Фрагмент выводит каталог полей--------------------------
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
@@ -29,21 +27,21 @@ import com.example.user.organizer.ShowFieldCatalogRecyclerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+//-----------Фрагмент выводит каталог полей--------------------------
 public class ShowFieldCatalogFragment extends Fragment {
 
     RecyclerView rvMainShFiCaFr;
     // адаптер для отображения recyclerView
     ShowFieldCatalogRecyclerAdapter showFieldCatalogRecyclerAdapter;
-    Button btnMapShFiCaFr;
+    Button btnMapShFiCaFr;      //кнопка перехода на googleMap
     DBUtilities dbUtilities;
     DBLocalUtilities dbLocalUtilities;
 
     int spPos;                      //позиция спинера
     List<String> spListCity;             // Данные для спинера выбора города
-    Spinner spCityShFiCaFr;
+    Spinner spCityShFiCaFr;         //основной спинер выбора города
     List<Field> fieldList = new ArrayList<>(); //коллекция полей
     Context context;
-
     boolean connection;                // статус подключения к сети
     String idAuthUser;                 //авторизированный пользователь
 
@@ -92,7 +90,8 @@ public class ShowFieldCatalogFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View result = inflater.inflate(R.layout.fragment_show_field_catalog, container, false);
-        if (connection) {
+
+        if (connection) {   //точка начала работы с фрагментом в случае присутсвия интернета
             btnMapShFiCaFr = (Button) result.findViewById(R.id.btnMapShFiCaFr);
             btnMapShFiCaFr.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -112,10 +111,9 @@ public class ShowFieldCatalogFragment extends Fragment {
             //привязываем адаптер к recycler объекту
             rvMainShFiCaFr.setAdapter(showFieldCatalogRecyclerAdapter);
 
-            if (!idAuthUser.equals("")) {
+            if (!idAuthUser.equals("")) {   //работа после авторизации
                 //привязка ресурсов к объектам
                 spCityShFiCaFr = getActivity().findViewById(R.id.spCityMain);
-
                 //инициализация коллекции для спинера
                 spListCity = new ArrayList<>();
                 //обращаемся к базе для получения списка имен городов
@@ -135,11 +133,8 @@ public class ShowFieldCatalogFragment extends Fragment {
                             buildUserRecyclerView(cityId);
                         }//if
                     }//onItemSelected
-
                     @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }//onNothingSelected
+                    public void onNothingSelected(AdapterView<?> parent) {}//onNothingSelected
                 });
 
                 //проверка если выбран пункт "Все города"
@@ -164,11 +159,11 @@ public class ShowFieldCatalogFragment extends Fragment {
                                     spCityShFiCaFr.getItemAtPosition(spCityShFiCaFr.getSelectedItemPosition()).toString());
                             //строим новый адаптер RecyclerView
                             refreshList(cityId);
-                        }
+                        }//if
                     }
-                });
-            }
-        } else {
+                });//setOnClickListener
+            }//if (!idAuthUser.equals(""))
+        } else { //точка начала работы с фрагментом в случае отсутствия интернета
             btnMapShFiCaFr = (Button) result.findViewById(R.id.btnMapShFiCaFr);
             btnMapShFiCaFr.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -186,7 +181,7 @@ public class ShowFieldCatalogFragment extends Fragment {
             showFieldCatalogRecyclerAdapter = new ShowFieldCatalogRecyclerAdapter(context, fieldList, "0");
             //привязываем адаптер к recycler объекту
             rvMainShFiCaFr.setAdapter(showFieldCatalogRecyclerAdapter);
-        }
+        }//if (connection)
 
         return result;
     } // onCreateView
@@ -202,7 +197,6 @@ public class ShowFieldCatalogFragment extends Fragment {
         rvMainShFiCaFr.setAdapter(showFieldCatalogRecyclerAdapter);
     }//buildUserRecyclerView
 
-
     //обновляем recyclerview
     private void refreshList(String cityId) {
         //получаем коллекцию полей
@@ -212,4 +206,4 @@ public class ShowFieldCatalogFragment extends Fragment {
         //привязываем адаптер к recycler объекту
         rvMainShFiCaFr.setAdapter(showFieldCatalogRecyclerAdapter);
     }//refreshList
-}
+}//ShowFieldCatalogFragment

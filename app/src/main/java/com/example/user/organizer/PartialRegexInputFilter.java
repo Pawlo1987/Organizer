@@ -6,7 +6,8 @@ import android.text.Spanned;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//------Для ввода телефоного номера с регулярным выражением---------------
+//------Класс-фильтр для ввода с регулярным выражением---------------
+//http://horribileru.blogspot.com/2011/12/edittext.html
 public class PartialRegexInputFilter implements InputFilter {
 
     private Pattern mPattern;

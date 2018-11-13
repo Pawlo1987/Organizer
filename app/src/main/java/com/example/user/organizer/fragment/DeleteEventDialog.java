@@ -95,8 +95,11 @@ public class DeleteEventDialog extends DialogFragment {
         //удаляем старый список учасников из таблицы participants
         for (String idParticipants : idParticipantsList) {
             //получаем данные для уведомления
+            //коллекция списка событий
             listEvent = dbUtilities.getListEvents(event_id, "", user_id);
 
+            //создаем новые уведомления для участников
+            //от организатора события об удалении события
             dbUtilities.insertIntoNotifications(event_id,
                  dbUtilities.searchValueInColumn("participants", "id",
                         "user_id", idParticipants),    //увеомление для организатора
@@ -104,11 +107,15 @@ public class DeleteEventDialog extends DialogFragment {
                  dbUtilities.getIdByValue("fields","name",listEvent.get(0).getFieldName()),
                  listEvent.get(0).getEventTime(), listEvent.get(0).getEventData(), "4", " "
             );
+
+            //удаляем записи участников из таблицы участников
             dbUtilities.deleteRowById("participants",idParticipants);
         }//foreach
+
+        //удаляем записи уведомлений об организации даного события если ктото не получил
         dbUtilities.deleteRowByValue("notifications", "event_id", event_id);
 
-        //удалил собития
+        //удалить собитие из базы
         dbUtilities.deleteRowById("events", event_id);
 
         Intent intent = new Intent();

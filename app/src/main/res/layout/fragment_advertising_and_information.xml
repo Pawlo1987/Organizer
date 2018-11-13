@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context="com.example.user.organizer.activity.AdvertisingAndInformationActivity">
+    tools:context="com.example.user.organizer.fragment.AdvertisingAndInformationFragment">
 
     <TextView
         android:id="@+id/tvHeadAdAnInAc"
@@ -41,5 +42,8 @@
         android:id="@+id/rvNoteLineAdAnInAc"
         app:layoutManager="LinearLayoutManager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" >
+
+    </android.support.v7.widget.RecyclerView>
+
 </LinearLayout>

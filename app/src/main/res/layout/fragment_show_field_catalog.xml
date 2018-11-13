@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.user.organizer.activity.ShowAllEventActivity">
+    tools:context="com.example.user.organizer.fragment.ShowAllEventsFragment">
 
     <TextView
         android:id="@+id/tvHeaderShFiCaFr"

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -24,7 +25,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 
 //-------Адаптера для вывода(просмотра) всех событий--------------
 public class ShowAllEventsRecyclerAdapter extends
@@ -97,8 +97,8 @@ public class ShowAllEventsRecyclerAdapter extends
             implements PopupMenu.OnMenuItemClickListener{
         final TextView tvDateShAlEvReAd, tvTimeShAlEvReAd,
                 tvCityShAlEvReAd, tvFieldShAlEvReAd;
-        LinearLayout llMainShAlEvReAd;
-        ImageView ivImageShAlEvReAd;
+        CardView cvMainShAlEvAc;
+        ImageView ivArrowShAlEvReAd;
 
         ViewHolder(View view){
             super(view);
@@ -107,21 +107,21 @@ public class ShowAllEventsRecyclerAdapter extends
             tvTimeShAlEvReAd = view.findViewById(R.id.tvTimeShAlEvReAd);
             tvCityShAlEvReAd = view.findViewById(R.id.tvCityShAlEvReAd);
             tvFieldShAlEvReAd = view.findViewById(R.id.tvFieldShAlEvReAd);
-            llMainShAlEvReAd = view.findViewById(R.id.llMainShAlEvReAd);
-            ivImageShAlEvReAd = view.findViewById(R.id.ivImageShAlEvReAd);
+            cvMainShAlEvAc = view.findViewById(R.id.cvMainShAlEvAc);
+            ivArrowShAlEvReAd = view.findViewById(R.id.ivArrowShAlEvReAd);
 
-            view.setOnTouchListener(new View.OnTouchListener() {
+            cvMainShAlEvAc.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
-                            view.setBackgroundColor(Color.argb(255,135,135,135));
+                            cvMainShAlEvAc.setCardBackgroundColor(Color.argb(255,255,255,255));
                             break;
                         case MotionEvent.ACTION_UP:
-                            view.setBackgroundColor(Color.argb(255,170,170,170));
+                            cvMainShAlEvAc.setCardBackgroundColor(Color.argb(255,170,170,170));
                             break;
                         default:
-                            view.setBackgroundColor(Color.argb(255,170,170,170));
+                            cvMainShAlEvAc.setCardBackgroundColor(Color.argb(255,170,170,170));
                             break;
 
                     }//switch
@@ -129,26 +129,26 @@ public class ShowAllEventsRecyclerAdapter extends
                 }//onTouch
             });//setOnTouchListener
 
-            ivImageShAlEvReAd.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            ivImageShAlEvReAd.setImageResource(R.drawable.football_ball11);
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            ivImageShAlEvReAd.setImageResource(R.drawable.football_ball1);
-                            break;
-                        default:
-                            ivImageShAlEvReAd.setImageResource(R.drawable.football_ball1);
-                            break;
+//            ivArrowShAlEvReAd.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    switch (event.getAction()) {
+//                        case MotionEvent.ACTION_DOWN:
+//                            ivArrowShAlEvReAd.setColorFilter(Color.argb(255,170,170,170));
+//                            break;
+//                        case MotionEvent.ACTION_UP:
+//                            ivArrowShAlEvReAd.setColorFilter(Color.argb(255,255,255,255));
+//                            break;
+//                        default:
+//                            ivArrowShAlEvReAd.setColorFilter(R.color.colorAccent);
+//                            break;
+//
+//                    }//switch
+//                    return false;
+//                }//onTouch
+//            });//setOnTouchListener
 
-                    }//switch
-                    return false;
-                }//onTouch
-            });//setOnTouchListener
-
-            view.setOnLongClickListener(new View.OnLongClickListener() {
+            cvMainShAlEvAc.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     //получаем данные о нажатом событии
@@ -164,22 +164,16 @@ public class ShowAllEventsRecyclerAdapter extends
                     eventPhone = event.eventPhone;
                     eventUserId = event.eventUserId;
 
-                    //выбран пункт подробная информация
-                    aboutEvent();
+                    //выбран пункт принять участие
+                    takePart();
                     return true;
                 }//onLongClick
             });//setOnLongClickListener
 
-            //слушатель события нажатого меню
-            ivImageShAlEvReAd.setOnClickListener(new View.OnClickListener() {
-
+            //слушатель события нажатия стрелки
+            ivArrowShAlEvReAd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    PopupMenu popup = new PopupMenu(view.getContext(), view);
-//                    popup.inflate(R.menu.rva_show_all_event_popup_menu);
-//                    popup.setOnMenuItemClickListener(ViewHolder.this);
-//                    popup.show();
-
 
                     //получаем данные о нажатом событии
                     event = eventsList.get(getAdapterPosition());
@@ -194,8 +188,8 @@ public class ShowAllEventsRecyclerAdapter extends
                     eventPhone = event.eventPhone;
                     eventUserId = event.eventUserId;
 
-                    //выбран пункт принять участие
-                    takePart();
+                    //выбран пункт подробная информация
+                    aboutEvent();
                 }//onClick
             });
         } // ViewHolder

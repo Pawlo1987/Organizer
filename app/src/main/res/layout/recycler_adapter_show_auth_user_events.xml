@@ -4,110 +4,126 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="20dp"
+    android:layout_margin="10dp"
+    android:background="@android:color/white"
     android:orientation="vertical"
     tools:context="com.example.user.organizer.ShowAuthUserEventsRecyclerAdapter">
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
+        android:id="@+id/cvMainShAuUsEvReAd"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tvFirstLineShAuUsEvReAd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/tvFirstLineShAuUsEvReAd" />
-
-        <TextView
-            android:id="@+id/tvDateShAuUsEvReAd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="DATE" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tvSecondLineShAuUsEvReAd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/tvSecondLineShAuUsEvReAd" />
-
-        <TextView
-            android:id="@+id/tvTimeShAuUsEvReAd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TIME" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tvThirdLineShAuUsEvReAd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/tvThirdLineShAuUsEvReAd" />
-
-        <TextView
-            android:id="@+id/tvCityShAuUsEvReAd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="CITY" />
-    </LinearLayout>
-
-    <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-
-    <TextView
-        android:id="@+id/tvFourthLineShAuUsEvReAd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:layout_weight="1"
-        android:text="@string/tvFourthLineShAuUsEvReAd" />
+        app:cardBackgroundColor="@android:color/darker_gray"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="10dp"
+        app:contentPadding="8dp">
 
-    <TextView
-        android:id="@+id/tvFieldShAuUsEvReAd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="FIELD" />
-
-</LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tvFifthLineShAuUsEvReAd"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/tvFifthLineShAuUsEvReAd" />
+            android:layout_height="80dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvStatusShAuUsEvReAd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="STATUS" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-    </LinearLayout>
+                <ImageView
+                    android:id="@+id/ivLogoShAlEvReAd"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:src="@drawable/football_ball1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvTypeShAuUsEvReAd"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@android:color/holo_red_dark"
+                            android:text="@string/tvTypeShAuUsEvReAd" />
+
+                        <TextView
+                            android:id="@+id/tvStatusShAuUsEvReAd"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="STATUS" />
+
+                        <ImageView
+                            android:id="@+id/ivArrowShAuUsEvReAd"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:src="@android:drawable/ic_media_play" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/white"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvDateShAuUsEvReAd"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="DATE" />
+
+                        <TextView
+                            android:id="@+id/tvTimeShAuUsEvReAd"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="TIME" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/white"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvCityShAuUsEvReAd"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="CITY" />
+
+                        <TextView
+                            android:id="@+id/tvFieldShAuUsEvReAd"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="FIELD" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
 </LinearLayout>

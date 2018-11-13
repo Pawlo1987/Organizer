@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import com.example.user.organizer.DBUtilities;
@@ -28,7 +29,7 @@ public class ShowAllEventsFragment extends Fragment {
     // адаптер для отображения recyclerView
     ShowAllEventsRecyclerAdapter showAllEventsRecyclerAdapter;
     DBUtilities dbUtilities;
-
+    GridView gvMainShAlEvAc;
     List<Event> eventsList = new ArrayList<>(); //коллекция событий
     Context context;
 
@@ -61,15 +62,9 @@ public class ShowAllEventsFragment extends Fragment {
         // RecyclerView для отображения таблицы users БД
         rvMainShAlEvAc = result.findViewById(R.id.rvMainShAlEvAc);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-
-//        DividerItemDecoration itemDecoration = new DividerItemDecoration(context, layoutManager.getOrientation());
-//        rvMainShAlEvAc.setHasFixedSize(true);
-//        rvMainShAlEvAc.setLayoutManager(layoutManager);
-//        rvMainShAlEvAc.addItemDecoration(itemDecoration);
-
         //привязываем адаптер к recycler объекту
         rvMainShAlEvAc.setAdapter(showAllEventsRecyclerAdapter);
+
         return result;
     } // onCreateView
 }

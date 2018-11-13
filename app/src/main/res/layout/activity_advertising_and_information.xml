@@ -8,30 +8,44 @@
     tools:context="com.example.user.organizer.AdvertisingAndInformationActivity">
 
     <TextView
-        android:id="@+id/tvadvinfoac"
+        android:id="@+id/tvAdAnInAc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView" />
 
     <TextView
-        android:id="@+id/tvHeaderAdInAc"
+        android:id="@+id/tvHeadAdAnInAc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="@string/tvHeaderAdInAc"
+        android:text="@string/tvHeadAdAnInAc"
         android:textAlignment="center"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/background_dark"
         android:textSize="24sp" />
 
-    <Spinner
-        android:id="@+id/spCityAdInAc"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnNewNoteAdAnInAc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClick"
+            android:text="@string/btnNewNoteAdAnInAc"
+            tools:ignore="OnClick" />
+
+        <Spinner
+            android:id="@+id/spCityAdAnInAc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvMainAdInAc"
+        android:id="@+id/rvNoteLineAdAnInAc"
         app:layoutManager="LinearLayoutManager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+        android:layout_height="wrap_content" />
 </LinearLayout>

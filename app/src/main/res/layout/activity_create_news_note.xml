@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.user.organizer.CreateNewsNoteActivity">
+
+    <TextView
+        android:id="@+id/tvHeadCrNeNoAc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="@string/tvHeadCrNeNoAc"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_dark"
+        android:textSize="30sp" />
+
+    <Spinner
+        android:id="@+id/spCityCrNeNoAc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Запись появится" />
+
+        <TextView
+            android:id="@+id/tvDateCrNeNoAc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/btnDateCrEv" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/etHeadCrNeNoAc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:hint="@string/etHeadCrNeNoAc"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/etNoteCrNeNoAc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:hint="@string/etNoteCrNeNoAc"
+        android:inputType="textPersonName" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnConfirmCrNeNoAc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClick"
+            android:text="@string/btnConfirmCrNeNoAc" />
+
+        <Button
+            android:id="@+id/btnCancelCrNeNoAc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClick"
+            android:text="@string/btnCancelCrNeNoAc" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<ShowAuthUserEventsRecyclerAdapter.ViewHolder> {
 
-    //поля класса ShowAuthUserEventsRecyclerAdapter
+    //поля класса AdvertisingAndInformationRecyclerAdapter
     private LayoutInflater inflater;
     private Cursor eventsCursor;
     DBUtilities dbUtilities;
@@ -23,7 +23,7 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         this.inflater = LayoutInflater.from(context);
         this.eventsCursor = eventsCursor;
         dbUtilities = new DBUtilities(context);
-    } // ShowAuthUserEventsRecyclerAdapter
+    } // AdvertisingAndInformationRecyclerAdapter
 
     //создаем новую разметку(View) путем указания разметки
     @Override
@@ -67,4 +67,4 @@ public class ShowAuthUserEventsRecyclerAdapter extends RecyclerView.Adapter<Show
         } // ViewHolder
     } // class ViewHolder
 
-}//ShowAuthUserEventsRecyclerAdapter
+}//AdvertisingAndInformationRecyclerAdapter

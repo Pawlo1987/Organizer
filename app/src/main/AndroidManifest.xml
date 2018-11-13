@@ -28,7 +28,9 @@
         <activity android:name=".SelectParticipantsActivity" />
         <activity android:name=".ShowAuthUserEventsActivity" />
         <activity android:name=".ShowAuthUserEventsRecyclerAdapter" />
-        <activity android:name=".AdvertisingAndInformationActivity"></activity>
+        <activity android:name=".AdvertisingAndInformationActivity" />
+        <activity android:name=".AdvertisingAndInformationRecyclerAdapter" />
+        <activity android:name=".CreateNewsNoteActivity"></activity>
     </application>
 
 </manifest>

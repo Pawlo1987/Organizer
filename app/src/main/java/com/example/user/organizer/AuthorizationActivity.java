@@ -3,6 +3,8 @@ package com.example.user.organizer;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.ArrayMap;
@@ -12,6 +14,7 @@ import android.widget.EditText;
 
 //--------Активность для авторизация пользователя или перехода в актиность создания нового акаунта-
 
+@RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class AuthorizationActivity extends AppCompatActivity {
 
     DBUtilities dbUtilities;

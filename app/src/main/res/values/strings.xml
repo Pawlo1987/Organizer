@@ -78,6 +78,12 @@
     <string name="tvThirdLineShAuUsEvReAd">в городе</string>
     <string name="tvFourthLineShAuUsEvReAd">на поле</string>
     <string name="tvFifthLineShAuUsEvReAd">ваш статус</string>
-    <string name="tvHeaderAdInAc">Новости и Реклама</string>
+    <string name="tvHeadAdAnInAc">Новости и реклама</string>
+    <string name="btnNewNoteAdAnInAc">Создать новость</string>
+    <string name="tvHeadCrNeNoAc">Новая запись</string>
+    <string name="etNoteCrNeNoAc">текст записи</string>
+    <string name="etHeadCrNeNoAc">загаловок записи</string>
+    <string name="btnConfirmCrNeNoAc">Создать</string>
+    <string name="btnCancelCrNeNoAc">Отмена</string>
 
 </resources>
